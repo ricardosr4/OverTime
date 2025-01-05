@@ -1,4 +1,4 @@
-package com.example.overtime.ui.preLogin
+package com.example.overtime.ui.preLogin.presenter
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.navigation.AppScreen
+import com.example.overtime.ui.theme.ButtonDisabled
+import com.example.overtime.ui.theme.ButtonPrimary
+import com.example.overtime.ui.theme.ButtonPrimaryText
+import com.example.overtime.ui.theme.DividerColor
+import com.example.overtime.ui.theme.TextPrimary
 
 @Composable
 fun PreLoginScreen(navController: NavController) {
@@ -73,11 +79,11 @@ fun PreLoginScreen(navController: NavController) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Blue)
+                        .background(ButtonPrimary)
                 ) {
                     Text(
-                        text = "Login",
-                        color = Color.White,
+                        text = stringResource(R.string.login),
+                        color = ButtonPrimaryText,
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -101,16 +107,16 @@ fun PreLoginScreen(navController: NavController) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Blue)
+                        .background(ButtonPrimary)
                 ) {
                     Text(
-                        text = "Register",
-                        color = Color.White,
+                        text = stringResource(R.string.register),
+                        color = ButtonPrimaryText,
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp
-                        //fontFamily = FontFamily(getFont(Fonts.ROBOTO_BOLD)) -> definir fuente
+                        //fontFamily = FontFamily(getFont(Fonts.ROBOTO_BOLD))
 
                     )
                 }
@@ -124,22 +130,22 @@ fun PreLoginScreen(navController: NavController) {
                     .height(45.dp)
                     .padding(horizontal = 20.dp)
                     .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                    .clickable { } //agregar funcion para entrar con google
+                    .clickable { } //add fun for login to google and firebase
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Blue)
+                        .background(ButtonDisabled)
                 ) {
                     Text(
-                        text = "Registrarse con google",
-                        color = Color.White,
+                        text = stringResource(R.string.login_con_google),
+                        color = ButtonPrimaryText,
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         fontSize = 16.sp
-                        //fontFamily = FontFamily(getFont(Fonts.ROBOTO_BOLD)) -> definir fuente
+                        //fontFamily = FontFamily(getFont(Fonts.ROBOTO_BOLD))
 
                     )
                 }
@@ -151,7 +157,7 @@ fun PreLoginScreen(navController: NavController) {
                     .padding(horizontal = 20.dp)
             ) {
                 Divider(
-                    color = Color.Black,
+                    color = DividerColor,
                     thickness = 1.dp,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
@@ -160,12 +166,12 @@ fun PreLoginScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "En caso de problemas comunicate con Soporte",
+                    text = stringResource(R.string.message_soporte),
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 10.dp),
                     style = TextStyle(
-                        color = (Color.Black),
+                        color = TextPrimary,
                         fontSize = 14.sp
                     )
 

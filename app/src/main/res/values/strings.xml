@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">OverTime</string>
     <string name="register">Registrarse</string>
+    <string name="login">Login</string>
+    <string name="login_con_google">Login con google</string>
+    <string name="message_soporte">En caso de problemas comunicate con Soporte</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="mostrar_contraseña">Mostrar contraseña</string>
+    <string name="recuperar_contraseña">Recuperar tu Contraseña!</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>

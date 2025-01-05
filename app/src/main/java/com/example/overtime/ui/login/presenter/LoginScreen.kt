@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,6 +44,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.navigation.AppScreen
+import com.example.overtime.ui.theme.ButtonPrimary
+import com.example.overtime.ui.theme.ButtonPrimaryText
+import com.example.overtime.ui.theme.DividerColor
+import com.example.overtime.ui.theme.PrimaryColor
+import com.example.overtime.ui.theme.SecondaryColor
+import com.example.overtime.ui.theme.TextHint
+import com.example.overtime.ui.theme.TextPrimary
 
 
 @Composable
@@ -62,12 +71,13 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(70.dp))
 
         Text(
-            text = "Login",
+            text = stringResource(id = R.string.login),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Start)
                 .padding(start = 40.dp),
-            fontSize = 50.sp
+            fontSize = 50.sp,
+            color = TextPrimary
         )
         Spacer(modifier = Modifier.height(70.dp))
 
@@ -97,7 +107,9 @@ fun LoginScreen(navController: NavController) {
             },
 
             label = {
-                Text(text = "Email", color = Color.Gray)
+                Text(
+                    text = stringResource(R.string.email),
+                    color = TextHint)
             }
         )
         Spacer(modifier = Modifier.height(30.dp))
@@ -128,7 +140,9 @@ fun LoginScreen(navController: NavController) {
                 )
             },
             label = {
-                Text(text = "Password", color = Color.Gray)
+                Text(
+                    text = stringResource(R.string.password),
+                    color = TextHint)
             }
         )
         Row(
@@ -139,21 +153,23 @@ fun LoginScreen(navController: NavController) {
         ) {
             Checkbox(
                 checked = checkPassword,
-                onCheckedChange = {
-                checkPassword = it
-
-            })
-            Text(text = "Mostrar contraseña")
+                onCheckedChange = { checkPassword = it },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = SecondaryColor,
+                ))
+            Text(
+                text = stringResource(R.string.mostrar_contraseña),
+                fontSize = 12.sp)
         }
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(50.dp))
 
         Text(
-            text = "Recuperar tu Contraseña!",
+            text = stringResource(R.string.recuperar_contraseña),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .clickable {  },
+                .clickable { },
             style = TextStyle(
-                color = Color.Blue,
+                color = PrimaryColor,
                 fontSize = 14.sp,
             ),
         )
@@ -166,18 +182,18 @@ fun LoginScreen(navController: NavController) {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable { navController.navigate(AppScreen.HomeScreen.route) } //agregar funcion para registrar con firebase
+                .clickable { navController.navigate(AppScreen.HomeScreen.route) } //add fun register for firebase
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Blue)
-                //aqui podemos agregar un color de boton antes de activacion
+                    .background(ButtonPrimary)
+                //add color button disabled
             ) {
                 Text(
-                    text = "Login",
-                    color = Color.White,
+                    text = stringResource(R.string.login),
+                    color = ButtonPrimaryText,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
@@ -194,7 +210,7 @@ fun LoginScreen(navController: NavController) {
             .padding(horizontal = 20.dp)
     ) {
         Divider(
-            color = Color.Black,
+            color = DividerColor,
             thickness = 1.dp,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -203,12 +219,12 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "En caso de problemas comunicate con Soporte",
+            text = stringResource(R.string.message_soporte),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 10.dp),
             style = TextStyle(
-                color = (Color.Black),
+                color = TextPrimary,
                 fontSize = 14.sp
             )
         )

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,6 +43,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.overtime.R
+import com.example.overtime.ui.theme.ButtonPrimary
+import com.example.overtime.ui.theme.ButtonPrimaryText
+import com.example.overtime.ui.theme.DividerColor
+import com.example.overtime.ui.theme.SecondaryColor
+import com.example.overtime.ui.theme.TextHint
+import com.example.overtime.ui.theme.TextPrimary
 
 @Preview(showBackground = true)
 @Composable
@@ -50,11 +58,19 @@ fun RegisterScreen() {
 
     var password by remember { mutableStateOf("") }
     var checkPassword by remember { mutableStateOf(false) }
-    var visualTransformationPassword by remember { mutableStateOf<VisualTransformation> (PasswordVisualTransformation()) }
+    var visualTransformationPassword by remember {
+        mutableStateOf<VisualTransformation>(
+            PasswordVisualTransformation()
+        )
+    }
 
     var confirmPassword by remember { mutableStateOf("") }
     var checkConfirmPassword by remember { mutableStateOf(false) }
-    var visualTransformationConfirmPassword by remember { mutableStateOf<VisualTransformation> (PasswordVisualTransformation()) }
+    var visualTransformationConfirmPassword by remember {
+        mutableStateOf<VisualTransformation>(
+            PasswordVisualTransformation()
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -65,12 +81,13 @@ fun RegisterScreen() {
         Spacer(modifier = Modifier.height(70.dp))
 
         Text(
-            text = "Register",
+            text = stringResource(id = R.string.register),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Start)
                 .padding(start = 40.dp),
-            fontSize = 50.sp
+            fontSize = 50.sp,
+            color = TextPrimary
         )
         Spacer(modifier = Modifier.height(70.dp))
 
@@ -100,7 +117,10 @@ fun RegisterScreen() {
             },
 
             label = {
-                Text(text = "Email", color = Color.Gray)
+                Text(
+                    text = stringResource(id = R.string.email),
+                    color = TextHint
+                )
             }
         )
         Spacer(modifier = Modifier.height(40.dp))
@@ -130,7 +150,10 @@ fun RegisterScreen() {
                 )
             },
             label = {
-                Text(text = "Password", color = Color.Gray)
+                Text(
+                    text = stringResource(id = R.string.password),
+                    color = TextHint
+                )
             }
         )
         Row(
@@ -141,11 +164,15 @@ fun RegisterScreen() {
         ) {
             Checkbox(
                 checked = checkPassword,
-                onCheckedChange = {
-                    checkPassword = it
-
-                })
-            Text(text = "Mostrar contraseña")
+                onCheckedChange = { checkPassword = it },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = SecondaryColor
+                )
+            )
+            Text(
+                text = stringResource(id = R.string.mostrar_contraseña),
+                fontSize = 12.sp
+            )
         }
 
 
@@ -175,7 +202,10 @@ fun RegisterScreen() {
                 )
             },
             label = {
-                Text(text = "Confirm Password", color = Color.Gray)
+                Text(
+                    text = stringResource(R.string.confirm_password),
+                    color = TextHint
+                )
             }
         )
         Row(
@@ -186,11 +216,16 @@ fun RegisterScreen() {
         ) {
             Checkbox(
                 checked = checkConfirmPassword,
-                onCheckedChange = {
-                    checkConfirmPassword = it
+                onCheckedChange = { checkConfirmPassword = it },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = SecondaryColor
+                )
+            )
 
-                })
-            Text(text = "Mostrar contraseña")
+            Text(
+                text = stringResource(id = R.string.mostrar_contraseña),
+                fontSize = 12.sp
+            )
         }
         Spacer(modifier = Modifier.height(100.dp))
 
@@ -201,18 +236,18 @@ fun RegisterScreen() {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable {  } //agregar funcion para registrar con firebase
+                .clickable { } //add fun for register for google
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Blue)
-                    //aqui podemos agregar un color de boton antes de activacion
+                    .background(ButtonPrimary)
+                //add button color disable
             ) {
                 Text(
-                    text = "Registrarse",
-                    color = Color.White,
+                    text = stringResource(id = R.string.register),
+                    color = ButtonPrimaryText,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
@@ -228,7 +263,7 @@ fun RegisterScreen() {
             .padding(horizontal = 20.dp)
     ) {
         Divider(
-            color = Color.Black,
+            color = DividerColor,
             thickness = 1.dp,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -237,12 +272,12 @@ fun RegisterScreen() {
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "En caso de problemas comunicate con Soporte",
+            text = stringResource(id = R.string.message_soporte),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 10.dp),
             style = TextStyle(
-                color = (Color.Black),
+                color = (TextPrimary),
                 fontSize = 14.sp
             )
         )

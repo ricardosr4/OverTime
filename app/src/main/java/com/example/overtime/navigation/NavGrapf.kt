@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.overtime.ui.home.presenter.HomeScreen
 import com.example.overtime.ui.login.presenter.LoginScreen
-import com.example.overtime.ui.preLogin.PreLoginScreen
+import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
 import com.example.overtime.ui.register.presenter.RegisterScreen
 
 @Composable

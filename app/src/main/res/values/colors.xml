@@ -7,4 +7,41 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+
+    <!-- Colores Base -->
+    <color name="primary_color">#4A90E2</color> <!-- Botón principal, enlaces interactivos -->
+    <color name="secondary_color">#50E3C2</color> <!-- Elementos secundarios, acentos -->
+    <color name="background_color">#F5F7FA</color> <!-- Fondo principal de la app -->
+    <color name="contrast_color">#FF6B6B</color> <!-- Botón de acción destacada, alertas importantes -->
+
+    <!-- Botones -->
+    <color name="button_primary">#4A90E2</color> <!-- Fondo del botón principal -->
+    <color name="button_primary_text">#FFFFFF</color> <!-- Texto del botón principal -->
+    <color name="button_secondary_border">#4A90E2</color> <!-- Borde del botón secundario -->
+    <color name="button_secondary_text">#4A90E2</color> <!-- Texto del botón secundario -->
+    <color name="button_disabled">#E0E0E0</color> <!-- Fondo del botón deshabilitado -->
+    <color name="button_disabled_text">#9E9E9E</color> <!-- Texto del botón deshabilitado -->
+
+    <!-- Textos -->
+    <color name="text_primary">#212121</color> <!-- Texto principal -->
+    <color name="text_secondary">#757575</color> <!-- Texto secundario -->
+    <color name="text_hint">#9E9E9E</color> <!-- Texto de ayuda (hints) -->
+
+    <!-- Errores y Validaciones -->
+    <color name="error_text">#D32F2F</color> <!-- Mensajes de error -->
+    <color name="error_border">#FFCDD2</color> <!-- Bordes de campos con error -->
+
+    <!-- Notificaciones y Estados -->
+    <color name="success_color">#81C784</color> <!-- Indicadores de éxito -->
+    <color name="warning_color">#FFB74D</color> <!-- Advertencias -->
+
+    <!-- Sombras y Separadores -->
+    <color name="shadow_color">#BDBDBD</color> <!-- Sombras sutiles -->
+    <color name="divider_color">#E0E0E0</color> <!-- Líneas divisorias -->
+
+    <!-- Placeholders -->
+    <color name="placeholder_background">#EDEDED</color> <!-- Fondo para placeholders -->
+
 </resources>
