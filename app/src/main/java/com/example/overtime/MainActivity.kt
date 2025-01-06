@@ -25,5 +25,6 @@ class MainActivity : ComponentActivity() {
 // una prueba mas
 // prueba 3
 // prueba 4
+//problema solucionado podemos continuar
 
 
