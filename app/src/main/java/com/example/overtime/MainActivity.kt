@@ -19,5 +19,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+//conflicto solucionado
 
 
