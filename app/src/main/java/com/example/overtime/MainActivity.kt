@@ -23,5 +23,6 @@ class MainActivity : ComponentActivity() {
 // problema solucionado gracias a chat gpt
 //los problemas siguen
 // una prueba mas
+// prueba 3
 
 
