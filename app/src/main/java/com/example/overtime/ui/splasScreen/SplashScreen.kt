@@ -43,14 +43,14 @@ fun SplashScreen(navController: NavController) {
             ),
         )
 
-        delay(3000L)
+        delay(2500)
         navController.navigate(AppScreen.PreLoginScreen.route)
 
     }
     Box(
         modifier = Modifier
-            .fillMaxSize() // Asegura que el Box ocupe todo el espacio disponible
-            .wrapContentSize(Alignment.Center) // Centra el contenido dentro del Box
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_pre_login),
