@@ -8,6 +8,7 @@ import com.example.overtime.ui.home.presenter.HomeScreen
 import com.example.overtime.ui.login.presenter.LoginScreen
 import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
 import com.example.overtime.ui.register.presenter.RegisterScreen
+import com.example.overtime.ui.splasScreen.SplashScreen
 
 @Composable
 fun NavGraph(
@@ -16,7 +17,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.PreLoginScreen.route
+        startDestination = AppScreen.SplashScreen.route
     ){
 
         composable(AppScreen.PreLoginScreen.route) {
@@ -34,6 +35,11 @@ fun NavGraph(
         }
         composable(AppScreen.HomeScreen.route) {
             HomeScreen()
+        }
+        composable(AppScreen.SplashScreen.route) {
+            SplashScreen(
+                navController = navController
+            )
         }
 
     }

@@ -2,31 +2,14 @@ package com.example.overtime.ui.login.presenter
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -36,31 +19,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.overtime.R
 import com.example.overtime.navigation.AppScreen
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
+import com.example.overtime.ui.theme.TextPrimary
 import com.example.overtime.ui.theme.DividerColor
 import com.example.overtime.ui.theme.PrimaryColor
 import com.example.overtime.ui.theme.SecondaryColor
 import com.example.overtime.ui.theme.TextHint
-import com.example.overtime.ui.theme.TextPrimary
-
+import com.example.overtime.ui.login.viewModel.LoginViewModel
 
 @Composable
 fun LoginScreen(navController: NavController) {
 
-    var email by remember { mutableStateOf("") }
-
-    var password by remember { mutableStateOf("") }
-    var checkPassword by remember { mutableStateOf(false) }
-    var visualTransformationPassword by remember { mutableStateOf<VisualTransformation> (PasswordVisualTransformation()) }
+    val viewModel: LoginViewModel = viewModel()
+    val loginState by viewModel.loginState
 
     Column(
         modifier = Modifier
@@ -85,17 +64,13 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            value = email,
+            value = loginState.email,
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done
             ),
-            onValueChange = {
-                email = it
-
-            },
-//            placeholder = { Text(text = "stringResource(EMAIL)", color = Color.Gray) },
+            onValueChange = { viewModel.onEmailChanged(it) },
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_email),
@@ -105,11 +80,11 @@ fun LoginScreen(navController: NavController) {
                         .size(20.dp)
                 )
             },
-
             label = {
                 Text(
                     text = stringResource(R.string.email),
-                    color = TextHint)
+                    color = TextHint
+                )
             }
         )
         Spacer(modifier = Modifier.height(30.dp))
@@ -118,18 +93,14 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            value = password,
+            value = loginState.password,
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            onValueChange = {
-                password = it
-
-            },
-            visualTransformation = visualTransformationPassword,
-//            placeholder = { Text(text = "stringResource(EMAIL)", color = Color.Gray) },
+            onValueChange = { viewModel.onPasswordChanged(it) },
+            visualTransformation = loginState.passwordVisualTransformation,
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_password),
@@ -142,9 +113,11 @@ fun LoginScreen(navController: NavController) {
             label = {
                 Text(
                     text = stringResource(R.string.password),
-                    color = TextHint)
+                    color = TextHint
+                )
             }
         )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -152,14 +125,16 @@ fun LoginScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checkPassword,
-                onCheckedChange = { checkPassword = it },
+                checked = loginState.isPasswordVisible,
+                onCheckedChange = { viewModel.onPasswordVisibilityChanged() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = SecondaryColor,
-                ))
+                )
+            )
             Text(
                 text = stringResource(R.string.mostrar_contraseña),
-                fontSize = 12.sp)
+                fontSize = 12.sp
+            )
         }
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -182,28 +157,27 @@ fun LoginScreen(navController: NavController) {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable { navController.navigate(AppScreen.HomeScreen.route) } //add fun register for firebase
+                .clickable {
+                    if (loginState.isFormValid) {
+                        navController.navigate(AppScreen.HomeScreen.route)
+                    }
+                },
+            color = if (loginState.isFormValid) ButtonPrimary else Color.Gray
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(ButtonPrimary)
-                //add color button disabled
+                modifier = Modifier.fillMaxSize()
             ) {
                 Text(
                     text = stringResource(R.string.login),
                     color = ButtonPrimaryText,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-//                    fontFamily = FontFamily(getFont(Fonts.ROBOTO_BOLD))
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
                 )
             }
         }
-
-
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
