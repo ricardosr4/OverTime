@@ -32,6 +32,7 @@ fun NavGraph(
         }
         composable(AppScreen.RegisterScreen.route) {
             RegisterScreen()
+
         }
         composable(AppScreen.HomeScreen.route) {
             HomeScreen()
