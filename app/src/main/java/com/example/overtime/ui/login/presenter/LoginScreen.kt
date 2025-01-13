@@ -157,10 +157,7 @@ fun LoginScreen(navController: NavController) {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable {
-                    if (loginState.isFormValid) {
-                        navController.navigate(AppScreen.HomeScreen.route)
-                    }
+                .clickable { if (loginState.isFormValid) { navController.navigate(AppScreen.HomeScreen.route) }
                 },
             color = if (loginState.isFormValid) ButtonPrimary else Color.Gray
         ) {

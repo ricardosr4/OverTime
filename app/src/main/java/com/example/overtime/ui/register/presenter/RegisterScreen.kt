@@ -24,9 +24,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -36,13 +33,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.overtime.R
+import com.example.overtime.ui.register.viewModel.RegisterViewModel
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.DividerColor
@@ -50,27 +46,12 @@ import com.example.overtime.ui.theme.SecondaryColor
 import com.example.overtime.ui.theme.TextHint
 import com.example.overtime.ui.theme.TextPrimary
 
-@Preview(showBackground = true)
+
 @Composable
 fun RegisterScreen() {
 
-    var email by remember { mutableStateOf("") }
-
-    var password by remember { mutableStateOf("") }
-    var checkPassword by remember { mutableStateOf(false) }
-    var visualTransformationPassword by remember {
-        mutableStateOf<VisualTransformation>(
-            PasswordVisualTransformation()
-        )
-    }
-
-    var confirmPassword by remember { mutableStateOf("") }
-    var checkConfirmPassword by remember { mutableStateOf(false) }
-    var visualTransformationConfirmPassword by remember {
-        mutableStateOf<VisualTransformation>(
-            PasswordVisualTransformation()
-        )
-    }
+    val viewModel: RegisterViewModel = viewModel()
+    val registerState by viewModel.registerState
 
     Column(
         modifier = Modifier
@@ -95,15 +76,14 @@ fun RegisterScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            value = email,
+            value = registerState.email,
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done
             ),
             onValueChange = {
-                email = it
-
+                viewModel.onEmailChanged(it)
             },
 //            placeholder = { Text(text = "stringResource(EMAIL)", color = Color.Gray) },
             leadingIcon = {
@@ -129,17 +109,14 @@ fun RegisterScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            value = password,
+            value = registerState.password,
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            onValueChange = {
-                password = it
-
-            },
-            visualTransformation = visualTransformationPassword,
+            onValueChange = { viewModel.onPasswordChanged(it) },
+            visualTransformation = registerState.passwordVisualTransformation,
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_password),
@@ -163,8 +140,8 @@ fun RegisterScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checkPassword,
-                onCheckedChange = { checkPassword = it },
+                checked = registerState.isPasswordVisible,
+                onCheckedChange = { viewModel.onPasswordVisibilityChanged() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = SecondaryColor
                 )
@@ -180,17 +157,14 @@ fun RegisterScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            value = confirmPassword,
+            value = registerState.passwordConfirmation,
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            onValueChange = {
-                confirmPassword = it
-
-            },
-            visualTransformation = visualTransformationConfirmPassword,
+            onValueChange = { viewModel.onPasswordConfirmationChanged(it) },
+            visualTransformation = registerState.passwordConfirmationVisualTransformation,
 //            placeholder = { Text(text = "stringResource(EMAIL)", color = Color.Gray) },
             leadingIcon = {
                 Icon(
@@ -215,8 +189,8 @@ fun RegisterScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checkConfirmPassword,
-                onCheckedChange = { checkConfirmPassword = it },
+                checked = registerState.isPasswordConfirmationVisible,
+                onCheckedChange = { viewModel.onPasswordConfirmationVisibilityChanged() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = SecondaryColor
                 )
@@ -236,13 +210,15 @@ fun RegisterScreen() {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable { } //add fun for register for google
+                .clickable { registerState.isFormValid },
+            color = if (registerState.isFormValid) ButtonPrimary else Color.Gray
+
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(ButtonPrimary)
+
                 //add button color disable
             ) {
                 Text(
