@@ -19,12 +19,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-//conflicto solucionado
-// problema solucionado gracias a chat gpt
-//los problemas siguen
-// una prueba mas
-// prueba 3
-// prueba 4
-//problema solucionado podemos continuar
 
 

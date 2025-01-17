@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.overtime.ui.addHrsExtras.AddHrsExtrasScreen
+import com.example.overtime.ui.configuration.ConfigScreen
 import com.example.overtime.ui.home.presenter.HomeScreen
 import com.example.overtime.ui.login.presenter.LoginScreen
 import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
@@ -18,8 +20,13 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = AppScreen.SplashScreen.route
-    ){
+    ) {
 
+        composable(AppScreen.SplashScreen.route) {
+            SplashScreen(
+                navController = navController
+            )
+        }
         composable(AppScreen.PreLoginScreen.route) {
             PreLoginScreen(
                 navController = navController
@@ -37,11 +44,13 @@ fun NavGraph(
         composable(AppScreen.HomeScreen.route) {
             HomeScreen()
         }
-        composable(AppScreen.SplashScreen.route) {
-            SplashScreen(
-                navController = navController
-            )
+        composable(AppScreen.ConfigScreen.route) {
+            ConfigScreen()
         }
+        composable(AppScreen.AddHrsExtrasScreen.route) {
+            AddHrsExtrasScreen()
+        }
+
 
     }
 
