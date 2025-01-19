@@ -3,6 +3,7 @@ package com.example.overtime.ui.splasScreen
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -54,9 +56,10 @@ fun SplashScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
+            .background(Color.White)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_pre_login),
+            painter = painterResource(id = R.drawable.img_over_time),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
