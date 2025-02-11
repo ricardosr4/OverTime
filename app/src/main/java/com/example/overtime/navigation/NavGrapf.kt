@@ -19,7 +19,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.SplashScreen.route
+        startDestination = AppScreen.HomeScreen.route
     ) {
 
         composable(AppScreen.SplashScreen.route) {
@@ -38,7 +38,9 @@ fun NavGraph(
             )
         }
         composable(AppScreen.RegisterScreen.route) {
-            RegisterScreen()
+            RegisterScreen(
+                navController = navController
+            )
 
         }
         composable(AppScreen.HomeScreen.route) {

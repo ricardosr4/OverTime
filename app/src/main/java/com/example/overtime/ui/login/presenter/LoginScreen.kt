@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -139,6 +140,19 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(50.dp))
 
         Text(
+            text = "Si no tienes una cuenta, registrate aqui !",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clickable {  navController.navigate("register_screen") },
+            style = TextStyle(
+                color = PrimaryColor,
+                fontSize = 14.sp,
+                fontFamily = FontFamily.SansSerif
+            ),
+        )
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Text(
             text = stringResource(R.string.recuperar_contraseña),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -146,6 +160,7 @@ fun LoginScreen(navController: NavController) {
             style = TextStyle(
                 color = PrimaryColor,
                 fontSize = 14.sp,
+                fontFamily = FontFamily.SansSerif
             ),
         )
         Spacer(modifier = Modifier.height(170.dp))

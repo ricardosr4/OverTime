@@ -54,17 +54,18 @@ fun SplashScreen(navController: NavController) {
     }
     Box(
         modifier = Modifier
+            .background(Color.White)
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
-            .background(Color.White)
+
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_over_time),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(250.dp)
-                .height(250.dp)
+                .width(350.dp)
+                .height(350.dp)
                 .scale(scale.value)
                 .clip(
                     RoundedCornerShape(

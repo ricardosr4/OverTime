@@ -20,4 +20,5 @@ sealed class ItemsBottomNav(
         Icons.Default.Add,
         "Agregar hrs",
         "add_hrs_extras")
+
 }

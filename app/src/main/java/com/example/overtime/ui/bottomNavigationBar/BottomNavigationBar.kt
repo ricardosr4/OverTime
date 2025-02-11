@@ -22,6 +22,7 @@ fun BottomNavigationBar(
         ItemsBottomNav.HomeScreen,
         ItemsBottomNav.ConfigScreen,
         ItemsBottomNav.AddHrsExtras,
+
     )
     BottomAppBar {
         NavigationBar(

@@ -58,7 +58,7 @@ fun PreLoginScreen(navController: NavController) {
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(320.dp)
                     .align(Alignment.CenterHorizontally)
                     .clip(
                         RoundedCornerShape(
@@ -67,7 +67,7 @@ fun PreLoginScreen(navController: NavController) {
                         )
                     )
             )
-            Spacer(modifier = Modifier.height(150.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
             Surface(
                 shape = RoundedCornerShape(8.dp),

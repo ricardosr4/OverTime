@@ -27,28 +27,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.ui.register.viewModel.RegisterViewModel
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.DividerColor
+import com.example.overtime.ui.theme.PrimaryColor
 import com.example.overtime.ui.theme.SecondaryColor
 import com.example.overtime.ui.theme.TextHint
 import com.example.overtime.ui.theme.TextPrimary
 
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(navController: NavController) {
 
     val viewModel: RegisterViewModel = viewModel()
     val registerState by viewModel.registerState
@@ -201,7 +205,21 @@ fun RegisterScreen() {
                 fontSize = 12.sp
             )
         }
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Text(
+            text = "Si ya tienes una cuenta, ingresa aqui!",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clickable { navController.navigate("login_screen") },
+            style = TextStyle(
+                color = PrimaryColor,
+                fontSize = 14.sp,
+                fontFamily = FontFamily.SansSerif
+            ),
+        )
         Spacer(modifier = Modifier.height(100.dp))
+
 
         Surface(
             shape = RoundedCornerShape(8.dp),
