@@ -7,5 +7,5 @@ sealed class AppScreen(val route: String) {
     data object RegisterScreen: AppScreen("register_screen")
     data object HomeScreen: AppScreen("home_screen")
     data object ConfigScreen: AppScreen("config_screen")
-    data object AddHrsExtras: AppScreen("add_hrs_extras")
+    data object AddHrsExtrasScreen: AppScreen("add_hrs_extras")
 }

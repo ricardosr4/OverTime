@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
@@ -52,11 +54,12 @@ fun PreLoginScreen(navController: NavController) {
                 .padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.img_pre_login),
+                painter = painterResource(id = R.drawable.img_over_time),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .size(320.dp)
+                    .align(Alignment.CenterHorizontally)
                     .clip(
                         RoundedCornerShape(
                             bottomStart = 10.dp,
@@ -64,7 +67,7 @@ fun PreLoginScreen(navController: NavController) {
                         )
                     )
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(100.dp))
 
             Surface(
                 shape = RoundedCornerShape(8.dp),
@@ -154,7 +157,7 @@ fun PreLoginScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 10.dp)
             ) {
                 Divider(
                     color = DividerColor,
@@ -168,8 +171,7 @@ fun PreLoginScreen(navController: NavController) {
                 Text(
                     text = stringResource(R.string.message_soporte),
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 10.dp),
+                        .align(Alignment.BottomCenter),
                     style = TextStyle(
                         color = TextPrimary,
                         fontSize = 14.sp
