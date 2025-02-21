@@ -28,11 +28,29 @@ fun HomeScreen(navController: NavController) {
     val currentMonth =
         remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
 
+    // Lista con los ítems (día, cantidad de horas extras, porcentaje de horas extras)
     var itemsList by remember {
         mutableStateOf(List(21) { index ->
             Triple("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
         })
     }
+
+    // Variables para llevar un control de las horas acumuladas por cada porcentaje
+    var total50 by remember { mutableStateOf(0) }
+    var total75 by remember { mutableStateOf(0) }
+    var total100 by remember { mutableStateOf(0) }
+    var total130 by remember { mutableStateOf(0) }
+
+    // Función para recalcular las horas de cada porcentaje
+    fun recalculateHours() {
+        total50 = itemsList.filter { it.third == 50 }.sumOf { it.second }
+        total75 = itemsList.filter { it.third == 75 }.sumOf { it.second }
+        total100 = itemsList.filter { it.third == 100 }.sumOf { it.second }
+        total130 = itemsList.filter { it.third == 130 }.sumOf { it.second }
+    }
+
+    // Recalcular las horas al inicio
+    recalculateHours()
 
     Column(modifier = Modifier.fillMaxSize()) {
         // Card superior
@@ -59,10 +77,12 @@ fun HomeScreen(navController: NavController) {
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(text = "20 hrs al 130%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "20 hrs al 100%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "20 hrs al 75%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "20 hrs al 50%", fontSize = 16.sp, color = Color.Black)
+
+                // Mostrar las horas acumuladas por porcentaje
+                Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = Color.Black)
             }
         }
 
@@ -97,7 +117,10 @@ fun HomeScreen(navController: NavController) {
                     weekDay = item.first,
                     quantityOverHours = item.second,
                     percentageOverHours = item.third,
-                    onDeleteConfirm = { itemsList = itemsList - item }
+                    onDeleteConfirm = {
+                        itemsList = itemsList - item
+                        recalculateHours() // Recalcular horas al eliminar un ítem
+                    }
                 )
             }
         }
@@ -108,7 +131,7 @@ fun HomeScreen(navController: NavController) {
 fun CardItem(
     weekDay: String,
     quantityOverHours: Int,
-   percentageOverHours: Int,
+    percentageOverHours: Int,
     onDeleteConfirm: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -174,3 +197,4 @@ fun CardItem(
         }
     }
 }
+//faltan mas ajustes ...
