@@ -1,5 +1,7 @@
 package com.example.overtime.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +14,7 @@ import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
 import com.example.overtime.ui.register.presenter.RegisterScreen
 import com.example.overtime.ui.splasScreen.SplashScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(
     navController: NavHostController
@@ -19,7 +22,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.HomeScreen.route
+        startDestination = AppScreen.SplashScreen.route
     ) {
 
         composable(AppScreen.SplashScreen.route) {
@@ -44,7 +47,9 @@ fun NavGraph(
 
         }
         composable(AppScreen.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(
+                navController = navController
+            )
         }
         composable(AppScreen.ConfigScreen.route) {
             ConfigScreen()

@@ -1,5 +1,7 @@
 package com.example.overtime.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,6 +11,7 @@ import com.example.overtime.ui.configuration.ConfigScreen
 import com.example.overtime.ui.home.presenter.HomeScreen
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BottomNavGraph(
     navController: NavHostController
@@ -20,7 +23,7 @@ fun BottomNavGraph(
     ) {
 
         composable(AppScreen.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(AppScreen.ConfigScreen.route) {
             ConfigScreen()
