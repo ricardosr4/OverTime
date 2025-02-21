@@ -14,6 +14,9 @@ data class RegisterState(
     val isFormValid: Boolean = false,
 
     val passwordVisualTransformation: VisualTransformation = PasswordVisualTransformation(),
-    val passwordConfirmationVisualTransformation: VisualTransformation = PasswordVisualTransformation()
+    val passwordConfirmationVisualTransformation: VisualTransformation = PasswordVisualTransformation(),
+
+    val isSuccess: Boolean = false,  // Para saber si el registro fue exitoso
+    val errorMessage: String? = null // Para mostrar errores
 
 )

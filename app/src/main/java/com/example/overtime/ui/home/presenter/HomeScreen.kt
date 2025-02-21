@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.overtime.ui.theme.ButtonPrimary
 
 import java.time.LocalDate
@@ -23,7 +24,7 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     val currentMonth =
         remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
 

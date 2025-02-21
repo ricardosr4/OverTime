@@ -8,8 +8,13 @@ import com.example.overtime.ui.register.state.RegisterState
 import androidx.compose.runtime.State
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class RegisterViewModel :ViewModel(){
+
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _registerState: MutableState<RegisterState> = mutableStateOf(RegisterState())
     val registerState:State<RegisterState> get() = _registerState
@@ -55,5 +60,21 @@ class RegisterViewModel :ViewModel(){
         _registerState.value = _registerState.value.copy(
             isFormValid = isFormValid
         )
+    }
+    fun register() {
+        if (!_registerState.value.isFormValid) return
+
+        viewModelScope.launch {
+            auth.createUserWithEmailAndPassword(
+                _registerState.value.email,
+                _registerState.value.password
+            ).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _registerState.value = _registerState.value.copy(isSuccess = true)
+                } else {
+                    _registerState.value = _registerState.value.copy(errorMessage = task.exception?.message ?: "Error desconocido")
+                }
+            }
+        }
     }
 }
