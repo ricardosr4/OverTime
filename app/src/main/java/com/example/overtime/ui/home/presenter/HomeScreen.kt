@@ -197,4 +197,4 @@ fun CardItem(
         }
     }
 }
-//faltan mas ajustes ...
+
