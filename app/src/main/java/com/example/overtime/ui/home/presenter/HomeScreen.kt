@@ -17,10 +17,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.overtime.ui.theme.ButtonPrimary
-
+import com.example.overtime.ui.theme.CardColor
+import com.example.overtime.ui.theme.SecondaryColor
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+
+// Definir el data class WorkDay
+data class WorkDay(
+    val weekDay: String,
+    val quantityOverHours: Int,
+    val percentageOverHours: Int
+)
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -28,10 +36,10 @@ fun HomeScreen(navController: NavController) {
     val currentMonth =
         remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
 
-    // Lista con los ítems (día, cantidad de horas extras, porcentaje de horas extras)
+    // Lista con los ítems como WorkDay
     var itemsList by remember {
         mutableStateOf(List(21) { index ->
-            Triple("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
+            WorkDay("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
         })
     }
 
@@ -43,10 +51,10 @@ fun HomeScreen(navController: NavController) {
 
     // Función para recalcular las horas de cada porcentaje
     fun recalculateHours() {
-        total50 = itemsList.filter { it.third == 50 }.sumOf { it.second }
-        total75 = itemsList.filter { it.third == 75 }.sumOf { it.second }
-        total100 = itemsList.filter { it.third == 100 }.sumOf { it.second }
-        total130 = itemsList.filter { it.third == 130 }.sumOf { it.second }
+        total50 = itemsList.filter { it.percentageOverHours == 50 }.sumOf { it.quantityOverHours }
+        total75 = itemsList.filter { it.percentageOverHours == 75 }.sumOf { it.quantityOverHours }
+        total100 = itemsList.filter { it.percentageOverHours == 100 }.sumOf { it.quantityOverHours }
+        total130 = itemsList.filter { it.percentageOverHours == 130 }.sumOf { it.quantityOverHours }
     }
 
     // Recalcular las horas al inicio
@@ -60,7 +68,7 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxHeight(0.3f)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            colors = CardDefaults.cardColors(containerColor = CardColor),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
         ) {
             Column(
@@ -114,9 +122,9 @@ fun HomeScreen(navController: NavController) {
         ) {
             items(itemsList) { item ->
                 CardItem(
-                    weekDay = item.first,
-                    quantityOverHours = item.second,
-                    percentageOverHours = item.third,
+                    weekDay = item.weekDay,
+                    quantityOverHours = item.quantityOverHours,
+                    percentageOverHours = item.percentageOverHours,
                     onDeleteConfirm = {
                         itemsList = itemsList - item
                         recalculateHours() // Recalcular horas al eliminar un ítem
@@ -162,7 +170,7 @@ fun CardItem(
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = SecondaryColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -197,4 +205,3 @@ fun CardItem(
         }
     }
 }
-
