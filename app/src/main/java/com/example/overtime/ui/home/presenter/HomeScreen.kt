@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
 import com.example.overtime.ui.theme.SecondaryColor
@@ -23,12 +24,6 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-// Definir el data class WorkDay
-data class WorkDay(
-    val weekDay: String,
-    val quantityOverHours: Int,
-    val percentageOverHours: Int
-)
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -36,12 +31,16 @@ fun HomeScreen(navController: NavController) {
     val currentMonth =
         remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
 
-    // Lista con los ítems como WorkDay
+    // Lista que inicia como vacia
     var itemsList by remember {
-        mutableStateOf(List(21) { index ->
-            WorkDay("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
-        })
+        mutableStateOf<List<WorkDay>>(emptyList()) // Lista vacía
     }
+    // Lista con los ítems de ejemplo
+//    var itemsList by remember {
+//        mutableStateOf(List(21) { index ->
+//            WorkDay("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
+//        })
+//    }
 
     // Variables para llevar un control de las horas acumuladas por cada porcentaje
     var total50 by remember { mutableStateOf(0) }
