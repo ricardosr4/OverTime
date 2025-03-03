@@ -15,34 +15,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.theme.ButtonPrimary
-
+import com.example.overtime.ui.viewmodel.OvertimeViewModel
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(navController: NavController) {
-    val currentMonth =
-        remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
+fun HomeScreen(
+    navController: NavController,
+    viewModel: OvertimeViewModel = viewModel()
+) {
 
-    var itemsList by remember {
-        mutableStateOf(List(21) { index ->
-            Triple("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
-        })
-    }
+    val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
+    val workDays by viewModel.workDays.collectAsState()
+
+    // Calcular total de horas por porcentaje
+    val total50 = workDays.filter { it.percentageOverHours == 50 }.sumOf { it.quantityOverHours }
+    val total75 = workDays.filter { it.percentageOverHours == 75 }.sumOf { it.quantityOverHours }
+    val total100 = workDays.filter { it.percentageOverHours == 100 }.sumOf { it.quantityOverHours }
+    val total130 = workDays.filter { it.percentageOverHours == 130 }.sumOf { it.quantityOverHours }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Card superior
+        // Card superior con totales de horas
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.3f)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
         ) {
             Column(
@@ -58,46 +64,38 @@ fun HomeScreen(navController: NavController) {
                     fontSize = 22.sp,
                     color = Color.Black
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(text = "20 hrs al 130%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "20 hrs al 100%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "20 hrs al 75%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "20 hrs al 50%", fontSize = 16.sp, color = Color.Black)
+
+                // Mostrar el total de horas agrupadas por porcentaje
+                Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = Color.Black)
             }
         }
 
         Button(
-            onClick = { },
+            onClick = { navController.navigate("add_hrs_extras") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 50.dp),
+                .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = ButtonPrimary,
-                contentColor = Color.White
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
         ) {
-            Text(
-                text = "Calcular Total $",
-                style = MaterialTheme.typography.labelLarge
-            )
+            Text("Agregar Horas Extras")
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // LazyColumn con los elementos dinámicos
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(itemsList) { item ->
+            items(workDays) { item ->
                 CardItem(
-                    weekDay = item.first,
-                    quantityOverHours = item.second,
-                    percentageOverHours = item.third,
-                    onDeleteConfirm = { itemsList = itemsList - item }
+                    workDay = item,
+                    onDeleteConfirm = { viewModel.deleteWorkDay(item) } // Llamar función de eliminación
                 )
             }
         }
@@ -106,9 +104,7 @@ fun HomeScreen(navController: NavController) {
 
 @Composable
 fun CardItem(
-    weekDay: String,
-    quantityOverHours: Int,
-   percentageOverHours: Int,
+    workDay: WorkDay,
     onDeleteConfirm: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -139,7 +135,7 @@ fun CardItem(
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -149,20 +145,9 @@ fun CardItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = weekDay,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Horas extras: $quantityOverHours",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "Porcentaje: $percentageOverHours%",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                Text(text = workDay.weekDay, fontSize = 16.sp)
+                Text(text = "Horas extras: ${workDay.quantityOverHours}", fontSize = 14.sp)
+                Text(text = "Porcentaje: ${workDay.percentageOverHours}%", fontSize = 14.sp)
             }
             IconButton(onClick = { showDialog = true }) {
                 Icon(

@@ -1,116 +1,218 @@
 package com.example.overtime.ui.addHrsExtras
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.overtime.data.model.WorkDay
+import com.example.overtime.ui.theme.ButtonPrimary
+import com.example.overtime.ui.theme.CardColor
+import com.example.overtime.ui.viewmodel.OvertimeViewModel
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHrsExtrasScreen(){
+fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewModel = viewModel()) {
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("Selecciona una fecha") }
+    var selectedPercentage by remember { mutableIntStateOf(50) }
+    var selectedHours by remember { mutableIntStateOf(1) }
+    var showErrorDialog by remember { mutableStateOf(false) } // Estado para mostrar la alerta
 
-    Column(
+    val percentageOptions = listOf(50, 75, 100, 130)
+    val hoursOptions = (1..12).toList()
+
+    var expandedPercentage by remember { mutableStateOf(false) }
+    var expandedHours by remember { mutableStateOf(false) }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(start = 20.dp, end = 20.dp, top = 50.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 20.dp)
     ) {
-        // 📌 Tarjeta con la fecha seleccionada y un icono de calendario
-
-
-        Button(
-            onClick = { showDatePicker = true },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Seleccionar Fecha", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-            shape = RoundedCornerShape(16.dp),
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .align(Alignment.TopCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            // Card para seleccionar la fecha
+            Card(
+                colors = CardDefaults.cardColors(containerColor = CardColor),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
             ) {
-                Icon(
-                    imageVector = Icons.Default.DateRange, // 🔄 Cambio aquí
-                    contentDescription = "Calendario",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = selectedDate,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-        }
-
-        if (showDatePicker) {
-            DatePickerDialog(
-                onDismissRequest = { showDatePicker = false },
-                confirmButton = {
-                    TextButton(onClick = { showDatePicker = false }) {
-                        Text("Aceptar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    }
-                }
-            ) {
-                val datePickerState = rememberDatePickerState()
-                DatePicker(state = datePickerState)
-
-                LaunchedEffect(datePickerState.selectedDateMillis) {
-                    datePickerState.selectedDateMillis?.let { millis ->
-                        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                        selectedDate = sdf.format(Date(millis))
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Seleccionar Fecha", fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = { showDatePicker = true },
+                        colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = selectedDate, fontSize = 16.sp)
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(50.dp))
+            Divider()
+            Spacer(modifier = Modifier.height(50.dp))
+
+            // Card para seleccionar el porcentaje de horas extras
+            Card(
+                colors = CardDefaults.cardColors(containerColor = CardColor),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Selecciona el porcentaje de horas extras", fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    ExposedDropdownMenuBox(
+                        expanded = expandedPercentage,
+                        onExpandedChange = { expandedPercentage = !expandedPercentage }
+                    ) {
+                        TextField(
+                            readOnly = true,
+                            value = "$selectedPercentage%",
+                            onValueChange = {},
+                            label = { Text("Porcentaje") },
+                            modifier = Modifier.fillMaxWidth().menuAnchor(),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expandedPercentage,
+                            onDismissRequest = { expandedPercentage = false }
+                        ) {
+                            percentageOptions.forEach { percentage ->
+                                DropdownMenuItem(
+                                    text = { Text("$percentage%") },
+                                    onClick = {
+                                        selectedPercentage = percentage
+                                        expandedPercentage = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(50.dp))
+            Divider()
+            Spacer(modifier = Modifier.height(50.dp))
+
+            // Card para seleccionar la cantidad de horas extras
+            Card(
+                colors = CardDefaults.cardColors(containerColor = CardColor),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Selecciona las horas extras", fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    ExposedDropdownMenuBox(
+                        expanded = expandedHours,
+                        onExpandedChange = { expandedHours = !expandedHours }
+                    ) {
+                        TextField(
+                            readOnly = true,
+                            value = "$selectedHours hrs",
+                            onValueChange = {},
+                            label = { Text("Horas Extras") },
+                            modifier = Modifier.fillMaxWidth().menuAnchor(),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expandedHours,
+                            onDismissRequest = { expandedHours = false }
+                        ) {
+                            hoursOptions.forEach { hour ->
+                                DropdownMenuItem(
+                                    text = { Text("$hour hrs") },
+                                    onClick = {
+                                        selectedHours = hour
+                                        expandedHours = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        // Botón fijo en la parte inferior
+        Button(
+            onClick = {
+                if (selectedDate == "Selecciona una fecha" || selectedHours == 0) {
+                    showErrorDialog = true // Mostrar alerta si falta algún campo
+                } else {
+                    val newWorkDay = WorkDay(
+                        weekDay = selectedDate,
+                        quantityOverHours = selectedHours,
+                        percentageOverHours = selectedPercentage
+                    )
+                    viewModel.addWorkDay(newWorkDay)
+                    navController.popBackStack() // Regresar a Home
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(20.dp)
+        ) {
+            Text(text = "Agregar", fontSize = 20.sp)
+        }
+    }
+
+    // Mostrar el DatePicker cuando se activa
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Aceptar")
+                }
+            }
+        ) {
+            val datePickerState = rememberDatePickerState()
+            DatePicker(state = datePickerState)
+
+            LaunchedEffect(datePickerState.selectedDateMillis) {
+                datePickerState.selectedDateMillis?.let { millis ->
+
+                    val sdf = SimpleDateFormat("EEEE dd/MM/yyyy", Locale.getDefault())
+                    selectedDate = sdf.format(Date(millis)).replaceFirstChar { it.uppercase() }
+                }
+            }
+        }
+    }
+
+    // Mostrar AlertDialog si falta algún campo
+    if (showErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showErrorDialog = false },
+            title = { Text("Error") },
+            text = { Text("Falta llenar un campo.") },
+            confirmButton = {
+                TextButton(onClick = { showErrorDialog = false }) {
+                    Text("Aceptar", color = Color.Red)
+                }
+            }
+        )
     }
 }

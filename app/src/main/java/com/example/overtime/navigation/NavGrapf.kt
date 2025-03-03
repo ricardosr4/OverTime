@@ -3,6 +3,7 @@ package com.example.overtime.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,52 +14,39 @@ import com.example.overtime.ui.login.presenter.LoginScreen
 import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
 import com.example.overtime.ui.register.presenter.RegisterScreen
 import com.example.overtime.ui.splasScreen.SplashScreen
+import com.example.overtime.ui.viewmodel.OvertimeViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavGraph(
-    navController: NavHostController
+fun NavGraph(navController: NavHostController) {
+    // Crear una única instancia de ViewModel para compartir entre pantallas
+    val viewModel: OvertimeViewModel = viewModel()
 
-) {
     NavHost(
         navController = navController,
         startDestination = AppScreen.SplashScreen.route
     ) {
 
         composable(AppScreen.SplashScreen.route) {
-            SplashScreen(
-                navController = navController
-            )
+            SplashScreen(navController = navController)
         }
         composable(AppScreen.PreLoginScreen.route) {
-            PreLoginScreen(
-                navController = navController
-            )
+            PreLoginScreen(navController = navController)
         }
         composable(AppScreen.LoginScreen.route) {
-            LoginScreen(
-                navController = navController
-            )
+            LoginScreen(navController = navController)
         }
         composable(AppScreen.RegisterScreen.route) {
-            RegisterScreen(
-                navController = navController
-            )
-
+            RegisterScreen(navController = navController)
         }
         composable(AppScreen.HomeScreen.route) {
-            HomeScreen(
-                navController = navController
-            )
+            HomeScreen(navController = navController, viewModel = viewModel) // Pasar ViewModel
         }
         composable(AppScreen.ConfigScreen.route) {
             ConfigScreen()
         }
         composable(AppScreen.AddHrsExtrasScreen.route) {
-            AddHrsExtrasScreen()
+            AddHrsExtrasScreen(navController = navController, viewModel = viewModel) // Pasar ViewModel
         }
-
-
     }
-
 }
