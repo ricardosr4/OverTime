@@ -7,17 +7,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
+import com.example.overtime.ui.viewmodel.OvertimeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHrsExtrasScreen() {
+fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewModel = viewModel()) {
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("Selecciona una fecha") }
     var selectedPercentage by remember { mutableIntStateOf(50) }
@@ -48,7 +51,6 @@ fun AddHrsExtrasScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp),
-
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
@@ -56,7 +58,6 @@ fun AddHrsExtrasScreen() {
                     Text(
                         text = "Seleccionar Fecha",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
 
@@ -68,7 +69,7 @@ fun AddHrsExtrasScreen() {
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = selectedDate, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        Text(text = selectedDate, fontSize = 16.sp)
                     }
                 }
             }
@@ -89,7 +90,6 @@ fun AddHrsExtrasScreen() {
                     Text(
                         text = "Selecciona el porcentaje de horas extras",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
 
@@ -146,7 +146,6 @@ fun AddHrsExtrasScreen() {
                     Text(
                         text = "Selecciona las horas extras",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
 
@@ -190,7 +189,15 @@ fun AddHrsExtrasScreen() {
 
         // Botón fijo en la parte inferior
         Button(
-            onClick = { /* Acción para agregar */ },
+            onClick = {
+                val newWorkDay = WorkDay(
+                    weekDay = selectedDate,
+                    quantityOverHours = selectedHours,
+                    percentageOverHours = selectedPercentage
+                )
+                viewModel.addWorkDay(newWorkDay)
+                navController.popBackStack() // Regresar a Home
+            },
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
@@ -198,7 +205,7 @@ fun AddHrsExtrasScreen() {
                 .align(Alignment.BottomCenter)
                 .padding(20.dp)
         ) {
-            Text(text = "Agregar", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Agregar", fontSize = 20.sp)
         }
     }
 
@@ -208,7 +215,7 @@ fun AddHrsExtrasScreen() {
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Aceptar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text("Aceptar", fontSize = 16.sp)
                 }
             }
         ) {

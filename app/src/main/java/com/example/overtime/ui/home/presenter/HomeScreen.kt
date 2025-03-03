@@ -15,59 +15,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.theme.ButtonPrimary
-import com.example.overtime.ui.theme.CardColor
-import com.example.overtime.ui.theme.SecondaryColor
+import com.example.overtime.ui.viewmodel.OvertimeViewModel
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, viewModel: OvertimeViewModel = viewModel()) {
     val currentMonth =
         remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
 
-    // Lista que inicia como vacia
-    var itemsList by remember {
-        mutableStateOf<List<WorkDay>>(emptyList()) // Lista vacía
-    }
-    // Lista con los ítems de ejemplo
-//    var itemsList by remember {
-//        mutableStateOf(List(21) { index ->
-//            WorkDay("Día $index", (1..5).random(), listOf(50, 75, 100, 130).random())
-//        })
-//    }
-
-    // Variables para llevar un control de las horas acumuladas por cada porcentaje
-    var total50 by remember { mutableStateOf(0) }
-    var total75 by remember { mutableStateOf(0) }
-    var total100 by remember { mutableStateOf(0) }
-    var total130 by remember { mutableStateOf(0) }
-
-    // Función para recalcular las horas de cada porcentaje
-    fun recalculateHours() {
-        total50 = itemsList.filter { it.percentageOverHours == 50 }.sumOf { it.quantityOverHours }
-        total75 = itemsList.filter { it.percentageOverHours == 75 }.sumOf { it.quantityOverHours }
-        total100 = itemsList.filter { it.percentageOverHours == 100 }.sumOf { it.quantityOverHours }
-        total130 = itemsList.filter { it.percentageOverHours == 130 }.sumOf { it.quantityOverHours }
-    }
-
-    // Recalcular las horas al inicio
-    recalculateHours()
+    val workDays by viewModel.workDays.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Card superior
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.3f)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = CardColor),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
         ) {
             Column(
@@ -83,51 +55,32 @@ fun HomeScreen(navController: NavController) {
                     fontSize = 22.sp,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-
-                // Mostrar las horas acumuladas por porcentaje
-                Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = Color.Black)
-                Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = Color.Black)
             }
         }
 
         Button(
-            onClick = { },
+            onClick = { navController.navigate("addHrsExtrasScreen") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 50.dp),
+                .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = ButtonPrimary,
-                contentColor = Color.White
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
         ) {
-            Text(
-                text = "Calcular Total $",
-                style = MaterialTheme.typography.labelLarge
-            )
+            Text("Agregar Horas Extras")
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // LazyColumn con los elementos dinámicos
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(itemsList) { item ->
+            items(workDays) { item ->
                 CardItem(
                     weekDay = item.weekDay,
                     quantityOverHours = item.quantityOverHours,
                     percentageOverHours = item.percentageOverHours,
-                    onDeleteConfirm = {
-                        itemsList = itemsList - item
-                        recalculateHours() // Recalcular horas al eliminar un ítem
-                    }
+                    onDeleteConfirm = { /* Implementación de eliminación si es necesario */ }
                 )
             }
         }
@@ -141,35 +94,12 @@ fun CardItem(
     percentageOverHours: Int,
     onDeleteConfirm: () -> Unit
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Confirmar eliminación") },
-            text = { Text("¿Estás seguro de que deseas eliminar este ítem?") },
-            confirmButton = {
-                TextButton(onClick = {
-                    onDeleteConfirm()
-                    showDialog = false
-                }) {
-                    Text("Eliminar", color = Color.Red)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancelar")
-                }
-            }
-        )
-    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = SecondaryColor),
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -179,27 +109,12 @@ fun CardItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = weekDay,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Horas extras: $quantityOverHours",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "Porcentaje: $percentageOverHours%",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                Text(text = weekDay, fontSize = 16.sp)
+                Text(text = "Horas extras: $quantityOverHours", fontSize = 14.sp)
+                Text(text = "Porcentaje: $percentageOverHours%", fontSize = 14.sp)
             }
-            IconButton(onClick = { showDialog = true }) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar",
-                    tint = Color.Red
-                )
+            IconButton(onClick = { onDeleteConfirm() }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
             }
         }
     }
