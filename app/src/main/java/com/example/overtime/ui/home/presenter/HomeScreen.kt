@@ -26,13 +26,22 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(navController: NavController, viewModel: OvertimeViewModel = viewModel()) {
-    val currentMonth =
-        remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
+fun HomeScreen(
+    navController: NavController,
+    viewModel: OvertimeViewModel = viewModel()
+) {
 
+    val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
     val workDays by viewModel.workDays.collectAsState()
 
+    // Calcular total de horas por porcentaje
+    val total50 = workDays.filter { it.percentageOverHours == 50 }.sumOf { it.quantityOverHours }
+    val total75 = workDays.filter { it.percentageOverHours == 75 }.sumOf { it.quantityOverHours }
+    val total100 = workDays.filter { it.percentageOverHours == 100 }.sumOf { it.quantityOverHours }
+    val total130 = workDays.filter { it.percentageOverHours == 130 }.sumOf { it.quantityOverHours }
+
     Column(modifier = Modifier.fillMaxSize()) {
+        // Card superior con totales de horas
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,11 +64,19 @@ fun HomeScreen(navController: NavController, viewModel: OvertimeViewModel = view
                     fontSize = 22.sp,
                     color = Color.Black
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Mostrar el total de horas agrupadas por porcentaje
+                Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = Color.Black)
+                Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = Color.Black)
             }
         }
 
         Button(
-            onClick = { navController.navigate("addHrsExtrasScreen") },
+            onClick = { navController.navigate("add_hrs_extras") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -77,10 +94,8 @@ fun HomeScreen(navController: NavController, viewModel: OvertimeViewModel = view
         ) {
             items(workDays) { item ->
                 CardItem(
-                    weekDay = item.weekDay,
-                    quantityOverHours = item.quantityOverHours,
-                    percentageOverHours = item.percentageOverHours,
-                    onDeleteConfirm = { /* Implementación de eliminación si es necesario */ }
+                    workDay = item,
+                    onDeleteConfirm = { viewModel.deleteWorkDay(item) } // Llamar función de eliminación
                 )
             }
         }
@@ -89,11 +104,32 @@ fun HomeScreen(navController: NavController, viewModel: OvertimeViewModel = view
 
 @Composable
 fun CardItem(
-    weekDay: String,
-    quantityOverHours: Int,
-    percentageOverHours: Int,
+    workDay: WorkDay,
     onDeleteConfirm: () -> Unit
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Confirmar eliminación") },
+            text = { Text("¿Estás seguro de que deseas eliminar este ítem?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDeleteConfirm()
+                    showDialog = false
+                }) {
+                    Text("Eliminar", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,12 +145,16 @@ fun CardItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = weekDay, fontSize = 16.sp)
-                Text(text = "Horas extras: $quantityOverHours", fontSize = 14.sp)
-                Text(text = "Porcentaje: $percentageOverHours%", fontSize = 14.sp)
+                Text(text = workDay.weekDay, fontSize = 16.sp)
+                Text(text = "Horas extras: ${workDay.quantityOverHours}", fontSize = 14.sp)
+                Text(text = "Porcentaje: ${workDay.percentageOverHours}%", fontSize = 14.sp)
             }
-            IconButton(onClick = { onDeleteConfirm() }) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
+            IconButton(onClick = { showDialog = true }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Eliminar",
+                    tint = Color.Red
+                )
             }
         }
     }

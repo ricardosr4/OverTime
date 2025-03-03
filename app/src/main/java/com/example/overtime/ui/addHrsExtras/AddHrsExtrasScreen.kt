@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,6 +26,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
     var selectedDate by remember { mutableStateOf("Selecciona una fecha") }
     var selectedPercentage by remember { mutableIntStateOf(50) }
     var selectedHours by remember { mutableIntStateOf(1) }
+    var showErrorDialog by remember { mutableStateOf(false) } // Estado para mostrar la alerta
 
     val percentageOptions = listOf(50, 75, 100, 130)
     val hoursOptions = (1..12).toList()
@@ -52,17 +54,9 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                     .fillMaxWidth()
                     .padding(top = 30.dp),
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Seleccionar Fecha",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Seleccionar Fecha", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-
                     Button(
                         onClick = { showDatePicker = true },
                         colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
@@ -84,17 +78,9 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Selecciona el porcentaje de horas extras",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Selecciona el porcentaje de horas extras", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-
                     ExposedDropdownMenuBox(
                         expanded = expandedPercentage,
                         onExpandedChange = { expandedPercentage = !expandedPercentage }
@@ -104,14 +90,8 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                             value = "$selectedPercentage%",
                             onValueChange = {},
                             label = { Text("Porcentaje") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            )
+                            modifier = Modifier.fillMaxWidth().menuAnchor(),
                         )
-
                         ExposedDropdownMenu(
                             expanded = expandedPercentage,
                             onDismissRequest = { expandedPercentage = false }
@@ -140,17 +120,9 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Selecciona las horas extras",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Selecciona las horas extras", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-
                     ExposedDropdownMenuBox(
                         expanded = expandedHours,
                         onExpandedChange = { expandedHours = !expandedHours }
@@ -160,14 +132,8 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                             value = "$selectedHours hrs",
                             onValueChange = {},
                             label = { Text("Horas Extras") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            )
+                            modifier = Modifier.fillMaxWidth().menuAnchor(),
                         )
-
                         ExposedDropdownMenu(
                             expanded = expandedHours,
                             onDismissRequest = { expandedHours = false }
@@ -190,13 +156,17 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
         // Botón fijo en la parte inferior
         Button(
             onClick = {
-                val newWorkDay = WorkDay(
-                    weekDay = selectedDate,
-                    quantityOverHours = selectedHours,
-                    percentageOverHours = selectedPercentage
-                )
-                viewModel.addWorkDay(newWorkDay)
-                navController.popBackStack() // Regresar a Home
+                if (selectedDate == "Selecciona una fecha" || selectedHours == 0) {
+                    showErrorDialog = true // Mostrar alerta si falta algún campo
+                } else {
+                    val newWorkDay = WorkDay(
+                        weekDay = selectedDate,
+                        quantityOverHours = selectedHours,
+                        percentageOverHours = selectedPercentage
+                    )
+                    viewModel.addWorkDay(newWorkDay)
+                    navController.popBackStack() // Regresar a Home
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
             shape = RoundedCornerShape(12.dp),
@@ -215,7 +185,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Aceptar", fontSize = 16.sp)
+                    Text("Aceptar")
                 }
             }
         ) {
@@ -224,10 +194,25 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
 
             LaunchedEffect(datePickerState.selectedDateMillis) {
                 datePickerState.selectedDateMillis?.let { millis ->
-                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                    selectedDate = sdf.format(Date(millis))
+
+                    val sdf = SimpleDateFormat("EEEE dd/MM/yyyy", Locale.getDefault())
+                    selectedDate = sdf.format(Date(millis)).replaceFirstChar { it.uppercase() }
                 }
             }
         }
+    }
+
+    // Mostrar AlertDialog si falta algún campo
+    if (showErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showErrorDialog = false },
+            title = { Text("Error") },
+            text = { Text("Falta llenar un campo.") },
+            confirmButton = {
+                TextButton(onClick = { showErrorDialog = false }) {
+                    Text("Aceptar", color = Color.Red)
+                }
+            }
+        )
     }
 }

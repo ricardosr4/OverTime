@@ -13,4 +13,7 @@ class OvertimeViewModel : ViewModel() {
     fun addWorkDay(workDay: WorkDay) {
         _workDays.value = _workDays.value + workDay
     }
+    fun deleteWorkDay(workDay: WorkDay) {
+        _workDays.value = _workDays.value - workDay
+    }
 }

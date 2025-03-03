@@ -47,3 +47,22 @@ val DividerColor = Color(0xFFE0E0E0) // Líneas divisorias
 
 // Placeholders
 //val PlaceholderBackground = Color(0xFFEDEDED) // Fondo para placeholders
+
+val BluePrimary = Color(0xFF1E88E5)      // Azul vibrante (botones principales)
+val BlueDark = Color(0xFF1565C0)         // Azul oscuro (acciones secundarias)
+val YellowSecondary = Color(0xFFFFC107)  // Amarillo dorado (botones de advertencia)
+val OrangeVariant = Color(0xFFFFA000)    // Naranja dorado (acciones importantes)
+
+val Background = Color(0xFFF5F5F5)       // Gris claro (fondo general)
+val Surface = Color(0xFFFFFFFF)          // Blanco (tarjetas y contenedores)
+val Error = Color(0xFFD32F2F)            // Rojo (alertas y errores)
+
+val OnPrimary = Color(0xFFFFFFFF)        // Blanco (texto sobre azul)
+val OnSecondary = Color(0xFF000000)      // Negro (texto sobre amarillo)
+val OnBackground = Color(0xFF212121)     // Negro intenso (texto principal)
+val OnSurface = Color(0xFF424242)        // Gris oscuro (texto en tarjetas)
+
+val Hint = Color(0xFF9E9E9E)             // Gris medio (hints en input fields)
+val Disabled = Color(0xFFBDBDBD)         // Gris claro (botones deshabilitados)
+val ButtonBar = Color(0xFF263238)        // Azul grisáceo (barra de navegación)
+
