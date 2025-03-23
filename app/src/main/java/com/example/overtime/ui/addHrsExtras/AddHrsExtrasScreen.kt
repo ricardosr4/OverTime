@@ -109,6 +109,8 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                     }
                 }
             }
+            //jajaja
+            //primera parte de actiaizacion
 
             Spacer(modifier = Modifier.height(50.dp))
             Divider()
