@@ -1,6 +1,5 @@
 package com.example.overtime.ui.login.presenter
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,13 +9,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -44,22 +41,8 @@ fun LoginScreen(navController: NavController) {
 
     val viewModel: LoginViewModel = viewModel()
     val loginState by viewModel.loginState
-    val context = LocalContext.current
 
-    val messageErrorLogin = "Error al Ingresar"
-    val messageSuccessLogin = "Inicio de sesión exitoso"
 
-    LaunchedEffect(loginState) {
-        when {
-            loginState.isSuccess -> {
-                navController.navigate(AppScreen.HomeScreen.route)
-                Toast.makeText(context, messageSuccessLogin, Toast.LENGTH_SHORT).show()
-            }
-            loginState.isLoginAttempted && !loginState.errorMessage.isNullOrEmpty() -> {
-                Toast.makeText(context, messageErrorLogin, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -175,7 +158,7 @@ fun LoginScreen(navController: NavController) {
             text = stringResource(R.string.recuperar_contraseña),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .clickable {},
+                .clickable { viewModel.resetPassword(loginState.email){} },
             style = TextStyle(
                 color = PrimaryColor,
                 fontSize = 14.sp,
@@ -191,7 +174,9 @@ fun LoginScreen(navController: NavController) {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable { if (loginState.isFormValid) viewModel.login() },
+                .clickable { if (loginState.isFormValid) viewModel.login(loginState.email,loginState.password){
+                    navController.navigate(AppScreen.HomeScreen.route)
+                }  },
             color = if (loginState.isFormValid) ButtonPrimary else Color.Gray
         ) {
             Box(
