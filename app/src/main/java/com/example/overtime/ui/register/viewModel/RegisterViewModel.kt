@@ -10,7 +10,9 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewModelScope
+import com.example.overtime.data.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class RegisterViewModel : ViewModel() {
@@ -97,6 +99,7 @@ class RegisterViewModel : ViewModel() {
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                saveUser(email)
                                 onSuccess()
                                 cleanFields()
                             } else {
@@ -137,4 +140,23 @@ class RegisterViewModel : ViewModel() {
 //            }
 //        }
 //    }
+    //esta funcion es para guardar el usuario en base de datos de firebase
+    private fun saveUser(userName: String) {
+        val id = auth.currentUser?.uid
+        val email = auth.currentUser?.email
+
+        val user = UserModel(
+            userId = id.toString(),
+            email = email.toString(),
+
+        )
+
+        FirebaseFirestore.getInstance().collection("Users")
+            .add(user)
+            .addOnSuccessListener {
+                Log.d("FIREBASE", "Se guardo el usuario")
+            }.addOnFailureListener {
+                Log.d("FIREBASE", "No se pudo guardar el usuario")
+            }
+    }
 }

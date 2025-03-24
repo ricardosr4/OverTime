@@ -26,7 +26,7 @@ fun BottomNavGraph(
             HomeScreen(navController = navController)
         }
         composable(AppScreen.ConfigScreen.route) {
-            ConfigScreen()
+            ConfigScreen(navController = navController)
         }
         composable(AppScreen.AddHrsExtrasScreen.route) {
             AddHrsExtrasScreen(

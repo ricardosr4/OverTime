@@ -237,7 +237,7 @@ fun RegisterScreen(navController: NavController) {
                         Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
                     }
                 },
-            color = if (registerState.isFormValid) ButtonPrimary else Color.Gray
+            color = if (registerState.isFormValid) SecondaryColor else Color.Gray
 
         ) {
             Box(
