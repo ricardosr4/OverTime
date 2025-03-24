@@ -1,5 +1,6 @@
 package com.example.overtime.ui.login.presenter
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -27,7 +29,6 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.overtime.R
 import com.example.overtime.navigation.AppScreen
-import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.TextPrimary
 import com.example.overtime.ui.theme.DividerColor
@@ -41,6 +42,7 @@ fun LoginScreen(navController: NavController) {
 
     val viewModel: LoginViewModel = viewModel()
     val loginState by viewModel.loginState
+    val context = LocalContext.current
 
 
 
@@ -176,8 +178,9 @@ fun LoginScreen(navController: NavController) {
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
                 .clickable { if (loginState.isFormValid) viewModel.login(loginState.email,loginState.password){
                     navController.navigate(AppScreen.HomeScreen.route)
+                    Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
                 }  },
-            color = if (loginState.isFormValid) ButtonPrimary else Color.Gray
+            color = if (loginState.isFormValid) SecondaryColor else Color.Gray
         ) {
             Box(
                 contentAlignment = Alignment.Center,

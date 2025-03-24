@@ -232,7 +232,7 @@ fun RegisterScreen(navController: NavController) {
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
                 .clickable {
                     if (registerState.isFormValid) {
-                        viewModel.register()
+                        viewModel.createUser{}
                         navController.navigate("login_screen")
                         Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
                     }

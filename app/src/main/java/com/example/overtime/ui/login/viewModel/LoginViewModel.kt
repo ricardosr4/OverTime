@@ -18,6 +18,7 @@ class LoginViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
 
+
     private val _loginState: MutableState<LoginState> = mutableStateOf(LoginState())
     val loginState: State<LoginState> get() = _loginState
 
