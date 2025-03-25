@@ -20,7 +20,6 @@ import com.example.overtime.ui.viewmodel.OvertimeViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(navController: NavHostController) {
-    // Crear una única instancia de ViewModel para compartir entre pantallas
     val viewModel: OvertimeViewModel = viewModel()
 
     NavHost(
@@ -44,13 +43,13 @@ fun NavGraph(navController: NavHostController) {
             RegisterScreen(navController = navController)
         }
         composable(AppScreen.HomeScreen.route) {
-            HomeScreen(navController = navController, viewModel = viewModel) // Pasar ViewModel
+            HomeScreen(navController = navController, viewModel = viewModel)
         }
         composable(AppScreen.ConfigScreen.route) {
             ConfigScreen(navController = navController)
         }
         composable(AppScreen.AddHrsExtrasScreen.route) {
-            AddHrsExtrasScreen(navController = navController, viewModel = viewModel) // Pasar ViewModel
+            AddHrsExtrasScreen(navController = navController, viewModel = viewModel)
         }
     }
 }

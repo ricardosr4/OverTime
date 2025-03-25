@@ -74,24 +74,10 @@ class RegisterViewModel : ViewModel() {
 
         return isFormValid
     }
-//    private fun validateForm() {
-//        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(_registerState.value.email).matches()
-//        val isPasswordValid = _registerState.value.password.isNotEmpty()
-//        val isPasswordConfirmationValid =
-//            _registerState.value.password == _registerState.value.passwordConfirmation
-//
-//        val isFormValid = isEmailValid && isPasswordValid && isPasswordConfirmationValid
-//
-//        _registerState.value = _registerState.value.copy(
-//            isFormValid = isFormValid
-//        )
-//    }
 
     fun createUser(onSuccess: () -> Unit) {
         val email = registerState.value.email
         val password = registerState.value.password
-
-
 
         if (validateFields()) {
             viewModelScope.launch {
@@ -124,23 +110,7 @@ class RegisterViewModel : ViewModel() {
     private fun cleanFields() {
         _registerState.value = RegisterState()
     }
-//    fun register() {
-//        if (!_registerState.value.isFormValid) return
-//
-//        viewModelScope.launch {
-//            auth.createUserWithEmailAndPassword(
-//                _registerState.value.email,
-//                _registerState.value.password
-//            ).addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    _registerState.value = _registerState.value.copy(isSuccess = true)
-//                } else {
-//                    _registerState.value = _registerState.value.copy(errorMessage = task.exception?.message ?: "Error desconocido")
-//                }
-//            }
-//        }
-//    }
-    //esta funcion es para guardar el usuario en base de datos de firebase
+
     private fun saveUser(userName: String) {
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email

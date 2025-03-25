@@ -43,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.ui.register.viewModel.RegisterViewModel
-import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.DividerColor
 import com.example.overtime.ui.theme.PrimaryColor
@@ -91,7 +90,6 @@ fun RegisterScreen(navController: NavController) {
             onValueChange = {
                 viewModel.onEmailChanged(it)
             },
-//            placeholder = { Text(text = "stringResource(EMAIL)", color = Color.Gray) },
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_email),
@@ -171,7 +169,6 @@ fun RegisterScreen(navController: NavController) {
             ),
             onValueChange = { viewModel.onPasswordConfirmationChanged(it) },
             visualTransformation = registerState.passwordConfirmationVisualTransformation,
-//            placeholder = { Text(text = "stringResource(EMAIL)", color = Color.Gray) },
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_password),
@@ -232,7 +229,7 @@ fun RegisterScreen(navController: NavController) {
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
                 .clickable {
                     if (registerState.isFormValid) {
-                        viewModel.createUser{}
+                        viewModel.createUser {}
                         navController.navigate("login_screen")
                         Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
                     }
