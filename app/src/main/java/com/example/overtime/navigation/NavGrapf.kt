@@ -16,12 +16,12 @@ import com.example.overtime.ui.login.presenter.LoginScreen
 import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
 import com.example.overtime.ui.register.presenter.RegisterScreen
 import com.example.overtime.ui.splasScreen.SplashScreen
-import com.example.overtime.ui.viewmodel.OvertimeViewModel
+import com.example.overtime.ui.viewmodel.HomeViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(navController: NavHostController) {
-    val viewModel: OvertimeViewModel = viewModel()
+    val viewModel: HomeViewModel = viewModel()
     val addHrsExtrasViewModel: AddHrsExtrasViewModel = viewModel()
 
     NavHost(

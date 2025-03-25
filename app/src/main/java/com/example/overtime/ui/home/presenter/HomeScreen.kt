@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.theme.ButtonPrimary
-import com.example.overtime.ui.viewmodel.OvertimeViewModel
+import com.example.overtime.ui.viewmodel.HomeViewModel
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -28,9 +28,8 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: OvertimeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel()
 ) {
-
     val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
     val workDays by viewModel.workDays.collectAsState()
 
