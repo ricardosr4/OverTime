@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +29,6 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.overtime.R
 import com.example.overtime.navigation.AppScreen
-import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.TextPrimary
 import com.example.overtime.ui.theme.DividerColor
@@ -46,20 +44,7 @@ fun LoginScreen(navController: NavController) {
     val loginState by viewModel.loginState
     val context = LocalContext.current
 
-    val messageErrorLogin = "Error al Ingresar"
-    val messageSuccessLogin = "Inicio de sesión exitoso"
 
-    LaunchedEffect(loginState) {
-        when {
-            loginState.isSuccess -> {
-                navController.navigate(AppScreen.HomeScreen.route)
-                Toast.makeText(context, messageSuccessLogin, Toast.LENGTH_SHORT).show()
-            }
-            loginState.isLoginAttempted && !loginState.errorMessage.isNullOrEmpty() -> {
-                Toast.makeText(context, messageErrorLogin, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -175,7 +160,7 @@ fun LoginScreen(navController: NavController) {
             text = stringResource(R.string.recuperar_contraseña),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .clickable {},
+                .clickable { viewModel.resetPassword(loginState.email){} },
             style = TextStyle(
                 color = PrimaryColor,
                 fontSize = 14.sp,
@@ -191,8 +176,11 @@ fun LoginScreen(navController: NavController) {
                 .height(45.dp)
                 .padding(horizontal = 40.dp)
                 .shadow(elevation = 10.dp, ambientColor = Color.Black)
-                .clickable { if (loginState.isFormValid) viewModel.login() },
-            color = if (loginState.isFormValid) ButtonPrimary else Color.Gray
+                .clickable { if (loginState.isFormValid) viewModel.login(loginState.email,loginState.password){
+                    navController.navigate(AppScreen.HomeScreen.route)
+                    Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
+                }  },
+            color = if (loginState.isFormValid) SecondaryColor else Color.Gray
         ) {
             Box(
                 contentAlignment = Alignment.Center,

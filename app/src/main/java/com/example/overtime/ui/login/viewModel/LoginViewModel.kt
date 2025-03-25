@@ -17,6 +17,8 @@ class LoginViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
+
+
     private val _loginState: MutableState<LoginState> = mutableStateOf(LoginState())
     val loginState: State<LoginState> get() = _loginState
 
@@ -47,31 +49,87 @@ class LoginViewModel : ViewModel() {
         )
     }
 
-    fun login() {
-        if (!_loginState.value.isFormValid) return
+    private fun validateFields(email: String, password: String): Boolean {
+        return email.isNotEmpty() && password.isNotEmpty()
+    }
 
-        // Indicar que se ha intentado hacer login
-        _loginState.value = _loginState.value.copy(isLoginAttempted = true)
+    fun login(email: String, password: String, onSuccess: () -> Unit) {
+        if (validateFields(email, password)) {
+            viewModelScope.launch {
+                try {
+                    auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                onSuccess()
 
-        viewModelScope.launch {
-            auth.signInWithEmailAndPassword(
-                _loginState.value.email,
-                _loginState.value.password
-            ).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _loginState.value =
-                        _loginState.value.copy(isSuccess = true, isLoginAttempted = false)
-                } else {
-                    _loginState.value = _loginState.value.copy(
-                        errorMessage = task.exception?.message ?: "Error desconocido",
-                        isLoginAttempted = false // Resetear el intento
-                    )
+                            } else {
+                                Log.d("ERROR EN FIREBASE", "Usuario y/o contraseña incorrectos")
+                                //mostrar toas o alertDialog
+                            }
+                        }
+                } catch (e: Exception) {
+                    Log.d("ERROR EN FIREBASE", "Error: ${e.localizedMessage}")
                 }
             }
+        } else {
+            Log.d("VALIDACION", "Los campos no son válidos o están vacíos.")
+            //mostrar toas o alertDialog
+
         }
     }
-    fun sendPasswordResetEmail() {
+    // Función para recuperar la contraseña
+    fun resetPassword(email: String, onSuccess: () -> Unit) {
+        if (email.isNotEmpty()) {
+            viewModelScope.launch {
+                try {
+                    auth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("RECUPERACIÓN", "Correo enviado para recuperar la contraseña.")
+                                onSuccess()
+                            } else {
+                                Log.d("RECUPERACIÓN", "Error al enviar el correo de recuperación.")
+                                //mostrar toas o alertDialog
+                            }
+                        }
+                } catch (e: Exception) {
+                    Log.d("ERROR EN FIREBASE", "Error: ${e.localizedMessage}")
+                }
+            }
+        } else {
+            Log.d("VALIDACION", "El campo de correo está vacío.")
+            //mostrar toas o alertDialog
+        }
     }
 
 }
+
+
+
+
+
+//    fun login() {
+//        if (!_loginState.value.isFormValid) return
+//
+//        // Indicar que se ha intentado hacer login
+//        _loginState.value = _loginState.value.copy(isLoginAttempted = true)
+//
+//        viewModelScope.launch {
+//            auth.signInWithEmailAndPassword(
+//                _loginState.value.email,
+//                _loginState.value.password
+//            ).addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    _loginState.value =
+//                        _loginState.value.copy(isSuccess = true, isLoginAttempted = false)
+//                } else {
+//                    _loginState.value = _loginState.value.copy(
+//                        errorMessage = task.exception?.message ?: "Error desconocido",
+//                        isLoginAttempted = false // Resetear el intento
+//                    )
+//                }
+//            }
+//        }
+//    }
+
 
