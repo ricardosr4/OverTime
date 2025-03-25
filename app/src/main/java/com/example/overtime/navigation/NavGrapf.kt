@@ -7,7 +7,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.overtime.ui.addHrsExtras.AddHrsExtrasScreen
+import com.example.overtime.ui.addHrsExtras.screen.AddHrsExtrasScreen
+import com.example.overtime.ui.addHrsExtras.viewModel.AddHrsExtrasViewModel
 import com.example.overtime.ui.configuration.ConfigScreen
 import com.example.overtime.ui.home.presenter.HomeScreen
 import com.example.overtime.ui.login.presenter.BlankScreen
@@ -21,6 +22,7 @@ import com.example.overtime.ui.viewmodel.OvertimeViewModel
 @Composable
 fun NavGraph(navController: NavHostController) {
     val viewModel: OvertimeViewModel = viewModel()
+    val addHrsExtrasViewModel: AddHrsExtrasViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -49,7 +51,7 @@ fun NavGraph(navController: NavHostController) {
             ConfigScreen(navController = navController)
         }
         composable(AppScreen.AddHrsExtrasScreen.route) {
-            AddHrsExtrasScreen(navController = navController, viewModel = viewModel)
+            AddHrsExtrasScreen(navController = navController, viewModel = addHrsExtrasViewModel)
         }
     }
 }

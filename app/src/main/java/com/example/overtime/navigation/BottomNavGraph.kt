@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.overtime.ui.addHrsExtras.AddHrsExtrasScreen
+import com.example.overtime.ui.addHrsExtras.screen.AddHrsExtrasScreen
 import com.example.overtime.ui.configuration.ConfigScreen
 import com.example.overtime.ui.home.presenter.HomeScreen
 
