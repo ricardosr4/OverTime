@@ -118,14 +118,25 @@ class RegisterViewModel : ViewModel() {
         val user = UserModel(
             userId = id.toString(),
             email = email.toString(),
-
         )
 
-        FirebaseFirestore.getInstance().collection("Users")
-            .add(user)
+        // Guardamos los datos del usuario en la colección "Users"
+        val userRef = FirebaseFirestore.getInstance().collection("Users").document(id.toString())
+
+        // Se guardan los datos de usuario
+        userRef.set(user)
             .addOnSuccessListener {
-                Log.d("FIREBASE", "Se guardo el usuario")
-            }.addOnFailureListener {
+                // Crear una subcolección vacía de workdays para este usuario
+                val workdays = emptyList<Map<String, Any>>() // Puede ser vacío al principio
+                userRef.update("workdays", workdays)
+                    .addOnSuccessListener {
+                        Log.d("FIREBASE", "Se guardó el usuario y se creó la subcolección workdays.")
+                    }
+                    .addOnFailureListener {
+                        Log.d("FIREBASE", "No se pudo crear la subcolección workdays.")
+                    }
+            }
+            .addOnFailureListener {
                 Log.d("FIREBASE", "No se pudo guardar el usuario")
             }
     }

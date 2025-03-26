@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
 class HomeViewModel : ViewModel() {
@@ -23,37 +24,45 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun loadWorkDaysFromFirebase() {
-        // Escuchar los cambios en la colección 'workdays' en tiempo real
-        workDaysListener = FirebaseFirestore.getInstance()
-            .collection("workdays")
-            .addSnapshotListener { snapshot, exception ->
-                if (exception != null) {
-                    // Manejo de errores si falla la carga
-                    return@addSnapshotListener
-                }
-
-                if (snapshot != null) {
-                    // Mapear los documentos a la lista de WorkDay
-                    val workDaysList = snapshot.documents.mapNotNull { document ->
-                        val workDay = document.toObject(WorkDay::class.java)
-                        workDay?.copy(id = document.id) // Asignar el ID del documento a WorkDay
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            // Escuchar los cambios en la subcolección 'workdays' para el usuario autenticado
+            workDaysListener = FirebaseFirestore.getInstance()
+                .collection("Users")
+                .document(userId)
+                .collection("workdays")
+                .addSnapshotListener { snapshot, exception ->
+                    if (exception != null) {
+                        // Manejo de errores si falla la carga
+                        return@addSnapshotListener
                     }
-                    _workDays.value = workDaysList
+
+                    if (snapshot != null) {
+                        // Mapear los documentos a la lista de WorkDay
+                        val workDaysList = snapshot.documents.mapNotNull { document ->
+                            val workDay = document.toObject(WorkDay::class.java)
+                            workDay?.copy(id = document.id) // Asignar el ID del documento a WorkDay
+                        }
+                        _workDays.value = workDaysList
+                    }
                 }
-            }
+        }
     }
 
     // Función para eliminar un WorkDay
     fun deleteWorkDay(workDay: WorkDay) {
         viewModelScope.launch {
             try {
-                FirebaseFirestore.getInstance()
-                    .collection("workdays")
-                    .document(workDay.id)  // Usamos el ID para eliminar el documento correcto
-                    .delete()
-                    .await()
-
-                // Después de eliminar, la lista de datos ya está actualizada en tiempo real por el listener
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                if (userId != null) {
+                    FirebaseFirestore.getInstance()
+                        .collection("Users")
+                        .document(userId)
+                        .collection("workdays")
+                        .document(workDay.id)  // Usamos el ID para eliminar el documento correcto
+                        .delete()
+                        .await()
+                }
             } catch (e: Exception) {
                 // Manejo de errores si falla la eliminación
             }

@@ -19,6 +19,7 @@ import com.example.overtime.ui.addHrsExtras.state.AddHrsExtrasState
 import com.example.overtime.ui.addHrsExtras.viewModel.AddHrsExtrasViewModel
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -159,6 +160,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                     viewModel.onShowErrorDialog(true)
                 } else {
                     // Guardar los datos en Firebase
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                     val newWorkDay = WorkDay(
                         weekDay = state.selectedDate,
                         quantityOverHours = state.selectedHours,
