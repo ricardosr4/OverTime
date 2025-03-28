@@ -1,5 +1,7 @@
-package com.example.overtime.ui.addHrsExtras
+package com.example.overtime.ui.addHrsExtras.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,20 +15,18 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
+import com.example.overtime.ui.addHrsExtras.state.AddHrsExtrasState
+import com.example.overtime.ui.addHrsExtras.viewModel.AddHrsExtrasViewModel
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
-import com.example.overtime.ui.viewmodel.OvertimeViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewModel = viewModel()) {
-    var showDatePicker by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf("Selecciona una fecha") }
-    var selectedPercentage by remember { mutableIntStateOf(50) }
-    var selectedHours by remember { mutableIntStateOf(1) }
-    var showErrorDialog by remember { mutableStateOf(false) } // Estado para mostrar la alerta
+fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasViewModel = viewModel()) {
+    val state = viewModel.state.value
 
     val percentageOptions = listOf(50, 75, 100, 130)
     val hoursOptions = (1..12).toList()
@@ -58,12 +58,12 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                     Text("Seleccionar Fecha", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
-                        onClick = { showDatePicker = true },
+                        onClick = { viewModel.onShowDatePicker(true) },
                         colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = selectedDate, fontSize = 16.sp)
+                        Text(text = state.selectedDate, fontSize = 16.sp)
                     }
                 }
             }
@@ -87,7 +87,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                     ) {
                         TextField(
                             readOnly = true,
-                            value = "$selectedPercentage%",
+                            value = "${state.selectedPercentage}%",
                             onValueChange = {},
                             label = { Text("Porcentaje") },
                             modifier = Modifier.fillMaxWidth().menuAnchor(),
@@ -100,7 +100,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                                 DropdownMenuItem(
                                     text = { Text("$percentage%") },
                                     onClick = {
-                                        selectedPercentage = percentage
+                                        viewModel.onPercentageSelected(percentage)
                                         expandedPercentage = false
                                     }
                                 )
@@ -109,14 +109,12 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                     }
                 }
             }
-            //jajaja
-            //primera parte de actiaizacion
 
             Spacer(modifier = Modifier.height(50.dp))
             Divider()
             Spacer(modifier = Modifier.height(50.dp))
 
-            // Card para seleccionar la cantidad de horas extras
+            // Card para seleccionar las horas extras
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
@@ -131,7 +129,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                     ) {
                         TextField(
                             readOnly = true,
-                            value = "$selectedHours hrs",
+                            value = "${state.selectedHours} hrs",
                             onValueChange = {},
                             label = { Text("Horas Extras") },
                             modifier = Modifier.fillMaxWidth().menuAnchor(),
@@ -144,7 +142,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
                                 DropdownMenuItem(
                                     text = { Text("$hour hrs") },
                                     onClick = {
-                                        selectedHours = hour
+                                        viewModel.onHoursSelected(hour)
                                         expandedHours = false
                                     }
                                 )
@@ -155,16 +153,18 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
             }
         }
 
-        // Botón fijo en la parte inferior
+        // Botón para agregar el día de trabajo
         Button(
             onClick = {
-                if (selectedDate == "Selecciona una fecha" || selectedHours == 0) {
-                    showErrorDialog = true // Mostrar alerta si falta algún campo
+                if (state.selectedDate == "Selecciona una fecha" || state.selectedHours == 0) {
+                    viewModel.onShowErrorDialog(true)
                 } else {
+                    // Guardar los datos en Firebase
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                     val newWorkDay = WorkDay(
-                        weekDay = selectedDate,
-                        quantityOverHours = selectedHours,
-                        percentageOverHours = selectedPercentage
+                        weekDay = state.selectedDate,
+                        quantityOverHours = state.selectedHours,
+                        percentageOverHours = state.selectedPercentage
                     )
                     viewModel.addWorkDay(newWorkDay)
                     navController.popBackStack() // Regresar a Home
@@ -182,11 +182,11 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
     }
 
     // Mostrar el DatePicker cuando se activa
-    if (showDatePicker) {
+    if (state.showDatePicker) {
         DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
+            onDismissRequest = { viewModel.onShowDatePicker(false) },
             confirmButton = {
-                TextButton(onClick = { showDatePicker = false }) {
+                TextButton(onClick = { viewModel.onShowDatePicker(false) }) {
                     Text("Aceptar")
                 }
             }
@@ -196,22 +196,21 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: OvertimeViewMode
 
             LaunchedEffect(datePickerState.selectedDateMillis) {
                 datePickerState.selectedDateMillis?.let { millis ->
-
                     val sdf = SimpleDateFormat("EEEE dd/MM/yyyy", Locale.getDefault())
-                    selectedDate = sdf.format(Date(millis)).replaceFirstChar { it.uppercase() }
+                    viewModel.onDateSelected(sdf.format(Date(millis)).replaceFirstChar { it.uppercase() })
                 }
             }
         }
     }
 
     // Mostrar AlertDialog si falta algún campo
-    if (showErrorDialog) {
+    if (state.showErrorDialog) {
         AlertDialog(
-            onDismissRequest = { showErrorDialog = false },
+            onDismissRequest = { viewModel.onShowErrorDialog(false) },
             title = { Text("Error") },
             text = { Text("Falta llenar un campo.") },
             confirmButton = {
-                TextButton(onClick = { showErrorDialog = false }) {
+                TextButton(onClick = { viewModel.onShowErrorDialog(false) }) {
                     Text("Aceptar", color = Color.Red)
                 }
             }
