@@ -256,29 +256,29 @@ fun RegisterScreen(navController: NavController) {
         }
 
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-    ) {
-        Divider(
-            color = DividerColor,
-            thickness = 1.dp,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 40.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = stringResource(id = R.string.message_soporte),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 10.dp),
-            style = TextStyle(
-                color = (TextPrimary),
-                fontSize = 14.sp
-            )
-        )
-    }
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(horizontal = 20.dp)
+//    ) {
+//        Divider(
+//            color = DividerColor,
+//            thickness = 1.dp,
+//            modifier = Modifier
+//                .align(Alignment.BottomCenter)
+//                .padding(bottom = 40.dp)
+//        )
+//        Spacer(modifier = Modifier.height(10.dp))
+//
+//        Text(
+//            text = stringResource(id = R.string.message_soporte),
+//            modifier = Modifier
+//                .align(Alignment.BottomCenter)
+//                .padding(bottom = 10.dp),
+//            style = TextStyle(
+//                color = (TextPrimary),
+//                fontSize = 14.sp
+//            )
+//        )
+//    }
 }

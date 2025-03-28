@@ -169,6 +169,7 @@ fun LoginScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(170.dp))
 
+
         Surface(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
@@ -196,30 +197,29 @@ fun LoginScreen(navController: NavController) {
         }
     }
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-    ) {
-        Divider(
-            color = DividerColor,
-            thickness = 1.dp,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 40.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = stringResource(R.string.message_soporte),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 10.dp),
-            style = TextStyle(
-                color = TextPrimary,
-                fontSize = 14.sp
-            )
-        )
-    }
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(horizontal = 20.dp)
+//    ) {
+//        Divider(
+//            color = DividerColor,
+//            thickness = 1.dp,
+//            modifier = Modifier
+//                .align(Alignment.BottomCenter)
+//                .padding(bottom = 40.dp)
+//        )
+//        Spacer(modifier = Modifier.height(10.dp))
+//
+//        Text(
+//            text = stringResource(R.string.message_soporte),
+//            modifier = Modifier
+//                .align(Alignment.BottomCenter)
+//                .padding(bottom = 10.dp),
+//            style = TextStyle(
+//                color = TextPrimary,
+//                fontSize = 14.sp
+//            )
+//        )
+//    }
 }
