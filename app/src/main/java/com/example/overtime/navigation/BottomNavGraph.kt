@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.overtime.ui.addHrsExtras.screen.AddHrsExtrasScreen
-import com.example.overtime.ui.configuration.ConfigScreen
-import com.example.overtime.ui.home.presenter.HomeScreen
+import com.example.overtime.ui.screen.addHrsExtras.screen.AddHrsExtrasScreen
+import com.example.overtime.ui.screen.configuration.ConfigScreen
+import com.example.overtime.ui.screen.home.presenter.HomeScreen
 
 
 @RequiresApi(Build.VERSION_CODES.O)

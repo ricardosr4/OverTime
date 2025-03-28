@@ -7,23 +7,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.overtime.ui.addHrsExtras.screen.AddHrsExtrasScreen
-import com.example.overtime.ui.addHrsExtras.viewModel.AddHrsExtrasViewModel
-import com.example.overtime.ui.configuration.ConfigScreen
-import com.example.overtime.ui.home.presenter.HomeScreen
-import com.example.overtime.ui.home.viewModel.HomeViewModel
-import com.example.overtime.ui.login.presenter.BlankScreen
-import com.example.overtime.ui.login.presenter.LoginScreen
-import com.example.overtime.ui.preLogin.presenter.PreLoginScreen
-import com.example.overtime.ui.register.presenter.RegisterScreen
-import com.example.overtime.ui.splasScreen.SplashScreen
+import com.example.overtime.ui.screen.addHrsExtras.screen.AddHrsExtrasScreen
+import com.example.overtime.ui.screen.addHrsExtras.viewModel.AddHrsExtrasViewModel
+import com.example.overtime.ui.screen.configuration.ConfigScreen
+import com.example.overtime.ui.screen.home.presenter.HomeScreen
+import com.example.overtime.ui.screen.home.viewModel.HomeViewModel
+import com.example.overtime.ui.screen.login.presenter.BlankScreen
+import com.example.overtime.ui.screen.login.presenter.LoginScreen
+import com.example.overtime.ui.screen.preLogin.view.PreLoginScreen
+import com.example.overtime.ui.screen.register.view.RegisterScreen
+import com.example.overtime.ui.screen.splasScreen.SplashScreen
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavGraph(navController: NavHostController) {
-    val viewModel: HomeViewModel = viewModel()
-    val addHrsExtrasViewModel: AddHrsExtrasViewModel = viewModel()
+fun NavGraph(
+    navController: NavHostController,
+    viewModel: HomeViewModel,
+    addHrsExtrasViewModel: AddHrsExtrasViewModel
+
+) {
+
+
+//    val viewModel: HomeViewModel = viewModel()
+//    val addHrsExtrasViewModel: AddHrsExtrasViewModel = viewModel()
 
     NavHost(
         navController = navController,
