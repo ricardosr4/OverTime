@@ -1,6 +1,8 @@
 package com.example.overtime.ui.screen.addHrsExtras.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -34,7 +36,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.White)
             .padding(horizontal = 20.dp)
     ) {
         Column(
@@ -47,6 +49,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, Color.Black),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp),
@@ -58,6 +61,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                         onClick = { viewModel.onShowDatePicker(true) },
                         colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
                         shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, Color.Black),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(text = state.selectedDate, fontSize = 16.sp)
@@ -73,6 +77,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, Color.Black),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -87,7 +92,15 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                             value = "${state.selectedPercentage}%",
                             onValueChange = {},
                             label = { Text("Porcentaje") },
-                            modifier = Modifier.fillMaxWidth().menuAnchor(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor()
+                                .border(1.dp, Color.Black, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                                    colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = Color.White
+                                    ),
+                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+
                         )
                         ExposedDropdownMenu(
                             expanded = expandedPercentage,
@@ -117,6 +130,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, Color.Black),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -132,7 +146,18 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                             value = "${state.selectedHours} hrs",
                             onValueChange = {},
                             label = { Text("Horas Extras") },
-                            modifier = Modifier.fillMaxWidth().menuAnchor(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .border(1.dp, Color.Black, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                                .menuAnchor(),
+
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Color.White
+                            ),
+                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+
+
+
                         )
                         ExposedDropdownMenu(
                             expanded = expandedHours,
@@ -173,6 +198,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
             },
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
             shape = RoundedCornerShape(12.dp),
+            border = BorderStroke(1.dp, Color.Black),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)

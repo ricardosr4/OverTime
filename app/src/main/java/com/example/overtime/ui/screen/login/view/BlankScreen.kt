@@ -1,4 +1,4 @@
-package com.example.overtime.ui.screen.login.presenter
+package com.example.overtime.ui.screen.login.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
