@@ -1,4 +1,4 @@
-package com.example.overtime.ui.screen.login.presenter
+package com.example.overtime.ui.screen.login.view
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -31,7 +31,6 @@ import com.example.overtime.R
 import com.example.overtime.navigation.AppScreen
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.TextPrimary
-import com.example.overtime.ui.theme.DividerColor
 import com.example.overtime.ui.theme.PrimaryColor
 import com.example.overtime.ui.theme.SecondaryColor
 import com.example.overtime.ui.theme.TextHint

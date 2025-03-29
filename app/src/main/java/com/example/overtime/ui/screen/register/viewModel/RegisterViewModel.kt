@@ -35,8 +35,8 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun onPasswordConfirmationChanged(newConfirmationPassword: String) {
-        _registerState.value =
-            _registerState.value.copy(passwordConfirmation = newConfirmationPassword)
+        _registerState.value = _registerState.value.copy(
+            passwordConfirmation = newConfirmationPassword)
         validateFields()
 
     }

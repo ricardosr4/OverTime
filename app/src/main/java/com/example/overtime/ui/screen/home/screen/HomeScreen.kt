@@ -1,7 +1,9 @@
-package com.example.overtime.ui.screen.home.presenter
+package com.example.overtime.ui.screen.home.screen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +23,7 @@ import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.screen.home.viewModel.HomeViewModel
 
 import com.example.overtime.ui.theme.ButtonPrimary
+import com.example.overtime.ui.theme.CardColor
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -40,15 +43,18 @@ fun HomeScreen(
     val total100 = workDays.filter { it.percentageOverHours == 100 }.sumOf { it.quantityOverHours }
     val total130 = workDays.filter { it.percentageOverHours == 130 }.sumOf { it.quantityOverHours }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Card superior con totales de horas
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.3f)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            border = BorderStroke(1.dp, Color.Black),
+            colors = CardDefaults.cardColors(CardColor),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
         ) {
             Column(
@@ -81,6 +87,7 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, Color.Black),
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
         ) {
             Text("Agregar Horas Extras")
@@ -135,7 +142,8 @@ fun CardItem(
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+        border = BorderStroke(1.dp, Color.Black),
+        colors = CardDefaults.cardColors(CardColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -153,7 +161,7 @@ fun CardItem(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Eliminar",
-                    tint = Color.Red
+                    tint = Color.Gray
                 )
             }
         }
