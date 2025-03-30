@@ -4,6 +4,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
 data class RegisterState(
+    val name: String = "",
     val email: String = "",
     val password: String = "",
     val passwordConfirmation: String = "",

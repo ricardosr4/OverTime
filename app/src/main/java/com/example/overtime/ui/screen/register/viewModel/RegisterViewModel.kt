@@ -22,6 +22,12 @@ class RegisterViewModel : ViewModel() {
     private val _registerState: MutableState<RegisterState> = mutableStateOf(RegisterState())
     val registerState: State<RegisterState> get() = _registerState
 
+    fun onNameChanged(newName: String) {
+        _registerState.value = _registerState.value.copy(name = newName)
+        validateFields()
+
+    }
+
     fun onEmailChanged(newEmail: String) {
         _registerState.value = _registerState.value.copy(email = newEmail)
         validateFields()
@@ -106,6 +112,7 @@ class RegisterViewModel : ViewModel() {
             // Manejar el error de validación
         }
     }
+
 
     private fun cleanFields() {
         _registerState.value = RegisterState()

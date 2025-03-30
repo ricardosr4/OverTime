@@ -14,7 +14,7 @@ import com.example.overtime.ui.screen.home.viewModel.HomeViewModel
 import com.example.overtime.ui.screen.login.view.BlankScreen
 import com.example.overtime.ui.screen.login.view.LoginScreen
 import com.example.overtime.ui.screen.preLogin.view.PreLoginScreen
-import com.example.overtime.ui.screen.register.view.RegisterScreen
+import com.example.overtime.ui.screen.register.screen.RegisterScreen
 import com.example.overtime.ui.screen.splasScreen.SplashScreen
 
 
