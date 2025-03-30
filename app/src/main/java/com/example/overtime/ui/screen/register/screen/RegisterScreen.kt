@@ -72,19 +72,23 @@ fun RegisterScreen(navController: NavController) {
             ZetaOutlinedTextField(
                 value = registerState.name,
                 onValueChange = { viewModel.onNameChanged(it)},
-                label = "Nombre"
+                label = "Nombre",
+
+
             )
             ZetaSpaceHeight()
             ZetaOutlinedTextField(
                 value = registerState.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
                 label = "Email",
+                leadingIcon = painterResource(id = R.drawable.icon_email)
             )
             ZetaSpaceHeight()
             ZetaOutlinedTextField(
                 value = registerState.password,
                 onValueChange = { viewModel.onPasswordChanged(it)},
                 label = "Paswword",
+                leadingIcon = painterResource(id = R.drawable.icon_password),
                 isPassword = true //falta agregar funcion ´para ocultar password
             )
             ZetaSpaceHeight(40.dp)
