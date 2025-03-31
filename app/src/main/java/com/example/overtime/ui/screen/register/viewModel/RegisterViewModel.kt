@@ -40,12 +40,12 @@ class RegisterViewModel : ViewModel() {
 
     }
 
-    fun onPasswordConfirmationChanged(newConfirmationPassword: String) {
-        _registerState.value = _registerState.value.copy(
-            passwordConfirmation = newConfirmationPassword)
-        validateFields()
-
-    }
+//    fun onPasswordConfirmationChanged(newConfirmationPassword: String) {
+//        _registerState.value = _registerState.value.copy(
+//            passwordConfirmation = newConfirmationPassword)
+//        validateFields()
+//
+//    }
 
     fun onPasswordVisibilityChanged() {
         val newVisibility = !_registerState.value.isPasswordVisible
@@ -55,24 +55,25 @@ class RegisterViewModel : ViewModel() {
         )
     }
 
-    fun onPasswordConfirmationVisibilityChanged() {
-        val newVisibility = !_registerState.value.isPasswordConfirmationVisible
-        _registerState.value = _registerState.value.copy(
-            isPasswordConfirmationVisible = newVisibility,
-            passwordConfirmationVisualTransformation = if (newVisibility) VisualTransformation.None else PasswordVisualTransformation()
-        )
-    }
+//    fun onPasswordConfirmationVisibilityChanged() {
+//        val newVisibility = !_registerState.value.isPasswordConfirmationVisible
+//        _registerState.value = _registerState.value.copy(
+//            isPasswordConfirmationVisible = newVisibility,
+//            passwordConfirmationVisualTransformation = if (newVisibility) VisualTransformation.None else PasswordVisualTransformation()
+//        )
+//    }
 
     private fun validateFields(): Boolean {
         val email = registerState.value.email
         val password = registerState.value.password
-        val passwordConfirmation = registerState.value.passwordConfirmation
+//        val passwordConfirmation = registerState.value.passwordConfirmation
 
         val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
         val isPasswordValid = password.isNotEmpty()
-        val isPasswordConfirmationValid = password == passwordConfirmation
+//        val isPasswordConfirmationValid = password == passwordConfirmation
 
-        val isFormValid = isEmailValid && isPasswordValid && isPasswordConfirmationValid
+        val isFormValid = isEmailValid && isPasswordValid
+//                && isPasswordConfirmationValid
 
         _registerState.value = _registerState.value.copy(
             isFormValid = isFormValid

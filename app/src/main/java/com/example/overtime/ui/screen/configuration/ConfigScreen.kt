@@ -1,13 +1,20 @@
 package com.example.overtime.ui.screen.configuration
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -19,32 +26,35 @@ fun ConfigScreen(navController: NavController,
 
     Scaffold(
         topBar = {
-            // Barra superior con el icono de cerrar sesión
             TopAppBar(
                 title = { Text(text = "Configuración") },
                 actions = {
                     IconButton(onClick = { viewModel.signOut(navController) }) {
                         Icon(
-                            imageVector = Icons.Filled.ExitToApp, // Icono de cerrar sesión
+                            imageVector = Icons.Filled.ExitToApp,
                             contentDescription = "Cerrar sesión",
-                            tint = Color.Black // Cambiar color del icono si es necesario
+                            tint = Color.Black
                         )
                     }
                 }
             )
         },
-        content = {
-            ContentConfiguration()
+        content = { paddingValues -> // Se recibe paddingValues desde el Scaffold
+            ContentConfiguration(paddingValues) // Pasar paddingValues
         }
     )
 }
+
 @Composable
-fun ContentConfiguration() {
-    Column(modifier = Modifier) {
-
+fun ContentConfiguration(paddingValues: PaddingValues) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues) // Aplicar padding automáticamente gestionado
+    ) {
         Text("Configuración de usuario")
-
-        Button(onClick = { /* Acción de configuración */ }) {
+        Button(modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = { /* Acción de configuración */ }) {
             Text("Guardar cambios")
         }
     }

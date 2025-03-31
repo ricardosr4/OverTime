@@ -35,6 +35,7 @@ import com.example.overtime.ui.component.ZetaOutlinedTextField
 import com.example.overtime.ui.component.ZetaSpaceHeight
 import com.example.overtime.ui.component.ZetaText
 import com.example.overtime.ui.component.ZetaTextLink
+
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.TextPrimary
 import com.example.overtime.ui.theme.PrimaryColor
@@ -96,7 +97,9 @@ fun LoginScreen(navController: NavController) {
                 onValueChange = { viewModel.onPasswordChanged(it)},
                 label = "Paswword",
                 leadingIcon = painterResource(id = R.drawable.icon_password),
-                isPassword = true
+                isPassword = true,
+                isPasswordVisible = loginState.isPasswordVisible,
+                onVisibilityToggle = { viewModel.onPasswordVisibilityChanged() }
 
             )
             ZetaSpaceHeight(40.dp)

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -73,6 +75,8 @@ fun RegisterScreen(navController: NavController) {
                 value = registerState.name,
                 onValueChange = { viewModel.onNameChanged(it)},
                 label = "Nombre",
+                leadingIcon = painterResource(id = R.drawable.icon_person)
+
 
 
             )
@@ -89,7 +93,9 @@ fun RegisterScreen(navController: NavController) {
                 onValueChange = { viewModel.onPasswordChanged(it)},
                 label = "Paswword",
                 leadingIcon = painterResource(id = R.drawable.icon_password),
-                isPassword = true //falta agregar funcion ´para ocultar password
+                isPassword = true,
+                isPasswordVisible = registerState.isPasswordVisible,
+                onVisibilityToggle = { viewModel.onPasswordVisibilityChanged() }
             )
             ZetaSpaceHeight(40.dp)
             ZetaTextLink(
