@@ -10,9 +10,12 @@ data class LoginState(
     val passwordVisualTransformation: VisualTransformation = PasswordVisualTransformation(),
 
     val isFormValid: Boolean = false,
-    val isSuccess: Boolean = false,  // Para saber si el login fue exitoso
-    val errorMessage: String? = null, // Para mostrar errores
-    val isLoginAttempted: Boolean = false, // Estado para saber si se intentó el login
+    val showAlert: Boolean = false,
+
+    val isSuccess: Boolean = false,
+    val errorMessage: String? = null,
+    val errorType: AlertType? = null,
 
 
-)
+
+    )
