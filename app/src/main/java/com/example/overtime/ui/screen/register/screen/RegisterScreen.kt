@@ -1,5 +1,6 @@
 package com.example.overtime.ui.screen.register.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,23 +10,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
+import com.example.overtime.ui.component.ZetaAlertDialog
 import com.example.overtime.ui.component.ZetaButtonBasic
 import com.example.overtime.ui.component.ZetaImageLogo
 import com.example.overtime.ui.component.ZetaOutlinedTextField
 import com.example.overtime.ui.component.ZetaSpaceHeight
 import com.example.overtime.ui.component.ZetaText
 import com.example.overtime.ui.component.ZetaTextLink
+import com.example.overtime.ui.screen.login.state.AlertType
+import com.example.overtime.ui.screen.register.state.AlertTypeRegister
 import com.example.overtime.ui.screen.register.viewModel.RegisterViewModel
 import com.example.overtime.ui.theme.PrimaryColor
 
@@ -34,6 +40,19 @@ fun RegisterScreen(navController: NavController) {
 
     val viewModel: RegisterViewModel = viewModel()
     val registerState by viewModel.registerState
+    val context = LocalContext.current
+
+    LaunchedEffect(registerState) {
+        if (registerState.isSuccess) {
+            Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+            viewModel.clearMessages()
+        }
+
+        registerState.errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearMessages()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -109,221 +128,33 @@ fun RegisterScreen(navController: NavController) {
 
         }
         ZetaButtonBasic(
-            onClick = {if (registerState.isFormValid)
-                viewModel.createUser { navController.navigate("login_screen") } },
+            onClick = {
+                viewModel.createUser {
+                    navController.navigate("login_screen")
+                }
+            },
             backgroundColor = PrimaryColor,
-            text = "Registrase", color = Color.White,
+            text = "Registrarse",
+            color = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(20.dp)
-
-
-
         )
+        if (registerState.showAlert) {
+            val alertMessage = when (registerState.errorType) {
+                is AlertTypeRegister.EmptyField -> "Los campos no pueden estar vacíos."
+                is AlertTypeRegister.InvalidEmail -> "El correo electrónico no es válido."
+                is AlertTypeRegister.InvalidPassword -> "La contraseña debe tener al menos 6 caracteres."
+                is AlertTypeRegister.UnknownError -> registerState.errorMessage ?: "Ha ocurrido un error inesperado."
+                else -> "Ha ocurrido un error inesperado."
+            }
+            ZetaAlertDialog(
+                title = "Alerta",
+                message = alertMessage,
+                confirmText = "Aceptar",
+                onConfirmClick = { viewModel.closeAlert() }
+            ) { }
+        }
     }
 }
-
-
-//val viewModel: RegisterViewModel = viewModel()
-//    val registerState by viewModel.registerState
-//    val context = LocalContext.current
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Color.White)
-//            .verticalScroll(rememberScrollState())
-//    ) {
-//        Spacer(modifier = Modifier.height(70.dp))
-//
-//        Text(
-//            text = stringResource(id = R.string.register),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .align(Alignment.Start)
-//                .padding(start = 40.dp),
-//            fontSize = 50.sp,
-//            color = TextPrimary
-//        )
-//        Spacer(modifier = Modifier.height(70.dp))
-//
-//        OutlinedTextField(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 40.dp),
-//            value = registerState.email,
-//            singleLine = true,
-//            keyboardOptions = KeyboardOptions(
-//                keyboardType = KeyboardType.Email,
-//                imeAction = ImeAction.Done
-//            ),
-//            onValueChange = {
-//                viewModel.onEmailChanged(it)
-//            },
-//            leadingIcon = {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.icon_email),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .padding(start = 5.dp, end = 10.dp)
-//                        .size(20.dp)
-//                )
-//            },
-//
-//            label = {
-//                Text(
-//                    text = stringResource(id = R.string.email),
-//                    color = TextHint
-//                )
-//            }
-//        )
-//        Spacer(modifier = Modifier.height(40.dp))
-//
-//        OutlinedTextField(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 40.dp),
-//            value = registerState.password,
-//            singleLine = true,
-//            keyboardOptions = KeyboardOptions(
-//                keyboardType = KeyboardType.Password,
-//                imeAction = ImeAction.Done
-//            ),
-//            onValueChange = { viewModel.onPasswordChanged(it) },
-//            visualTransformation = registerState.passwordVisualTransformation,
-//            leadingIcon = {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.icon_password),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .padding(start = 5.dp, end = 10.dp)
-//                        .size(20.dp)
-//                )
-//            },
-//            label = {
-//                Text(
-//                    text = stringResource(id = R.string.password),
-//                    color = TextHint
-//                )
-//            }
-//        )
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 28.dp),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Checkbox(
-//                checked = registerState.isPasswordVisible,
-//                onCheckedChange = { viewModel.onPasswordVisibilityChanged() },
-//                colors = CheckboxDefaults.colors(
-//                    checkedColor = SecondaryColor
-//                )
-//            )
-//            Text(
-//                text = stringResource(id = R.string.mostrar_contraseña),
-//                fontSize = 12.sp
-//            )
-//        }
-//
-//
-//        OutlinedTextField(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 40.dp),
-//            value = registerState.passwordConfirmation,
-//            singleLine = true,
-//            keyboardOptions = KeyboardOptions(
-//                keyboardType = KeyboardType.Password,
-//                imeAction = ImeAction.Done
-//            ),
-//            onValueChange = { viewModel.onPasswordConfirmationChanged(it) },
-//            visualTransformation = registerState.passwordConfirmationVisualTransformation,
-//            leadingIcon = {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.icon_password),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .padding(start = 5.dp, end = 10.dp)
-//                        .size(20.dp)
-//                )
-//            },
-//            label = {
-//                Text(
-//                    text = stringResource(R.string.confirm_password),
-//                    color = TextHint
-//                )
-//            }
-//        )
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 28.dp),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Checkbox(
-//                checked = registerState.isPasswordConfirmationVisible,
-//                onCheckedChange = { viewModel.onPasswordConfirmationVisibilityChanged() },
-//                colors = CheckboxDefaults.colors(
-//                    checkedColor = SecondaryColor
-//                )
-//            )
-//
-//            Text(
-//                text = stringResource(id = R.string.mostrar_contraseña),
-//                fontSize = 12.sp
-//            )
-//        }
-//        Spacer(modifier = Modifier.height(40.dp))
-//
-//        Text(
-//            text = "Si ya tienes una cuenta, ingresa aqui!",
-//            modifier = Modifier
-//                .align(Alignment.CenterHorizontally)
-//                .clickable { navController.navigate("login_screen") },
-//            style = TextStyle(
-//                color = PrimaryColor,
-//                fontSize = 14.sp,
-//                fontFamily = FontFamily.SansSerif
-//            ),
-//        )
-//        Spacer(modifier = Modifier.height(100.dp))
-//
-//
-//        Surface(
-//            shape = RoundedCornerShape(8.dp),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(45.dp)
-//                .padding(horizontal = 40.dp)
-//                .shadow(elevation = 10.dp, ambientColor = Color.Black)
-//                .clickable {
-//                    if (registerState.isFormValid) {
-//                        viewModel.createUser {}
-//                        navController.navigate("login_screen")
-//                        Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
-//                    }
-//                },
-//            color = if (registerState.isFormValid) SecondaryColor else Color.Gray
-//
-//        ) {
-//            Box(
-//                contentAlignment = Alignment.Center,
-//                modifier = Modifier
-//                    .fillMaxSize()
-//
-//                //add button color disable
-//            ) {
-//                Text(
-//                    text = stringResource(id = R.string.register),
-//                    color = ButtonPrimaryText,
-//                    modifier = Modifier
-//                        .fillMaxWidth(),
-//                    textAlign = TextAlign.Center,
-////                    fontFamily = FontFamily(getFont(Fonts.ROBOTO_BOLD))
-//                )
-//            }
-//        }
-//
-//    }

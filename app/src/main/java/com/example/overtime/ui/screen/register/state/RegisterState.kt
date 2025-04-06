@@ -11,9 +11,10 @@ data class RegisterState(
     val passwordVisualTransformation: VisualTransformation = PasswordVisualTransformation(),
 
     val isFormValid: Boolean = false,
+    val showAlert: Boolean = false,
 
     val isSuccess: Boolean = false,
     val errorMessage: String? = null,
-    val isLoading: Boolean = false
+    val errorType: AlertTypeRegister? = null
 
 )
