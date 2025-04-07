@@ -1,5 +1,7 @@
 package com.example.overtime.ui.screen.addHrsExtras.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,10 +23,17 @@ import com.example.overtime.ui.theme.CardColor
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasViewModel = viewModel()) {
+fun AddHrsExtrasScreen(
+    navController: NavController,
+    viewModel: AddHrsExtrasViewModel = viewModel()
+) {
     val state = viewModel.state.value
 
     val percentageOptions = listOf(50, 75, 100, 130)
@@ -95,10 +104,14 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .menuAnchor()
-                                .border(1.dp, Color.Black, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-                                    colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = Color.White
-                                    ),
+                                .border(
+                                    1.dp,
+                                    Color.Black,
+                                    RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                                ),
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Color.White
+                            ),
                             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
 
                         )
@@ -140,7 +153,7 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                         expanded = expandedHours,
                         onExpandedChange = { expandedHours = !expandedHours },
 
-                    ) {
+                        ) {
                         TextField(
                             readOnly = true,
                             value = "${state.selectedHours} hrs",
@@ -148,7 +161,11 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                             label = { Text("Horas Extras") },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .border(1.dp, Color.Black, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                                .border(
+                                    1.dp,
+                                    Color.Black,
+                                    RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                                )
                                 .menuAnchor(),
 
                             colors = TextFieldDefaults.textFieldColors(
@@ -157,12 +174,11 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
                             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
 
 
-
                         )
                         ExposedDropdownMenu(
                             expanded = expandedHours,
                             onDismissRequest = { expandedHours = false },
-                                    modifier = Modifier.width(100.dp)
+                            modifier = Modifier.width(100.dp)
                         ) {
                             hoursOptions.forEach { hour ->
                                 DropdownMenuItem(
@@ -223,24 +239,32 @@ fun AddHrsExtrasScreen(navController: NavController, viewModel: AddHrsExtrasView
 
             LaunchedEffect(datePickerState.selectedDateMillis) {
                 datePickerState.selectedDateMillis?.let { millis ->
-                    val sdf = SimpleDateFormat("EEEE dd/MM/yyyy", Locale.getDefault())
-                    viewModel.onDateSelected(sdf.format(Date(millis)).replaceFirstChar { it.uppercase() })
+
+                    val localDate = Instant.ofEpochMilli(millis)
+                        .atZone(ZoneId.of("UTC")) // 👈 Interpretamos la fecha tal como la entrega DatePicker
+                        .toLocalDate()
+
+                    val formatter = DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", Locale.getDefault())
+
+                    val formattedDate = localDate.format(formatter).replaceFirstChar { it.uppercase() }
+
+                    viewModel.onDateSelected(formattedDate)
                 }
             }
         }
-    }
 
-    // Mostrar AlertDialog si falta algún campo
-    if (state.showErrorDialog) {
-        AlertDialog(
-            onDismissRequest = { viewModel.onShowErrorDialog(false) },
-            title = { Text("Error") },
-            text = { Text("Falta llenar un campo.") },
-            confirmButton = {
-                TextButton(onClick = { viewModel.onShowErrorDialog(false) }) {
-                    Text("Aceptar", color = Color.Red)
+        // Mostrar AlertDialog si falta algún campo
+        if (state.showErrorDialog) {
+            AlertDialog(
+                onDismissRequest = { viewModel.onShowErrorDialog(false) },
+                title = { Text("Error") },
+                text = { Text("Falta llenar un campo.") },
+                confirmButton = {
+                    TextButton(onClick = { viewModel.onShowErrorDialog(false) }) {
+                        Text("Aceptar", color = Color.Red)
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }

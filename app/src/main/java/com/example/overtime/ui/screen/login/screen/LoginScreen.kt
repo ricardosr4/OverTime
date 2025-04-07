@@ -81,7 +81,8 @@ fun LoginScreen(navController: NavController) {
                 value = loginState.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
                 label = "Email",
-                leadingIcon = painterResource(id = R.drawable.icon_email)
+                leadingIcon = painterResource(id = R.drawable.icon_email),
+
             )
             ZetaSpaceHeight()
             ZetaOutlinedTextField(
