@@ -40,7 +40,6 @@ class AddHrsExtrasViewModel : ViewModel() {
     fun addWorkDay(workDay: WorkDay) {
         viewModelScope.launch {
             val userId = FirebaseAuth.getInstance().currentUser?.uid // Obtener el userId del usuario autenticado
-
             if (userId != null) {
                 // Obtenemos la instancia de Firestore
                 val db = FirebaseFirestore.getInstance()

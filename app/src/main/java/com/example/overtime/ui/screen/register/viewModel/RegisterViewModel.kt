@@ -71,6 +71,8 @@ class RegisterViewModel : ViewModel() {
     fun createUser(onSuccess: () -> Unit) {
         val email = registerState.value.email
         val password = registerState.value.password
+        val name = registerState.value.name
+
 
         // Validar los campos de entrada
         validateInput(email, password)?.let { errorType ->
@@ -87,7 +89,7 @@ class RegisterViewModel : ViewModel() {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            saveUser(email)
+                            saveUser(name)
                             onSuccess()
                             cleanFields()
                         } else {
@@ -120,13 +122,14 @@ class RegisterViewModel : ViewModel() {
         val user = UserModel(
             userId = id.toString(),
             email = email.toString(),
+            userName = userName
         )
 
         // Guardamos los datos del usuario en la colección "Users"
         val userRef = FirebaseFirestore.getInstance().collection("Users").document(id.toString())
 
         // Se guardan los datos de usuario
-        userRef.set(user)
+        userRef.set(user.toMap())
             .addOnSuccessListener {
                 // Crear una subcolección vacía de workdays para este usuario
                 val workdays = emptyList<Map<String, Any>>() // Puede ser vacío al principio
