@@ -1,5 +1,6 @@
 package com.example.overtime.ui.screen.home.viewModel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.overtime.data.model.WorkDay
@@ -58,17 +59,21 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val userId = FirebaseAuth.getInstance().currentUser?.uid
-                if (userId != null) {
+                val workDayId = workDay.id
+
+                if (userId != null && !workDayId.isNullOrEmpty()) { // ✅ Verificamos que id no sea null ni vacío
                     FirebaseFirestore.getInstance()
-                        .collection("Users")        // Colección de usuarios
-                        .document(userId)           // Documento del usuario autenticado
-                        .collection("workdays")     // Subcolección workdays
-                        .document(workDay.id)       // Usamos el ID de ese WorkDay para eliminarlo
-                        .delete()                   // Eliminamos el documento
+                        .collection("Users")
+                        .document(userId)
+                        .collection("workdays")
+                        .document(workDayId)
+                        .delete()
                         .await()
+                } else {
+                    Log.e("Firebase", "El ID del WorkDay es nulo o vacío, no se puede eliminar.")
                 }
             } catch (e: Exception) {
-                // Manejo de errores si falla la eliminación
+                Log.e("Firebase", "Error al eliminar el día de trabajo", e)
             }
         }
     }

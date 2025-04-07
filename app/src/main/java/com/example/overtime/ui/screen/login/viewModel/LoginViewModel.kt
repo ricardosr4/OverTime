@@ -9,6 +9,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
+import com.example.overtime.ui.screen.login.state.AlertType
 import com.example.overtime.ui.screen.login.state.LoginState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -18,9 +19,9 @@ class LoginViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
 
-
     private val _loginState: MutableState<LoginState> = mutableStateOf(LoginState())
     val loginState: State<LoginState> get() = _loginState
+
 
     fun onEmailChanged(newEmail: String) {
         _loginState.value = _loginState.value.copy(email = newEmail)
@@ -49,35 +50,52 @@ class LoginViewModel : ViewModel() {
         )
     }
 
-    private fun validateFields(email: String, password: String): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty()
+    fun clearMessages() {
+        _loginState.value = _loginState.value.copy(
+            isSuccess = false,
+            errorMessage = null
+        )
+    }
+    fun closeAlert() {
+        _loginState.value = loginState.value.copy(showAlert = false)
+
     }
 
     fun login(email: String, password: String, onSuccess: () -> Unit) {
-        if (validateFields(email, password)) {
-            viewModelScope.launch {
-                try {
-                    auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                onSuccess()
-
-                            } else {
-                                Log.d("ERROR EN FIREBASE", "Usuario y/o contraseña incorrectos")
-                                //mostrar toas o alertDialog
-                            }
+        // Verificar si los campos están vacíos
+        if (email.isEmpty() || password.isEmpty()) {
+            _loginState.value = _loginState.value.copy(
+                showAlert = true,
+                errorType = AlertType.EmptyField
+            )
+            return
+        }
+        viewModelScope.launch {
+            try {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            _loginState.value = _loginState.value.copy(
+                                isSuccess = true,
+                                errorType = null
+                            )
+                            onSuccess()
+                        } else {
+                            _loginState.value = _loginState.value.copy(
+                                showAlert = true,
+                                errorType = AlertType.InvalidCredentials
+                            )
                         }
-                } catch (e: Exception) {
-                    Log.d("ERROR EN FIREBASE", "Error: ${e.localizedMessage}")
-                }
+                    }
+            } catch (e: Exception) {
+                _loginState.value = _loginState.value.copy(
+                    showAlert = true,
+                    errorType = e.localizedMessage?.let { AlertType.UnknownError(it) }
+                )
             }
-        } else {
-            Log.d("VALIDACION", "Los campos no son válidos o están vacíos.")
-            //mostrar toas o alertDialog
-
         }
     }
-    // Función para recuperar la contraseña
+
     fun resetPassword(email: String, onSuccess: () -> Unit) {
         if (email.isNotEmpty()) {
             viewModelScope.launch {
@@ -85,9 +103,17 @@ class LoginViewModel : ViewModel() {
                     auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Log.d("RECUPERACIÓN", "Correo enviado para recuperar la contraseña.")
+                                _loginState.value = _loginState.value.copy(
+                                    showAlert = true,
+                                    errorType = AlertType.ResetPasswordSuccess
+                                )
                                 onSuccess()
                             } else {
+                                _loginState.value = _loginState.value.copy(
+                                    showAlert = true,
+                                    errorType = AlertType.ResetPasswordInvalidEmail
+                                    //falta revisar funcion para enviar correo solo a email registrados en firebase
+                                )
                                 Log.d("RECUPERACIÓN", "Error al enviar el correo de recuperación.")
                                 //mostrar toas o alertDialog
                             }
@@ -97,39 +123,10 @@ class LoginViewModel : ViewModel() {
                 }
             }
         } else {
-            Log.d("VALIDACION", "El campo de correo está vacío.")
-            //mostrar toas o alertDialog
+            _loginState.value = _loginState.value.copy(
+                showAlert = true,
+                errorType = AlertType.ResetPasswordEmptyField
+            )
         }
     }
-
 }
-
-
-
-
-
-//    fun login() {
-//        if (!_loginState.value.isFormValid) return
-//
-//        // Indicar que se ha intentado hacer login
-//        _loginState.value = _loginState.value.copy(isLoginAttempted = true)
-//
-//        viewModelScope.launch {
-//            auth.signInWithEmailAndPassword(
-//                _loginState.value.email,
-//                _loginState.value.password
-//            ).addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    _loginState.value =
-//                        _loginState.value.copy(isSuccess = true, isLoginAttempted = false)
-//                } else {
-//                    _loginState.value = _loginState.value.copy(
-//                        errorMessage = task.exception?.message ?: "Error desconocido",
-//                        isLoginAttempted = false // Resetear el intento
-//                    )
-//                }
-//            }
-//        }
-//    }
-
-

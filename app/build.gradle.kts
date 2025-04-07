@@ -77,6 +77,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:31.2.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    //Extension de Iconos
+    implementation("androidx.compose.material:material-icons-extended")
 
 
 

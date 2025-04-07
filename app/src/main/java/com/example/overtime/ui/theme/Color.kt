@@ -31,7 +31,7 @@ val ButtonDisabled = Color(0xFFE0E0E0) // Fondo del botón deshabilitado
 // Textos
 val TextPrimary = Color(0xFF212121) // Texto principal
 //val TextSecondary = Color(0xFF757575) // Texto secundario
-val TextHint = Color(0xFF414141) // Texto de ayuda (hints)
+val TextHint = Color(0xFF867F7F) // Texto de ayuda (hints)
 
 // Errores y Validaciones
 //val ErrorText = Color(0xFFD32F2F) // Mensajes de error
