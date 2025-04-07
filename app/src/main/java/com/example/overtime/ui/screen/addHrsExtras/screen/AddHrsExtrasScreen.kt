@@ -21,7 +21,6 @@ import com.example.overtime.ui.screen.addHrsExtras.viewModel.AddHrsExtrasViewMod
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
 import com.google.firebase.auth.FirebaseAuth
-import java.text.SimpleDateFormat
 import java.util.*
 import java.time.Instant
 import java.time.ZoneId

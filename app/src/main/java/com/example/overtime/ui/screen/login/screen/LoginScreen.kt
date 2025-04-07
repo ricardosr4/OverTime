@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -81,6 +82,7 @@ fun LoginScreen(navController: NavController) {
                 value = loginState.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
                 label = "Email",
+                keyboardType = KeyboardType.Email,
                 leadingIcon = painterResource(id = R.drawable.icon_email),
 
             )
@@ -89,6 +91,7 @@ fun LoginScreen(navController: NavController) {
                 value = loginState.password,
                 onValueChange = { viewModel.onPasswordChanged(it) },
                 label = "Paswword",
+                keyboardType = KeyboardType.Password,
                 leadingIcon = painterResource(id = R.drawable.icon_password),
                 isPassword = true,
                 isPasswordVisible = loginState.isPasswordVisible,

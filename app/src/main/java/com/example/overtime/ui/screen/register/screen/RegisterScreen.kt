@@ -7,17 +7,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,7 +28,6 @@ import com.example.overtime.ui.component.ZetaOutlinedTextField
 import com.example.overtime.ui.component.ZetaSpaceHeight
 import com.example.overtime.ui.component.ZetaText
 import com.example.overtime.ui.component.ZetaTextLink
-import com.example.overtime.ui.screen.login.state.AlertType
 import com.example.overtime.ui.screen.register.state.AlertTypeRegister
 import com.example.overtime.ui.screen.register.viewModel.RegisterViewModel
 import com.example.overtime.ui.theme.PrimaryColor
@@ -94,6 +91,7 @@ fun RegisterScreen(navController: NavController) {
                 value = registerState.name,
                 onValueChange = { viewModel.onNameChanged(it)},
                 label = "Nombre",
+                keyboardType = KeyboardType.Text,
                 leadingIcon = painterResource(id = R.drawable.icon_person)
 
 
@@ -104,6 +102,7 @@ fun RegisterScreen(navController: NavController) {
                 value = registerState.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
                 label = "Email",
+                keyboardType = KeyboardType.Email,
                 leadingIcon = painterResource(id = R.drawable.icon_email)
             )
             ZetaSpaceHeight()
@@ -111,6 +110,7 @@ fun RegisterScreen(navController: NavController) {
                 value = registerState.password,
                 onValueChange = { viewModel.onPasswordChanged(it)},
                 label = "Paswword",
+                keyboardType = KeyboardType.Password,
                 leadingIcon = painterResource(id = R.drawable.icon_password),
                 isPassword = true,
                 isPasswordVisible = registerState.isPasswordVisible,

@@ -11,10 +11,11 @@ data class LoginState(
 
     val isFormValid: Boolean = false,
     val showAlert: Boolean = false,
+    val errorType: AlertType? = null,
 
     val isSuccess: Boolean = false,
     val errorMessage: String? = null,
-    val errorType: AlertType? = null,
+
 
 
 
