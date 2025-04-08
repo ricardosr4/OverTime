@@ -62,7 +62,6 @@ class LoginViewModel : ViewModel() {
     }
 
     fun login(email: String, password: String, onSuccess: () -> Unit) {
-        // Verificar si los campos están vacíos
         if (email.isEmpty() || password.isEmpty()) {
             _loginState.value = _loginState.value.copy(
                 showAlert = true,
@@ -112,10 +111,8 @@ class LoginViewModel : ViewModel() {
                                 _loginState.value = _loginState.value.copy(
                                     showAlert = true,
                                     errorType = AlertType.ResetPasswordInvalidEmail
-                                    //falta revisar funcion para enviar correo solo a email registrados en firebase
                                 )
                                 Log.d("RECUPERACIÓN", "Error al enviar el correo de recuperación.")
-                                //mostrar toas o alertDialog
                             }
                         }
                 } catch (e: Exception) {
