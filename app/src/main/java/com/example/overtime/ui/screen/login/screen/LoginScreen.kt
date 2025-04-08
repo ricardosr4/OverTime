@@ -70,7 +70,7 @@ fun LoginScreen(navController: NavController) {
             )
             ZetaSpaceHeight(30.dp)
             ZetaText(
-                text = "Login",
+                text = stringResource(R.string.login),
                 fontSize = 30.sp,
                 maxLines = 1,
                 color = Color.Black,
@@ -81,7 +81,7 @@ fun LoginScreen(navController: NavController) {
             ZetaOutlinedTextField(
                 value = loginState.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
-                label = "Email",
+                label = stringResource(R.string.email),
                 keyboardType = KeyboardType.Email,
                 leadingIcon = painterResource(id = R.drawable.icon_email),
 
@@ -90,7 +90,7 @@ fun LoginScreen(navController: NavController) {
             ZetaOutlinedTextField(
                 value = loginState.password,
                 onValueChange = { viewModel.onPasswordChanged(it) },
-                label = "Paswword",
+                label = stringResource(R.string.password),
                 keyboardType = KeyboardType.Password,
                 leadingIcon = painterResource(id = R.drawable.icon_password),
                 isPassword = true,
@@ -99,8 +99,8 @@ fun LoginScreen(navController: NavController) {
             )
             ZetaSpaceHeight(40.dp)
             ZetaTextLink(
-                text = "¿No tienes cuenta?", linkColor = PrimaryColor,
-                textLink = "Registrate aqui!!",
+                text = stringResource(R.string.not_register), linkColor = PrimaryColor,
+                textLink = stringResource(R.string.now_register),
                 onClick = { navController.navigate("register_screen") },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -140,9 +140,9 @@ fun LoginScreen(navController: NavController) {
                 else -> "Ha ocurrido un error inesperado."
             }
             ZetaAlertDialog(
-                title = "Alerta",
+                title = stringResource(R.string.alertTitle),
                 message = alertMessage,
-                confirmText = "Aceptar",
+                confirmText = stringResource(R.string.accept),
                 onConfirmClick = { viewModel.closeAlert() }
             ) { }
         }

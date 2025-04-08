@@ -10,4 +10,12 @@
     <string name="recuperar_contraseña">Recuperar tu Contraseña!</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="aqui">aqui!!</string>
+    <string name="successful_entry">¡Ingreso exitoso!</string>
+    <string name="not_register">¿No tienes cuenta?</string>
+    <string name="now_register">Registrate aqui!!</string>
+    <string name="alertTitle">Alerta</string>
+    <string name="accept">Aceptar</string>
+    <string name="init_session">Inicia Sesión</string>
+    <string name="have_an_account_cuestion">¿Ya tienes una cuenta?</string>
+    <string name="name">Nombre</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +78,7 @@ fun RegisterScreen(navController: NavController) {
             ZetaSpaceHeight(30.dp)
 
             ZetaText(
-                text = "Registrase",
+                text = stringResource(R.string.register),
                 fontSize = 30.sp,
                 maxLines = 1,
                 color = Color.Black,
@@ -90,7 +91,7 @@ fun RegisterScreen(navController: NavController) {
             ZetaOutlinedTextField(
                 value = registerState.name,
                 onValueChange = { viewModel.onNameChanged(it)},
-                label = "Nombre",
+                label = stringResource(R.string.name),
                 keyboardType = KeyboardType.Text,
                 leadingIcon = painterResource(id = R.drawable.icon_person)
 
@@ -101,7 +102,7 @@ fun RegisterScreen(navController: NavController) {
             ZetaOutlinedTextField(
                 value = registerState.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
-                label = "Email",
+                label = stringResource(R.string.email),
                 keyboardType = KeyboardType.Email,
                 leadingIcon = painterResource(id = R.drawable.icon_email)
             )
@@ -109,7 +110,7 @@ fun RegisterScreen(navController: NavController) {
             ZetaOutlinedTextField(
                 value = registerState.password,
                 onValueChange = { viewModel.onPasswordChanged(it)},
-                label = "Paswword",
+                label = stringResource(R.string.password),
                 keyboardType = KeyboardType.Password,
                 leadingIcon = painterResource(id = R.drawable.icon_password),
                 isPassword = true,
@@ -118,8 +119,8 @@ fun RegisterScreen(navController: NavController) {
             )
             ZetaSpaceHeight(40.dp)
             ZetaTextLink(
-                text = "¿Ya tienes una cuenta?", linkColor = PrimaryColor,
-                textLink = "Inicia Sesión",
+                text = stringResource(R.string.have_an_account_cuestion), linkColor = PrimaryColor,
+                textLink = stringResource(R.string.init_session),
                 onClick = { navController.navigate("login_screen") },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -134,7 +135,7 @@ fun RegisterScreen(navController: NavController) {
                 }
             },
             backgroundColor = PrimaryColor,
-            text = "Registrarse",
+            text = stringResource(R.string.register),
             color = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
@@ -150,9 +151,9 @@ fun RegisterScreen(navController: NavController) {
                 else -> "Ha ocurrido un error inesperado."
             }
             ZetaAlertDialog(
-                title = "Alerta",
+                title = stringResource(R.string.alertTitle),
                 message = alertMessage,
-                confirmText = "Aceptar",
+                confirmText = stringResource(R.string.accept),
                 onConfirmClick = { viewModel.closeAlert() }
             ) { }
         }
