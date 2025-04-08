@@ -15,7 +15,7 @@ class AddHrsExtrasViewModel : ViewModel() {
     private val _state = mutableStateOf(AddHrsExtrasState())
     val state = _state
 
-    // Funciones para manejar los cambios en la UI
+
     fun onDateSelected(date: String) {
         _state.value = _state.value.copy(selectedDate = date)
     }
@@ -36,23 +36,24 @@ class AddHrsExtrasViewModel : ViewModel() {
         _state.value = _state.value.copy(showErrorDialog = show)
     }
 
-    // Función para agregar el WorkDay a Firestore
     fun addWorkDay(workDay: WorkDay) {
         viewModelScope.launch {
             val userId = FirebaseAuth.getInstance().currentUser?.uid // Obtener el userId del usuario autenticado
-
             if (userId != null) {
-                // Obtenemos la instancia de Firestore
                 val db = FirebaseFirestore.getInstance()
-
-                // Referencia al documento del usuario en la colección "Users"
                 val userRef = db.collection("Users").document(userId)
-
-                // Agregar el WorkDay a la subcolección "workdays"
                 userRef.collection("workdays")
-                    .add(workDay)
+                    .add(
+                        WorkDay(
+                            weekDay = workDay.weekDay,
+                            quantityOverHours = workDay.quantityOverHours,
+                            percentageOverHours = workDay.percentageOverHours
+                        )
+                    )
                     .addOnSuccessListener { documentReference ->
-                        Log.d("Firebase", "Día de trabajo agregado con ID: ${documentReference.id}")
+                        val docId = documentReference.id
+                        documentReference.update("id", docId)
+                        Log.d("Firebase", "Día de trabajo agregado con ID: $docId")
                     }
                     .addOnFailureListener { e ->
                         Log.w("Firebase", "Error al agregar el día de trabajo", e)

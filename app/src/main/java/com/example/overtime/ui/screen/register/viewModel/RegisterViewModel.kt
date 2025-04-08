@@ -11,6 +11,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewModelScope
 import com.example.overtime.data.model.UserModel
+import com.example.overtime.ui.screen.register.state.AlertTypeRegister
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -22,23 +23,16 @@ class RegisterViewModel : ViewModel() {
     private val _registerState: MutableState<RegisterState> = mutableStateOf(RegisterState())
     val registerState: State<RegisterState> get() = _registerState
 
+    fun onNameChanged(newName: String) {
+        _registerState.value = _registerState.value.copy(name = newName)
+    }
+
     fun onEmailChanged(newEmail: String) {
         _registerState.value = _registerState.value.copy(email = newEmail)
-        validateFields()
-
     }
 
     fun onPasswordChanged(newPassword: String) {
         _registerState.value = _registerState.value.copy(password = newPassword)
-        validateFields()
-
-    }
-
-    fun onPasswordConfirmationChanged(newConfirmationPassword: String) {
-        _registerState.value = _registerState.value.copy(
-            passwordConfirmation = newConfirmationPassword)
-        validateFields()
-
     }
 
     fun onPasswordVisibilityChanged() {
@@ -49,61 +43,62 @@ class RegisterViewModel : ViewModel() {
         )
     }
 
-    fun onPasswordConfirmationVisibilityChanged() {
-        val newVisibility = !_registerState.value.isPasswordConfirmationVisible
+    private fun validateInput(email: String, password: String): AlertTypeRegister? {
+        return when {
+            email.isEmpty() || password.isEmpty() -> AlertTypeRegister.EmptyField
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> AlertTypeRegister.InvalidEmail
+            password.length < 6 -> AlertTypeRegister.InvalidPassword
+            else -> null
+        }
+    }
+
+    fun clearMessages() {
         _registerState.value = _registerState.value.copy(
-            isPasswordConfirmationVisible = newVisibility,
-            passwordConfirmationVisualTransformation = if (newVisibility) VisualTransformation.None else PasswordVisualTransformation()
+            isSuccess = false,
+            errorMessage = null
         )
     }
 
-    private fun validateFields(): Boolean {
-        val email = registerState.value.email
-        val password = registerState.value.password
-        val passwordConfirmation = registerState.value.passwordConfirmation
-
-        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        val isPasswordValid = password.isNotEmpty()
-        val isPasswordConfirmationValid = password == passwordConfirmation
-
-        val isFormValid = isEmailValid && isPasswordValid && isPasswordConfirmationValid
-
-        _registerState.value = _registerState.value.copy(
-            isFormValid = isFormValid
-        )
-
-        return isFormValid
+    fun closeAlert() {
+        _registerState.value = registerState.value.copy(showAlert = false)
     }
+
 
     fun createUser(onSuccess: () -> Unit) {
         val email = registerState.value.email
         val password = registerState.value.password
+        val name = registerState.value.name
 
-        if (validateFields()) {
-            viewModelScope.launch {
-                try {
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                saveUser(email)
-                                onSuccess()
-                                cleanFields()
-                            } else {
-                                Log.d(
-                                    "FirebaseAuth",
-                                    "Error al crear usuario: ${task.exception?.message}"
+        validateInput(email, password)?.let { errorType ->
+            _registerState.value = _registerState.value.copy(
+                showAlert = true,
+                errorType = errorType
+            )
+            return
+        }
+        viewModelScope.launch {
+            try {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            saveUser(name)
+                            onSuccess()
+                            cleanFields()
+                        } else {
+                            _registerState.value = _registerState.value.copy(
+                                showAlert = true,
+                                errorType = AlertTypeRegister.UnknownError(
+                                    task.exception?.message ?: "Error desconocido"
                                 )
-                                // Manejar el error de creación de usuario
-                            }
+                            )
                         }
-                } catch (e: Exception) {
-                    Log.d("FirebaseAuth", "Error al crear usuario: ${e.localizedMessage}")
-                    // Manejar otros errores
-                }
+                    }
+            } catch (e: Exception) {
+                _registerState.value = _registerState.value.copy(
+                    showAlert = true,
+                    errorType = AlertTypeRegister.UnknownError(e.localizedMessage)
+                )
             }
-        } else {
-            Log.d("Validation", "Campos inválidos o contraseña no coincide.")
-            // Manejar el error de validación
         }
     }
 
@@ -118,19 +113,19 @@ class RegisterViewModel : ViewModel() {
         val user = UserModel(
             userId = id.toString(),
             email = email.toString(),
+            userName = userName
         )
 
-        // Guardamos los datos del usuario en la colección "Users"
         val userRef = FirebaseFirestore.getInstance().collection("Users").document(id.toString())
-
-        // Se guardan los datos de usuario
-        userRef.set(user)
+        userRef.set(user.toMap())
             .addOnSuccessListener {
-                // Crear una subcolección vacía de workdays para este usuario
-                val workdays = emptyList<Map<String, Any>>() // Puede ser vacío al principio
+                val workdays = emptyList<Map<String, Any>>()
                 userRef.update("workdays", workdays)
                     .addOnSuccessListener {
-                        Log.d("FIREBASE", "Se guardó el usuario y se creó la subcolección workdays.")
+                        Log.d(
+                            "FIREBASE",
+                            "Se guardó el usuario y se creó la subcolección workdays."
+                        )
                     }
                     .addOnFailureListener {
                         Log.d("FIREBASE", "No se pudo crear la subcolección workdays.")
