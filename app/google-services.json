@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "782417725602",
+    "project_id": "overtime-e66b0",
+    "storage_bucket": "overtime-e66b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782417725602:android:2e9c4aad31c54565b6effb",
+        "android_client_info": {
+          "package_name": "com.example.overtime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGype3LKIbeYaEqphu3puwDox3Uvol8W4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
