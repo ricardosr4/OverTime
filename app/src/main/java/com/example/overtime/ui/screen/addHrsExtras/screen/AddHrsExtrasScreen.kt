@@ -53,7 +53,6 @@ fun AddHrsExtrasScreen(
                 .align(Alignment.TopCenter),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Card para seleccionar la fecha
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
@@ -81,7 +80,6 @@ fun AddHrsExtrasScreen(
             Divider()
             Spacer(modifier = Modifier.height(50.dp))
 
-            // Card para seleccionar el porcentaje de horas extras
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
@@ -138,7 +136,6 @@ fun AddHrsExtrasScreen(
             Divider()
             Spacer(modifier = Modifier.height(50.dp))
 
-            // Card para seleccionar las horas extras
             Card(
                 colors = CardDefaults.cardColors(containerColor = CardColor),
                 shape = RoundedCornerShape(16.dp),
@@ -171,8 +168,6 @@ fun AddHrsExtrasScreen(
                                 containerColor = Color.White
                             ),
                             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-
-
                         )
                         ExposedDropdownMenu(
                             expanded = expandedHours,
@@ -193,14 +188,12 @@ fun AddHrsExtrasScreen(
                 }
             }
         }
-
-        // Botón para agregar el día de trabajo
         Button(
             onClick = {
                 if (state.selectedDate == "Selecciona una fecha" || state.selectedHours == 0) {
                     viewModel.onShowErrorDialog(true)
                 } else {
-                    // Guardar los datos en Firebase
+
                     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                     val newWorkDay = WorkDay(
                         weekDay = state.selectedDate,
@@ -208,7 +201,7 @@ fun AddHrsExtrasScreen(
                         percentageOverHours = state.selectedPercentage
                     )
                     viewModel.addWorkDay(newWorkDay)
-                    navController.popBackStack() // Regresar a Home
+                    navController.popBackStack()
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
@@ -222,8 +215,6 @@ fun AddHrsExtrasScreen(
             Text(text = "Agregar", fontSize = 20.sp)
         }
     }
-
-    // Mostrar el DatePicker cuando se activa
     if (state.showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { viewModel.onShowDatePicker(false) },
@@ -240,19 +231,19 @@ fun AddHrsExtrasScreen(
                 datePickerState.selectedDateMillis?.let { millis ->
 
                     val localDate = Instant.ofEpochMilli(millis)
-                        .atZone(ZoneId.of("UTC")) // 👈 Interpretamos la fecha tal como la entrega DatePicker
+                        .atZone(ZoneId.of("UTC"))
                         .toLocalDate()
 
-                    val formatter = DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", Locale.getDefault())
+                    val formatter =
+                        DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", Locale.getDefault())
 
-                    val formattedDate = localDate.format(formatter).replaceFirstChar { it.uppercase() }
+                    val formattedDate =
+                        localDate.format(formatter).replaceFirstChar { it.uppercase() }
 
                     viewModel.onDateSelected(formattedDate)
                 }
             }
         }
-
-        // Mostrar AlertDialog si falta algún campo
         if (state.showErrorDialog) {
             AlertDialog(
                 onDismissRequest = { viewModel.onShowErrorDialog(false) },

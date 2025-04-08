@@ -1,10 +1,8 @@
 package com.example.overtime.ui.screen.configuration
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -39,8 +36,8 @@ fun ConfigScreen(navController: NavController,
                 }
             )
         },
-        content = { paddingValues -> // Se recibe paddingValues desde el Scaffold
-            ContentConfiguration(paddingValues) // Pasar paddingValues
+        content = { paddingValues ->
+            ContentConfiguration(paddingValues)
         }
     )
 }
@@ -50,7 +47,7 @@ fun ContentConfiguration(paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues) // Aplicar padding automáticamente gestionado
+            .padding(paddingValues)
     ) {
         Text("Configuración de usuario")
         Button(modifier = Modifier.align(Alignment.CenterHorizontally),

@@ -23,7 +23,6 @@ class RegisterViewModel : ViewModel() {
     private val _registerState: MutableState<RegisterState> = mutableStateOf(RegisterState())
     val registerState: State<RegisterState> get() = _registerState
 
-    // Funciones de manejo de cambios en los campos
     fun onNameChanged(newName: String) {
         _registerState.value = _registerState.value.copy(name = newName)
     }
@@ -44,7 +43,6 @@ class RegisterViewModel : ViewModel() {
         )
     }
 
-    // Función de validación de campos
     private fun validateInput(email: String, password: String): AlertTypeRegister? {
         return when {
             email.isEmpty() || password.isEmpty() -> AlertTypeRegister.EmptyField
@@ -54,7 +52,6 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
-    // Limpiar mensajes de estado
     fun clearMessages() {
         _registerState.value = _registerState.value.copy(
             isSuccess = false,
@@ -62,28 +59,23 @@ class RegisterViewModel : ViewModel() {
         )
     }
 
-    // Cerrar la alerta
     fun closeAlert() {
         _registerState.value = registerState.value.copy(showAlert = false)
     }
 
-    // Función principal para crear el usuario
+
     fun createUser(onSuccess: () -> Unit) {
         val email = registerState.value.email
         val password = registerState.value.password
         val name = registerState.value.name
 
-
-        // Validar los campos de entrada
         validateInput(email, password)?.let { errorType ->
             _registerState.value = _registerState.value.copy(
                 showAlert = true,
                 errorType = errorType
             )
-            return  // Detener la ejecución si hay un error
+            return
         }
-
-        // Si todas las validaciones pasan, intentamos crear el usuario
         viewModelScope.launch {
             try {
                 auth.createUserWithEmailAndPassword(email, password)
@@ -93,10 +85,11 @@ class RegisterViewModel : ViewModel() {
                             onSuccess()
                             cleanFields()
                         } else {
-                            // Mostrar un error desconocido si el registro falla
                             _registerState.value = _registerState.value.copy(
                                 showAlert = true,
-                                errorType = AlertTypeRegister.UnknownError(task.exception?.message ?: "Error desconocido")
+                                errorType = AlertTypeRegister.UnknownError(
+                                    task.exception?.message ?: "Error desconocido"
+                                )
                             )
                         }
                     }
@@ -109,12 +102,10 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
-    // Limpiar los campos después de la creación del usuario
     private fun cleanFields() {
         _registerState.value = RegisterState()
     }
 
-    // Guardar el usuario en la base de datos
     private fun saveUser(userName: String) {
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email
@@ -125,17 +116,16 @@ class RegisterViewModel : ViewModel() {
             userName = userName
         )
 
-        // Guardamos los datos del usuario en la colección "Users"
         val userRef = FirebaseFirestore.getInstance().collection("Users").document(id.toString())
-
-        // Se guardan los datos de usuario
         userRef.set(user.toMap())
             .addOnSuccessListener {
-                // Crear una subcolección vacía de workdays para este usuario
-                val workdays = emptyList<Map<String, Any>>() // Puede ser vacío al principio
+                val workdays = emptyList<Map<String, Any>>()
                 userRef.update("workdays", workdays)
                     .addOnSuccessListener {
-                        Log.d("FIREBASE", "Se guardó el usuario y se creó la subcolección workdays.")
+                        Log.d(
+                            "FIREBASE",
+                            "Se guardó el usuario y se creó la subcolección workdays."
+                        )
                     }
                     .addOnFailureListener {
                         Log.d("FIREBASE", "No se pudo crear la subcolección workdays.")

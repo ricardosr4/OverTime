@@ -7,12 +7,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ConfigViewModel : ViewModel() {
 
-    // Función para cerrar sesión
     fun signOut(navController: NavController) {
         val auth = FirebaseAuth.getInstance()
         try {
             auth.signOut()
-            // Navegar a la pantalla de login
             navController.navigate("login_screen") {
                 popUpTo("config_screen") { inclusive = true }
             }

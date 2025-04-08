@@ -21,7 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.screen.home.viewModel.HomeViewModel
-
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
 import java.time.LocalDate
@@ -37,7 +36,6 @@ fun HomeScreen(
     val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
     val workDays by viewModel.workDays.collectAsState()
 
-    // Calcular total de horas por porcentaje
     val total50 = workDays.filter { it.percentageOverHours == 50 }.sumOf { it.quantityOverHours }
     val total75 = workDays.filter { it.percentageOverHours == 75 }.sumOf { it.quantityOverHours }
     val total100 = workDays.filter { it.percentageOverHours == 100 }.sumOf { it.quantityOverHours }
@@ -73,7 +71,6 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Mostrar el total de horas agrupadas por porcentaje
                 Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = Color.Black)
                 Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = Color.Black)
                 Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = Color.Black)
