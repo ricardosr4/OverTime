@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
+import com.example.overtime.ui.component.ZetaAlertDialog
 import com.example.overtime.ui.screen.home.viewModel.HomeViewModel
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
@@ -35,6 +36,7 @@ fun HomeScreen(
 ) {
     val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
     val workDays by viewModel.workDays.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
     val total50 = workDays.filter { it.percentageOverHours == 50 }.sumOf { it.quantityOverHours }
     val total75 = workDays.filter { it.percentageOverHours == 75 }.sumOf { it.quantityOverHours }
@@ -78,8 +80,11 @@ fun HomeScreen(
             }
         }
 
+
+
+
         Button(
-            onClick = { navController.navigate("add_hrs_extras") },
+            onClick = { showDialog = true },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -87,8 +92,20 @@ fun HomeScreen(
             border = BorderStroke(1.dp, Color.Black),
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
         ) {
-            Text("Agregar Horas Extras")
+            Text("Eliminar todas las hrs Extras")
         }
+        if (showDialog) {
+            ZetaAlertDialog(
+                title = "Alerta",
+                message = "Estas seguro de eliminar todos los registros?",
+                confirmText = "Aceptar",
+                onConfirmClick = {
+                    viewModel.deleteAllWorkDays()
+                    showDialog = false },
+                onDismissClick = { showDialog = false }
+            )
+        }
+
 
         LazyColumn(
             modifier = Modifier
@@ -150,9 +167,9 @@ fun CardItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = workDay.weekDay, fontSize = 16.sp)
-                Text(text = "Horas extras: ${workDay.quantityOverHours}", fontSize = 14.sp)
-                Text(text = "Porcentaje: ${workDay.percentageOverHours}%", fontSize = 14.sp)
+                Text(text = workDay.weekDay, fontSize = 16.sp, color = Color.Black)
+                Text(text = "Horas extras: ${workDay.quantityOverHours}", fontSize = 14.sp, color = Color.Black)
+                Text(text = "Porcentaje: ${workDay.percentageOverHours}%", fontSize = 14.sp, color = Color.Black)
             }
             IconButton(onClick = { showDialog = true }) {
                 Icon(
@@ -164,3 +181,5 @@ fun CardItem(
         }
     }
 }
+
+

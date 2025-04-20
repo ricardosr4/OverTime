@@ -62,7 +62,7 @@ fun AddHrsExtrasScreen(
                     .padding(top = 30.dp),
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Seleccionar Fecha", fontSize = 16.sp)
+                    Text("Seleccionar Fecha", fontSize = 16.sp, color = Color.Black)
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = { viewModel.onShowDatePicker(true) },
@@ -87,7 +87,7 @@ fun AddHrsExtrasScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Selecciona el porcentaje de horas extras", fontSize = 16.sp)
+                    Text("Selecciona el porcentaje de horas extras", fontSize = 16.sp, color = Color.Black)
                     Spacer(modifier = Modifier.height(8.dp))
                     ExposedDropdownMenuBox(
                         expanded = expandedPercentage,
@@ -97,7 +97,7 @@ fun AddHrsExtrasScreen(
                             readOnly = true,
                             value = "${state.selectedPercentage}%",
                             onValueChange = {},
-                            label = { Text("Porcentaje") },
+                            label = { Text("Porcentaje", color = Color.Black) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .menuAnchor()
@@ -109,18 +109,21 @@ fun AddHrsExtrasScreen(
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Color.White
                             ),
-                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                            textStyle = LocalTextStyle.current.copy(color = Color.Black)
 
                         )
                         ExposedDropdownMenu(
                             expanded = expandedPercentage,
                             onDismissRequest = { expandedPercentage = false },
-                            modifier = Modifier.width(100.dp)
+                            modifier = Modifier
+                                .width(100.dp)
+                                .background(Color.White)
 
                         ) {
                             percentageOptions.forEach { percentage ->
                                 DropdownMenuItem(
-                                    text = { Text("$percentage%") },
+                                    text = { Text("$percentage%",color = Color.Black) },
                                     onClick = {
                                         viewModel.onPercentageSelected(percentage)
                                         expandedPercentage = false
@@ -143,7 +146,7 @@ fun AddHrsExtrasScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Selecciona las horas extras", fontSize = 16.sp)
+                    Text("Selecciona las horas extras", fontSize = 16.sp, color = Color.Black)
                     Spacer(modifier = Modifier.height(8.dp))
                     ExposedDropdownMenuBox(
                         expanded = expandedHours,
@@ -154,7 +157,7 @@ fun AddHrsExtrasScreen(
                             readOnly = true,
                             value = "${state.selectedHours} hrs",
                             onValueChange = {},
-                            label = { Text("Horas Extras") },
+                            label = { Text("Horas Extras", color = Color.Black) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .border(
@@ -167,20 +170,23 @@ fun AddHrsExtrasScreen(
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Color.White
                             ),
-                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                            textStyle = LocalTextStyle.current.copy(color = Color.Black)
                         )
                         ExposedDropdownMenu(
                             expanded = expandedHours,
                             onDismissRequest = { expandedHours = false },
-                            modifier = Modifier.width(100.dp)
+                            modifier = Modifier
+                                .width(100.dp)
+                                .background(Color.White),
                         ) {
                             hoursOptions.forEach { hour ->
                                 DropdownMenuItem(
-                                    text = { Text("$hour hrs") },
+                                    text = { Text("$hour hrs",color = Color.Black) },
                                     onClick = {
                                         viewModel.onHoursSelected(hour)
                                         expandedHours = false
-                                    }
+                                    },
                                 )
                             }
                         }

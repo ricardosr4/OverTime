@@ -17,6 +17,7 @@ class HomeViewModel : ViewModel() {
     private val _workDays = MutableStateFlow<List<WorkDay>>(emptyList())
     val workDays: StateFlow<List<WorkDay>> = _workDays
 
+
     private var workDaysListener: ListenerRegistration? = null
 
     init {
@@ -45,6 +46,35 @@ class HomeViewModel : ViewModel() {
                         _workDays.value = workDaysList
                     }
                 }
+        }
+    }
+
+    fun deleteAllWorkDays() {
+        viewModelScope.launch {
+            try {
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                if (userId != null) {
+                    // Obtén todos los WorkDays desde Firebase
+                    val workDaysSnapshot = FirebaseFirestore.getInstance()
+                        .collection("Users")
+                        .document(userId)
+                        .collection("workdays")
+                        .get()
+                        .await()
+
+                    // Elimina todos los documentos en la colección
+                    for (document in workDaysSnapshot.documents) {
+                        document.reference.delete().await()
+                    }
+
+                    // Actualiza el estado para reflejar que no hay más WorkDays
+                    _workDays.value = emptyList()  // Limpia la lista
+                } else {
+                    Log.e("Firebase", "El usuario no está autenticado.")
+                }
+            } catch (e: Exception) {
+                Log.e("Firebase", "Error al eliminar todos los WorkDays", e)
+            }
         }
     }
 
