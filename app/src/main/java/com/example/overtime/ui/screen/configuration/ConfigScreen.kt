@@ -1,6 +1,7 @@
 package com.example.overtime.ui.screen.configuration
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,8 @@ fun ConfigScreen(navController: NavController,
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Configuración") },
+                title = { Text(text = "Configuración",color = Color.Black) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
                 actions = {
                     IconButton(onClick = { viewModel.signOut(navController) }) {
                         Icon(
@@ -48,8 +50,9 @@ fun ContentConfiguration(paddingValues: PaddingValues) {
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
+            .background(Color.White)
     ) {
-        Text("Configuración de usuario")
+        Text("Configuración de usuario",color = Color.Black)
         Button(modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = { /* Acción de configuración */ }) {
             Text("Guardar cambios")
