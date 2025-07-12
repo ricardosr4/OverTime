@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.ui.screen.configuration.component.ConfigContent
@@ -16,7 +19,12 @@ fun ConfigScreen(
     navController: NavController,
     viewModel: ConfigViewModel = viewModel()
 ) {
-    val (userName, userEmail) = viewModel.getCurrentUser()
+    val userInfo by viewModel.userInfo.collectAsState()
+    val (userName, userEmail) = userInfo
+
+    LaunchedEffect(Unit) {
+        viewModel.getCurrentUser()
+    }
 
     Scaffold(
         topBar = {

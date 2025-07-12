@@ -5,6 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.ktx.firestore
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 class ConfigViewModel : ViewModel() {
 
     // Estado de configuración (en una app real esto se guardaría en SharedPreferences)
@@ -17,16 +22,37 @@ class ConfigViewModel : ViewModel() {
     val isDarkMode: Boolean
         get() = _isDarkMode
 
-    // Obtener información del usuario actual
+    // Estado para la información del usuario
+    private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
+    val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
+
+    // Obtener información del usuario actual desde Firestore
     fun getCurrentUser(): Pair<String, String> {
         val auth = Firebase.auth
         val user = auth.currentUser
-        return if (user != null) {
-            val name = user.displayName ?: "Usuario"
+        
+        if (user != null) {
+            val userId = user.uid
             val email = user.email ?: "No disponible"
-            Pair(name, email)
+            
+            // Obtener el nombre desde Firestore
+            Firebase.firestore.collection("Users").document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val userName = document.getString("userName") ?: "Usuario"
+                        _userInfo.value = Pair(userName, email)
+                    } else {
+                        _userInfo.value = Pair("Usuario", email)
+                    }
+                }
+                .addOnFailureListener {
+                    _userInfo.value = Pair("Usuario", email)
+                }
+            
+            return _userInfo.value
         } else {
-            Pair("Usuario", "No disponible")
+            return Pair("Usuario", "No disponible")
         }
     }
 
