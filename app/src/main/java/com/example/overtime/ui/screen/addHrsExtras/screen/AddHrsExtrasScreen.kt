@@ -5,10 +5,37 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,11 +47,12 @@ import com.example.overtime.data.model.WorkDay
 import com.example.overtime.ui.screen.addHrsExtras.viewModel.AddHrsExtrasViewModel
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.CardColor
-import com.google.firebase.auth.FirebaseAuth
-import java.util.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +115,11 @@ fun AddHrsExtrasScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Selecciona el porcentaje de horas extras", fontSize = 16.sp, color = Color.Black)
+                    Text(
+                        "Selecciona el porcentaje de horas extras",
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     ExposedDropdownMenuBox(
                         expanded = expandedPercentage,
@@ -123,7 +155,7 @@ fun AddHrsExtrasScreen(
                         ) {
                             percentageOptions.forEach { percentage ->
                                 DropdownMenuItem(
-                                    text = { Text("$percentage%",color = Color.Black) },
+                                    text = { Text("$percentage%", color = Color.Black) },
                                     onClick = {
                                         viewModel.onPercentageSelected(percentage)
                                         expandedPercentage = false
@@ -182,7 +214,7 @@ fun AddHrsExtrasScreen(
                         ) {
                             hoursOptions.forEach { hour ->
                                 DropdownMenuItem(
-                                    text = { Text("$hour hrs",color = Color.Black) },
+                                    text = { Text("$hour hrs", color = Color.Black) },
                                     onClick = {
                                         viewModel.onHoursSelected(hour)
                                         expandedHours = false
@@ -200,7 +232,7 @@ fun AddHrsExtrasScreen(
                     viewModel.onShowErrorDialog(true)
                 } else {
 
-                    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    val userId = Firebase.auth.currentUser?.uid ?: ""
                     val newWorkDay = WorkDay(
                         weekDay = state.selectedDate,
                         quantityOverHours = state.selectedHours,
@@ -249,18 +281,6 @@ fun AddHrsExtrasScreen(
                     viewModel.onDateSelected(formattedDate)
                 }
             }
-        }
-        if (state.showErrorDialog) {
-            AlertDialog(
-                onDismissRequest = { viewModel.onShowErrorDialog(false) },
-                title = { Text("Error") },
-                text = { Text("Falta llenar un campo.") },
-                confirmButton = {
-                    TextButton(onClick = { viewModel.onShowErrorDialog(false) }) {
-                        Text("Aceptar", color = Color.Red)
-                    }
-                }
-            )
         }
     }
 }
