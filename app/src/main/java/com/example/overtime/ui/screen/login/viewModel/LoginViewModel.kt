@@ -11,17 +11,16 @@ import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
 import com.example.overtime.ui.screen.login.state.AlertType
 import com.example.overtime.ui.screen.login.state.LoginState
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-
+    private val auth = Firebase.auth
 
     private val _loginState: MutableState<LoginState> = mutableStateOf(LoginState())
     val loginState: State<LoginState> get() = _loginState
-
 
     fun onEmailChanged(newEmail: String) {
         _loginState.value = _loginState.value.copy(email = newEmail)

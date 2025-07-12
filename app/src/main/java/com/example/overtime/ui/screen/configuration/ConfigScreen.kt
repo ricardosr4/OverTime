@@ -1,61 +1,38 @@
 package com.example.overtime.ui.screen.configuration
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.overtime.ui.screen.configuration.component.ConfigContent
+import com.example.overtime.ui.screen.configuration.component.ConfigTopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfigScreen(navController: NavController,
-                 viewModel: ConfigViewModel = viewModel()) {
+fun ConfigScreen(
+    navController: NavController,
+    viewModel: ConfigViewModel = viewModel()
+) {
+    val (userName, userEmail) = viewModel.getCurrentUser()
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Configuración",color = Color.Black) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
-                actions = {
-                    IconButton(onClick = { viewModel.signOut(navController) }) {
-                        Icon(
-                            imageVector = Icons.Filled.ExitToApp,
-                            contentDescription = "Cerrar sesión",
-                            tint = Color.Black
-                        )
-                    }
-                }
-            )
+            ConfigTopBar(viewModel, navController)
         },
         content = { paddingValues ->
-            ContentConfiguration(paddingValues)
+            ConfigContent(
+                userName = userName,
+                userEmail = userEmail,
+                notificationsEnabled = viewModel.notificationsEnabled,
+                isDarkMode = viewModel.isDarkMode,
+                onNotificationToggle = { viewModel.toggleNotifications() },
+                onThemeToggle = { viewModel.toggleTheme() },
+                onLogout = { viewModel.signOut(navController) },
+                paddingValues = paddingValues
+            )
         }
     )
-}
-
-@Composable
-fun ContentConfiguration(paddingValues: PaddingValues) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .background(Color.White)
-    ) {
-        Text("Configuración de usuario",color = Color.Black)
-        Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { /* Acción de configuración */ }) {
-            Text("Guardar cambios")
-        }
-    }
 }

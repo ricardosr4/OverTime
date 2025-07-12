@@ -3,12 +3,15 @@ package com.example.overtime.ui.screen.home.screen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.overtime.ui.screen.home.component.HomeContent
 import com.example.overtime.ui.screen.home.component.HomeDeleteAllButton
 import com.example.overtime.ui.screen.home.component.HomeSummaryCard
@@ -20,10 +23,10 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
-    navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
+    val currentMonth =
+        remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
     val workDays by viewModel.workDays.collectAsState()
 
     Column(
@@ -35,11 +38,11 @@ fun HomeScreen(
             workDays = workDays,
             currentMonth = currentMonth
         )
-        
+
         HomeDeleteAllButton(
             onDeleteAll = { viewModel.deleteAllWorkDays() }
         )
-        
+
         HomeContent(
             workDays = workDays,
             onDeleteWorkDay = { workDay -> viewModel.deleteWorkDay(workDay) }

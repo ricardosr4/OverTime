@@ -61,20 +61,21 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     //navigation
-    implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     //viewmodel
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     //livedata
-    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     //coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     //retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     //coil
     implementation ("io.coil-kt:coil-compose:2.4.0")
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:31.2.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     //Extension de Iconos

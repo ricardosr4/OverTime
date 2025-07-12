@@ -2,8 +2,14 @@ package com.example.overtime.ui.screen.register.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.ui.component.ZetaAlertDialog
-import com.example.overtime.ui.component.ZetaButtonBasic
 import com.example.overtime.ui.component.ZetaImageLogo
 import com.example.overtime.ui.component.ZetaSpaceHeight
 import com.example.overtime.ui.component.ZetaText
@@ -72,26 +77,28 @@ fun RegisterScreen(navController: NavController) {
                     .align(Alignment.Start)
             )
             ZetaSpaceHeight(20.dp)
-            
+
             RegisterForm(registerState, viewModel)
             RegisterLinks(
                 navController = navController,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
-        
+
         RegisterButton(
             viewModel = viewModel,
             navController = navController,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
-        
+
         if (registerState.showAlert) {
             val alertMessage = when (registerState.errorType) {
                 is AlertTypeRegister.EmptyField -> "Los campos no pueden estar vacíos."
                 is AlertTypeRegister.InvalidEmail -> "El correo electrónico no es válido."
                 is AlertTypeRegister.InvalidPassword -> "La contraseña debe tener al menos 6 caracteres."
-                is AlertTypeRegister.UnknownError -> registerState.errorMessage ?: "Ha ocurrido un error inesperado."
+                is AlertTypeRegister.UnknownError -> registerState.errorMessage
+                    ?: "Ha ocurrido un error inesperado."
+
                 else -> "Ha ocurrido un error inesperado."
             }
             ZetaAlertDialog(

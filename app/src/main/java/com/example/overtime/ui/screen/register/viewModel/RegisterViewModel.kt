@@ -12,13 +12,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewModelScope
 import com.example.overtime.data.model.UserModel
 import com.example.overtime.ui.screen.register.state.AlertTypeRegister
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.ktx.firestore
 import kotlinx.coroutines.launch
 
 class RegisterViewModel : ViewModel() {
 
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth = Firebase.auth
 
     private val _registerState: MutableState<RegisterState> = mutableStateOf(RegisterState())
     val registerState: State<RegisterState> get() = _registerState
@@ -116,7 +117,7 @@ class RegisterViewModel : ViewModel() {
             userName = userName
         )
 
-        val userRef = FirebaseFirestore.getInstance().collection("Users").document(id.toString())
+        val userRef = Firebase.firestore.collection("Users").document(id.toString())
         userRef.set(user.toMap())
             .addOnSuccessListener {
                 val workdays = emptyList<Map<String, Any>>()
