@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.overtime.ui.screen.home.component.HomeContent
 import com.example.overtime.ui.screen.home.component.HomeDeleteAllButton
 import com.example.overtime.ui.screen.home.component.HomeSummaryCard
@@ -22,7 +23,7 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(
+fun HomeScreen(navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
     val currentMonth =
