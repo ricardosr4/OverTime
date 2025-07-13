@@ -63,7 +63,7 @@ fun PercentageSelectionCard(
             ) {
                 OutlinedTextField(
                     readOnly = true,
-                    value = "$selectedPercentage%",
+                    value = if (selectedPercentage == 0) "Selecciona el porcentaje" else "$selectedPercentage%",
                     onValueChange = {},
                     label = { Text("Selecciona el porcentaje") },
                     modifier = Modifier

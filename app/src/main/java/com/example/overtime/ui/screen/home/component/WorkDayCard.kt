@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.overtime.data.model.WorkDay
+import com.example.overtime.ui.component.ZetaAlertDialog
 import com.example.overtime.ui.theme.CardColor
 
 @Composable
@@ -23,23 +24,15 @@ fun WorkDayCard(
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Confirmar eliminación") },
-            text = { Text("¿Estás seguro de que deseas eliminar este ítem?") },
-            confirmButton = {
-                TextButton(onClick = {
-                    onDeleteConfirm()
-                    showDialog = false
-                }) {
-                    Text("Eliminar", color = Color.Red)
-                }
+        ZetaAlertDialog(
+            title = "Confirmar eliminación",
+            message = "¿Estás seguro de que deseas eliminar este ítem?",
+            confirmText = "Eliminar",
+            onConfirmClick = {
+                onDeleteConfirm()
+                showDialog = false
             },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancelar")
-                }
-            }
+            onDismissClick = { showDialog = false }
         )
     }
 

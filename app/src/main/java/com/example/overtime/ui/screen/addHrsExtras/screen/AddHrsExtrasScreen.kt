@@ -22,6 +22,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,11 +33,16 @@ fun AddHrsExtrasScreen(
 ) {
     val state = viewModel.state.value
 
+    // Resetear el estado cuando se entra a la pantalla
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-    ) { paddingValues ->
+    ) {
         AddHrsExtrasContent(
             selectedDate = state.selectedDate,
             selectedPercentage = state.selectedPercentage,
@@ -45,9 +51,7 @@ fun AddHrsExtrasScreen(
             onPercentageSelected = { viewModel.onPercentageSelected(it) },
             onHoursSelected = { viewModel.onHoursSelected(it) },
             onAddClick = {
-                if (state.selectedDate == "Selecciona una fecha" || state.selectedHours == 0) {
-                    viewModel.onShowErrorDialog(true)
-                } else {
+                if (viewModel.validateFields()) {
                     val userId = Firebase.auth.currentUser?.uid ?: ""
                     val newWorkDay = WorkDay(
                         weekDay = state.selectedDate,
@@ -58,9 +62,10 @@ fun AddHrsExtrasScreen(
                     navController.navigate(AppScreen.HomeScreen.route) {
                         popUpTo(AppScreen.AddHrsExtrasScreen.route) { inclusive = true }
                     }
+                } else {
+                    viewModel.onShowErrorDialog(true)
                 }
-            },
-            paddingValues = paddingValues
+            }
         )
     }
     
@@ -80,8 +85,21 @@ fun AddHrsExtrasScreen(
                 }
             }
         ) {
-            val datePickerState = rememberDatePickerState()
-            DatePicker(state = datePickerState)
+            val today = LocalDate.now()
+            val datePickerState = rememberDatePickerState(
+                initialSelectedDateMillis = today.toEpochDay() * 24 * 60 * 60 * 1000
+            )
+            
+            DatePicker(
+                state = datePickerState,
+                dateValidator = { timestamp ->
+                    val selectedDate = Instant.ofEpochMilli(timestamp)
+                        .atZone(ZoneId.of("UTC"))
+                        .toLocalDate()
+                    // Solo permitir fechas hasta hoy (inclusive)
+                    !selectedDate.isAfter(today)
+                }
+            )
 
             LaunchedEffect(datePickerState.selectedDateMillis) {
                 datePickerState.selectedDateMillis?.let { millis ->

@@ -106,7 +106,7 @@ fun RegisterScreen(navController: NavController) {
                 message = alertMessage,
                 confirmText = "Aceptar",
                 onConfirmClick = { viewModel.closeAlert() }
-            ) { }
+            )
         }
     }
 }

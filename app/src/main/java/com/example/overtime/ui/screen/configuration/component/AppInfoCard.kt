@@ -80,7 +80,7 @@ fun AppInfoCard() {
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "1.0.0",
+                    text = "Prueba",
                     fontSize = 14.sp,
                     color = Color.Black,
                     modifier = Modifier.weight(0.7f)

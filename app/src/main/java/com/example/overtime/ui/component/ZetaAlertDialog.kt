@@ -1,13 +1,21 @@
 package com.example.overtime.ui.component
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.overtime.ui.theme.*
 
 @Composable
 fun ZetaAlertDialog(
@@ -15,12 +23,15 @@ fun ZetaAlertDialog(
     message: String,
     confirmText: String,
     onConfirmClick: () -> Unit,
-    onDismissClick: () -> Unit
+    onDismissClick: (() -> Unit)? = null // ahora es opcional
 ) {
     val scroll = rememberScrollState(0)
 
     AlertDialog(
-        onDismissRequest = { onDismissClick() },
+        onDismissRequest = { onDismissClick?.invoke() },
+        containerColor = ButtonPrimary,
+        titleContentColor = ButtonPrimaryText,
+        textContentColor = ButtonPrimaryText,
         title = { Text(text = title) },
         text = {
             Text(
@@ -30,8 +41,49 @@ fun ZetaAlertDialog(
             )
         },
         confirmButton = {
-            Button(onClick = { onConfirmClick() }) {
-                Text(text = confirmText)
+            Button(
+                onClick = { onConfirmClick() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(45.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ButtonPrimary
+                ),
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 4.dp,
+                    pressedElevation = 6.dp
+                )
+            ) {
+                Text(
+                    text = confirmText,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = ButtonPrimaryText
+                )
+            }
+        },
+        dismissButton = onDismissClick?.let {
+            {
+                Button(
+                    onClick = { it() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(45.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ButtonPrimary
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 4.dp,
+                        pressedElevation = 6.dp
+                    )
+                ) {
+                    Text(
+                        text = "Cancelar",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = ButtonPrimaryText
+                    )
+                }
             }
         }
     )

@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.overtime.R
 import com.example.overtime.ui.component.ZetaAlertDialog
-import com.example.overtime.ui.component.ZetaButtonBasic
+import com.example.overtime.ui.component.StandardButton
 import com.example.overtime.ui.component.ZetaImageLogo
 import com.example.overtime.ui.component.ZetaOutlinedTextField
 import com.example.overtime.ui.component.ZetaSpaceHeight
@@ -114,7 +114,7 @@ fun LoginScreen(navController: NavController) {
                     .align(Alignment.CenterHorizontally)
             )
         }
-        ZetaButtonBasic(
+        StandardButton(
             onClick = {
                 viewModel.login(
                     email = loginState.email,
@@ -123,8 +123,7 @@ fun LoginScreen(navController: NavController) {
                     navController.navigate("home_screen")
                 }
             },
-            backgroundColor = PrimaryColor,
-            text = "Login", color = Color.White,
+            text = "Login",
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -144,7 +143,7 @@ fun LoginScreen(navController: NavController) {
                 message = alertMessage,
                 confirmText = "Aceptar",
                 onConfirmClick = { viewModel.closeAlert() }
-            ) { }
+            )
         }
     }
 }

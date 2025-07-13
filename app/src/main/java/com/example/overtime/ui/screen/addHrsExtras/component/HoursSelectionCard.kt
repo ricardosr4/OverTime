@@ -63,7 +63,7 @@ fun HoursSelectionCard(
             ) {
                 OutlinedTextField(
                     readOnly = true,
-                    value = "$selectedHours horas",
+                    value = if (selectedHours == 0) "Selecciona las horas" else "$selectedHours horas",
                     onValueChange = {},
                     label = { Text("Selecciona las horas") },
                     modifier = Modifier

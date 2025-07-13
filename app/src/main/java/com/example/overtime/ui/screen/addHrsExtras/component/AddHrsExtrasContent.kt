@@ -16,13 +16,11 @@ fun AddHrsExtrasContent(
     onDateButtonClick: () -> Unit,
     onPercentageSelected: (Int) -> Unit,
     onHoursSelected: (Int) -> Unit,
-    onAddClick: () -> Unit,
-    paddingValues: PaddingValues
+    onAddClick: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+            .fillMaxSize(),
         contentPadding = PaddingValues(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

@@ -1,9 +1,7 @@
 package com.example.overtime.ui.screen.addHrsExtras.component
 
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.font.FontWeight
-import com.example.overtime.ui.theme.*
+import com.example.overtime.ui.component.ZetaAlertDialog
 
 @Composable
 fun ErrorDialog(
@@ -11,32 +9,14 @@ fun ErrorDialog(
     onDismiss: () -> Unit
 ) {
     if (showDialog) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            containerColor = Surface,
-            title = {
-                Text(
-                    text = "Error de Validación",
-                    fontWeight = FontWeight.Bold,
-                    color = TextPrimary
-                )
-            },
-            text = {
-                Text(
-                    text = "Por favor, asegúrate de seleccionar una fecha y las horas extras antes de continuar.",
-                    color = OnSurface
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = PrimaryColor
-                    )
-                ) {
-                    Text("Entendido")
-                }
-            }
+        ZetaAlertDialog(
+            title = "Campos Requeridos",
+            message = "Por favor, asegúrate de completar todos los campos correctamente:\n\n" +
+                    "• Seleccionar una fecha\n" +
+                    "• Seleccionar horas extras\n" +
+                    "• Seleccionar porcentaje",
+            confirmText = "Entendido",
+            onConfirmClick = onDismiss
         )
     }
 } 

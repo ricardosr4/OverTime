@@ -3,9 +3,10 @@ package com.example.overtime.ui.screen.configuration.component
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import com.example.overtime.ui.component.ZetaAlertDialog
 import com.example.overtime.ui.screen.configuration.ConfigViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -14,6 +15,8 @@ fun ConfigTopBar(
     viewModel: ConfigViewModel,
     navController: NavController
 ) {
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
     TopAppBar(
         title = { 
             Text(
@@ -26,7 +29,7 @@ fun ConfigTopBar(
         ),
         actions = {
             IconButton(
-                onClick = { viewModel.signOut(navController) }
+                onClick = { showLogoutDialog = true }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ExitToApp,
@@ -36,4 +39,17 @@ fun ConfigTopBar(
             }
         }
     )
+
+    if (showLogoutDialog) {
+        ZetaAlertDialog(
+            title = "Confirmar Cierre de Sesión",
+            message = "¿Estás seguro de que deseas cerrar sesión?",
+            confirmText = "Cerrar Sesión",
+            onConfirmClick = {
+                viewModel.signOut(navController)
+                showLogoutDialog = false
+            },
+            onDismissClick = { showLogoutDialog = false }
+        )
+    }
 } 

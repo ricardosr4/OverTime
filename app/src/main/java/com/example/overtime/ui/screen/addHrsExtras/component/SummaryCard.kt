@@ -19,7 +19,13 @@ fun SummaryCard(
     selectedHours: Int,
     modifier: Modifier = Modifier
 ) {
-    if (selectedDate != "Selecciona una fecha" && selectedHours > 0) {
+    // Validar que todos los campos básicos sean válidos
+    val validDate = selectedDate != "Selecciona una fecha"
+    val validHours = selectedHours >= 1 && selectedHours <= 12
+    val validPercentages = listOf(50, 75, 100, 130)
+    val validPercentage = validPercentages.contains(selectedPercentage)
+    
+    if (validDate && validHours && validPercentage) {
         Card(
             modifier = modifier
                 .fillMaxWidth()

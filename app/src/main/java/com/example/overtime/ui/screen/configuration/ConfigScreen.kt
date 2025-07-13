@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.ui.screen.configuration.component.ConfigContent
-import com.example.overtime.ui.screen.configuration.component.ConfigTopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,10 +26,7 @@ fun ConfigScreen(
     }
 
     Scaffold(
-        topBar = {
-            ConfigTopBar(viewModel, navController)
-        },
-        content = { paddingValues ->
+        content = {
             ConfigContent(
                 userName = userName,
                 userEmail = userEmail,
@@ -38,8 +34,8 @@ fun ConfigScreen(
                 isDarkMode = viewModel.isDarkMode,
                 onNotificationToggle = { viewModel.toggleNotifications() },
                 onThemeToggle = { viewModel.toggleTheme() },
-                onLogout = { viewModel.signOut(navController) },
-                paddingValues = paddingValues
+                navController = navController,
+                viewModel = viewModel
             )
         }
     )

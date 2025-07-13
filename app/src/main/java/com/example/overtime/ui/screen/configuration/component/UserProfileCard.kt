@@ -5,20 +5,29 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.overtime.ui.screen.configuration.ConfigViewModel
 import com.example.overtime.ui.theme.CardColor
+import com.example.overtime.ui.theme.ButtonPrimary
+import com.example.overtime.ui.theme.ButtonPrimaryText
 
 @Composable
 fun UserProfileCard(
     userName: String,
-    userEmail: String
+    userEmail: String,
+    navController: NavController,
+    viewModel: ConfigViewModel
 ) {
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,27 +40,40 @@ fun UserProfileCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(20.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = "Usuario",
-                modifier = Modifier.size(48.dp),
-                tint = Color.Black
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = "Perfil de Usuario",
-                fontSize = 18.sp,
-                color = Color.Black,
-                style = MaterialTheme.typography.titleMedium
-            )
-            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Usuario",
+                        modifier = Modifier.size(48.dp),
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Perfil de Usuario",
+                        fontSize = 18.sp,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+                IconButton(onClick = { showLogoutDialog = true }) {
+                    Icon(
+                        imageVector = Icons.Default.ExitToApp,
+                        contentDescription = "Cerrar sesión",
+                        tint = Color.Black,
+                        modifier = Modifier.size(35.dp)
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -69,9 +91,9 @@ fun UserProfileCard(
                     modifier = Modifier.weight(0.7f)
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -90,5 +112,35 @@ fun UserProfileCard(
                 )
             }
         }
+    }
+
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+            containerColor = ButtonPrimary,
+            titleContentColor = ButtonPrimaryText,
+            textContentColor = ButtonPrimaryText,
+            title = { Text("Cerrar sesión") },
+            text = { Text("¿Estás seguro que deseas cerrar sesión?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showLogoutDialog = false
+                        viewModel.signOut(navController)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
+                ) {
+                    Text("Cerrar sesión", color = ButtonPrimaryText)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showLogoutDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Text("Cancelar", color = ButtonPrimary)
+                }
+            }
+        )
     }
 } 
