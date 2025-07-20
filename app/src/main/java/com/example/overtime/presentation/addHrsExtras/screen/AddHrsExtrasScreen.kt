@@ -1,9 +1,11 @@
 package com.example.overtime.presentation.addHrsExtras.screen
 
+import android.R.attr.padding
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,8 +44,9 @@ fun AddHrsExtrasScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-    ) { _ ->
+    ) { innerPadding ->
         AddHrsExtrasContent(
+            modifier = Modifier.padding(innerPadding),
             selectedDate = state.selectedDate,
             selectedPercentage = state.selectedPercentage,
             selectedHours = state.selectedHours,
