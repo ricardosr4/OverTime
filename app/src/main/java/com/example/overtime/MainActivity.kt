@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.overtime.navigation.NavGraph
-import com.example.overtime.ui.bottomNavigationBar.BottomNavigationBar
-import com.example.overtime.ui.screen.addHrsExtras.viewModel.AddHrsExtrasViewModel
-import com.example.overtime.ui.screen.home.viewModel.HomeViewModel
+import com.example.overtime.presentation.navigation.NavGraph
+import com.example.overtime.presentation.components.BottomNavigationBar
+import com.example.overtime.presentation.addHrsExtras.viewModel.AddHrsExtrasViewModel
+import com.example.overtime.presentation.home.viewModel.HomeViewModel
 import com.example.overtime.ui.theme.OverTimeTheme
 
 class MainActivity : ComponentActivity() {
