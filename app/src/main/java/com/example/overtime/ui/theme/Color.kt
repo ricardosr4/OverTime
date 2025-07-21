@@ -21,8 +21,6 @@ val CardColor = Color(0xFFBFE6FD) // Color de card principal
 val ButtonPrimary = Color(0xFF4A90E2) // Fondo del botón principal
 val ButtonPrimaryText = Color(0xFFFFFFFF) // Texto del botón principal
 
-
-
 //val ButtonSecondaryBorder = Color(0xFF4A90E2) // Borde del botón secundario
 //val ButtonSecondaryText = Color(0xFF4A90E2) // Texto del botón secundario
 val ButtonDisabled = Color(0xFFE0E0E0) // Fondo del botón deshabilitado
