@@ -3,7 +3,7 @@ package com.example.overtime.presentation.register.component
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.overtime.ui.component.ZetaTextLink
+import com.example.overtime.presentation.login.components.ZetaTextLink
 import com.example.overtime.ui.theme.PrimaryColor
 
 @Composable

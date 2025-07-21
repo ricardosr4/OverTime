@@ -7,7 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.overtime.ui.component.StandardButton
+import com.example.overtime.presentation.login.components.StandardButton
 import com.example.overtime.ui.theme.ButtonPrimaryText
 
 @Composable

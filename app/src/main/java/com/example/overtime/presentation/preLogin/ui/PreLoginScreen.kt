@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.presentation.navigation.AppScreen
-import com.example.overtime.ui.component.StandardButton
+import com.example.overtime.presentation.login.components.StandardButton
 import com.example.overtime.ui.theme.ButtonDisabled
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.DividerColor

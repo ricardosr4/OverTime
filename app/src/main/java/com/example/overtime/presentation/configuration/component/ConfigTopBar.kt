@@ -6,7 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import com.example.overtime.ui.component.ZetaAlertDialog
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

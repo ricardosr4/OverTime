@@ -5,8 +5,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.overtime.R
-import com.example.overtime.ui.component.ZetaOutlinedTextField
-import com.example.overtime.ui.component.ZetaSpaceHeight
+import com.example.overtime.presentation.login.components.ZetaOutlinedTextField
+import com.example.overtime.presentation.login.components.ZetaSpaceHeight
 import com.example.overtime.presentation.register.state.RegisterState
 import com.example.overtime.presentation.register.viewModel.RegisterViewModel
 

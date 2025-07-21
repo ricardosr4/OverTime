@@ -1,7 +1,7 @@
 package com.example.overtime.presentation.addHrsExtras.component
 
 import androidx.compose.runtime.Composable
-import com.example.overtime.ui.component.ZetaAlertDialog
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 
 @Composable
 fun ErrorDialog(

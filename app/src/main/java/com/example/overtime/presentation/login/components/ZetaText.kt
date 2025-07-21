@@ -1,4 +1,4 @@
-package com.example.overtime.ui.component
+package com.example.overtime.presentation.login.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

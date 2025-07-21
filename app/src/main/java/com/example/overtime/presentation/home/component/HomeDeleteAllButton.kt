@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.overtime.ui.component.ZetaAlertDialog
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 import com.example.overtime.ui.theme.ButtonPrimary
 
 @Composable

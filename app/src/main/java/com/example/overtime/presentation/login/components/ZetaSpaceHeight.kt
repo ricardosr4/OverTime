@@ -1,4 +1,4 @@
-package com.example.overtime.ui.component
+package com.example.overtime.presentation.login.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

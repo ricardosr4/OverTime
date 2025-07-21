@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.overtime.data.model.WorkDay
-import com.example.overtime.ui.component.ZetaAlertDialog
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 import com.example.overtime.ui.theme.CardColor
 
 @Composable

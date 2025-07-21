@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
-import com.example.overtime.ui.component.ZetaAlertDialog
-import com.example.overtime.ui.component.ZetaImageLogo
-import com.example.overtime.ui.component.ZetaSpaceHeight
-import com.example.overtime.ui.component.ZetaText
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
+import com.example.overtime.presentation.login.components.ZetaImageLogo
+import com.example.overtime.presentation.login.components.ZetaSpaceHeight
+import com.example.overtime.presentation.login.components.ZetaText
 import com.example.overtime.presentation.register.component.RegisterButton
 import com.example.overtime.presentation.register.component.RegisterForm
 import com.example.overtime.presentation.register.component.RegisterLinks
