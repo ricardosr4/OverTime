@@ -14,13 +14,16 @@ import com.example.overtime.presentation.login.state.LoginState
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import com.example.overtime.domain.useCase.auth.LoginUserUseCase
+import com.example.overtime.domain.useCase.auth.ResetPasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
-
-    private val auth = Firebase.auth
+class LoginViewModel @Inject constructor(
+    private val loginUserUseCase: LoginUserUseCase,
+    private val resetPasswordUseCase: ResetPasswordUseCase
+) : ViewModel() {
 
     private val _loginState: MutableState<LoginState> = mutableStateOf(LoginState())
     val loginState: State<LoginState> get() = _loginState
@@ -60,7 +63,6 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
     fun closeAlert() {
         _loginState.value = loginState.value.copy(showAlert = false)
-
     }
 
     fun login(email: String, password: String, onSuccess: () -> Unit) {
@@ -72,26 +74,17 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             return
         }
         viewModelScope.launch {
-            try {
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            _loginState.value = _loginState.value.copy(
-                                isSuccess = true,
-                                errorType = null
-                            )
-                            onSuccess()
-                        } else {
-                            _loginState.value = _loginState.value.copy(
-                                showAlert = true,
-                                errorType = AlertType.InvalidCredentials
-                            )
-                        }
-                    }
-            } catch (e: Exception) {
+            val result = loginUserUseCase(email, password)
+            if (result.isSuccess) {
+                _loginState.value = _loginState.value.copy(
+                    isSuccess = true,
+                    errorType = null
+                )
+                onSuccess()
+            } else {
                 _loginState.value = _loginState.value.copy(
                     showAlert = true,
-                    errorType = e.localizedMessage?.let { AlertType.UnknownError(it) }
+                    errorType = AlertType.InvalidCredentials
                 )
             }
         }
@@ -100,25 +93,18 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     fun resetPassword(email: String, onSuccess: () -> Unit) {
         if (email.isNotEmpty()) {
             viewModelScope.launch {
-                try {
-                    auth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                _loginState.value = _loginState.value.copy(
-                                    showAlert = true,
-                                    errorType = AlertType.ResetPasswordSuccess
-                                )
-                                onSuccess()
-                            } else {
-                                _loginState.value = _loginState.value.copy(
-                                    showAlert = true,
-                                    errorType = AlertType.ResetPasswordInvalidEmail
-                                )
-                                Log.d("RECUPERACIÓN", "Error al enviar el correo de recuperación.")
-                            }
-                        }
-                } catch (e: Exception) {
-                    Log.d("ERROR EN FIREBASE", "Error: ${e.localizedMessage}")
+                val result = resetPasswordUseCase(email)
+                if (result.isSuccess) {
+                    _loginState.value = _loginState.value.copy(
+                        showAlert = true,
+                        errorType = AlertType.ResetPasswordSuccess
+                    )
+                    onSuccess()
+                } else {
+                    _loginState.value = _loginState.value.copy(
+                        showAlert = true,
+                        errorType = AlertType.ResetPasswordInvalidEmail
+                    )
                 }
             }
         } else {

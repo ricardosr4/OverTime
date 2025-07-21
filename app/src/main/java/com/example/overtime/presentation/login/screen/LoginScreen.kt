@@ -28,11 +28,12 @@ import com.example.overtime.ui.component.ZetaTextLink
 import com.example.overtime.presentation.login.state.AlertType
 import com.example.overtime.ui.theme.PrimaryColor
 import com.example.overtime.presentation.login.viewModel.LoginViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun LoginScreen(navController: NavController) {
 
-    val viewModel: LoginViewModel = viewModel()
+    val viewModel: LoginViewModel = hiltViewModel()
     val loginState by viewModel.loginState
     val context = LocalContext.current
 
