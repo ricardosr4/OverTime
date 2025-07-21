@@ -14,8 +14,11 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AddHrsExtrasViewModel : ViewModel() {
+@HiltViewModel
+class AddHrsExtrasViewModel @Inject constructor() : ViewModel() {
 
     private val _state = mutableStateOf(AddHrsExtrasState())
     val state: State<AddHrsExtrasState> = _state

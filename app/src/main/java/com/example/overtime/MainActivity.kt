@@ -20,7 +20,10 @@ import com.example.overtime.presentation.components.BottomNavigationBar
 import com.example.overtime.presentation.addHrsExtras.viewModel.AddHrsExtrasViewModel
 import com.example.overtime.presentation.home.viewModel.HomeViewModel
 import com.example.overtime.ui.theme.OverTimeTheme
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.hilt.navigation.compose.hiltViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +54,7 @@ fun OverTimeApp() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            NavGraph(navController = navController,
-                viewModel = HomeViewModel(),
-                addHrsExtrasViewModel = AddHrsExtrasViewModel()
-
-            )
+            NavGraph(navController = navController)
         }
     }
 }

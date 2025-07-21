@@ -16,15 +16,13 @@ import com.example.overtime.presentation.login.screen.LoginScreen
 import com.example.overtime.presentation.preLogin.ui.PreLoginScreen
 import com.example.overtime.presentation.register.screen.RegisterScreen
 import com.example.overtime.presentation.splasScreen.SplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(
-    navController: NavHostController,
-    viewModel: HomeViewModel,
-    addHrsExtrasViewModel: AddHrsExtrasViewModel
-
+    navController: NavHostController
 ) {
 
 
@@ -52,12 +50,14 @@ fun NavGraph(
             RegisterScreen(navController = navController)
         }
         composable(AppScreen.HomeScreen.route) {
-            HomeScreen(navController = navController, viewModel = viewModel)
+            val homeViewModel: HomeViewModel = hiltViewModel()
+            HomeScreen(navController = navController, viewModel = homeViewModel)
         }
         composable(AppScreen.ConfigScreen.route) {
             ConfigScreen(navController = navController)
         }
         composable(AppScreen.AddHrsExtrasScreen.route) {
+            val addHrsExtrasViewModel: AddHrsExtrasViewModel = hiltViewModel()
             AddHrsExtrasScreen(navController = navController, viewModel = addHrsExtrasViewModel)
         }
     }
