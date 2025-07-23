@@ -32,7 +32,7 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
             logo?.let {
                 val scaledLogo = Bitmap.createScaledBitmap(it, 120, 120, true)
                 canvas.drawBitmap(scaledLogo, (canvas.width - scaledLogo.width) / 2f, y.toFloat(), paint)
-                y += scaledLogo.height + 10
+                y += scaledLogo.height + 30 // Más espacio después del logo
             }
 
             // Nombre de usuario
@@ -57,13 +57,13 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
             // Encabezado de tabla
             paint.textSize = 16f
             paint.isFakeBoldText = true
-            paint.textAlign = Paint.Align.LEFT
+            paint.textAlign = Paint.Align.CENTER
             val startX = 40
-            val colWidths = listOf(120, 120, 120, 120)
-            val headers = listOf("Día", "Fecha/ID", "Horas", "% Extra")
+            val colWidths = listOf(180, 120, 180)
+            val headers = listOf("Fecha", "Horas", "Porcentaje de Hrs")
             var x = startX
             for ((i, header) in headers.withIndex()) {
-                canvas.drawText(header, x.toFloat(), y.toFloat(), paint)
+                canvas.drawText(header, x + colWidths[i] / 2f, y.toFloat(), paint)
                 x += colWidths[i]
             }
             y += 24
@@ -74,13 +74,12 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
             for (workDay in workDays) {
                 x = startX
                 val row = listOf(
-                    workDay.weekDay,
-                    workDay.id ?: "",
+                    workDay.weekDay, // Ahora 'Fecha' muestra el valor de weekDay
                     workDay.quantityOverHours.toString(),
                     workDay.percentageOverHours.toString()
                 )
                 for ((i, cell) in row.withIndex()) {
-                    canvas.drawText(cell, x.toFloat(), y.toFloat(), paint)
+                    canvas.drawText(cell, x + colWidths[i] / 2f, y.toFloat(), paint)
                     x += colWidths[i]
                 }
                 y += 20

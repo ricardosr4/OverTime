@@ -30,7 +30,7 @@ fun HomeActionsRow(
             border = BorderStroke(1.dp, Color.Black),
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
         ) {
-            Text("Eliminar hrs Extras")
+            Text("Eliminar Hrs")
         }
         Spacer(modifier = Modifier.width(8.dp))
         Button(
@@ -40,7 +40,7 @@ fun HomeActionsRow(
             border = BorderStroke(1.dp, Color.Black),
             colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
         ) {
-            Text("Descargar PDF de hrs")
+            Text("Descargar PDF")
         }
     }
     if (showDialog) {
