@@ -16,10 +16,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.ktx.firestore
 import kotlinx.coroutines.launch
+import com.example.overtime.domain.useCase.auth.RegisterUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterViewModel : ViewModel() {
-
-    private val auth = Firebase.auth
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val registerUserUseCase: RegisterUserUseCase
+) : ViewModel() {
 
     private val _registerState: MutableState<RegisterState> = mutableStateOf(RegisterState())
     val registerState: State<RegisterState> get() = _registerState
@@ -64,7 +68,6 @@ class RegisterViewModel : ViewModel() {
         _registerState.value = registerState.value.copy(showAlert = false)
     }
 
-
     fun createUser(onSuccess: () -> Unit) {
         val email = registerState.value.email
         val password = registerState.value.password
@@ -78,26 +81,15 @@ class RegisterViewModel : ViewModel() {
             return
         }
         viewModelScope.launch {
-            try {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            saveUser(name)
-                            onSuccess()
-                            cleanFields()
-                        } else {
-                            _registerState.value = _registerState.value.copy(
-                                showAlert = true,
-                                errorType = AlertTypeRegister.UnknownError(
-                                    task.exception?.message ?: "Error desconocido"
-                                )
-                            )
-                        }
-                    }
-            } catch (e: Exception) {
+            val result = registerUserUseCase(name, email, password)
+            if (result.isSuccess) {
+                _registerState.value = RegisterState(isSuccess = true)
+                onSuccess()
+                cleanFields()
+            } else {
                 _registerState.value = _registerState.value.copy(
                     showAlert = true,
-                    errorType = AlertTypeRegister.UnknownError(e.localizedMessage)
+                    errorType = AlertTypeRegister.UnknownError(result.exceptionOrNull()?.message ?: "Error desconocido")
                 )
             }
         }
@@ -105,35 +97,5 @@ class RegisterViewModel : ViewModel() {
 
     private fun cleanFields() {
         _registerState.value = RegisterState()
-    }
-
-    private fun saveUser(userName: String) {
-        val id = auth.currentUser?.uid
-        val email = auth.currentUser?.email
-
-        val user = UserModel(
-            userId = id.toString(),
-            email = email.toString(),
-            userName = userName
-        )
-
-        val userRef = Firebase.firestore.collection("Users").document(id.toString())
-        userRef.set(user.toMap())
-            .addOnSuccessListener {
-                val workdays = emptyList<Map<String, Any>>()
-                userRef.update("workdays", workdays)
-                    .addOnSuccessListener {
-                        Log.d(
-                            "FIREBASE",
-                            "Se guardó el usuario y se creó la subcolección workdays."
-                        )
-                    }
-                    .addOnFailureListener {
-                        Log.d("FIREBASE", "No se pudo crear la subcolección workdays.")
-                    }
-            }
-            .addOnFailureListener {
-                Log.d("FIREBASE", "No se pudo guardar el usuario")
-            }
     }
 }
