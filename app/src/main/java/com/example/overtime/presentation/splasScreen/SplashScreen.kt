@@ -26,10 +26,36 @@ import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.presentation.navigation.AppScreen
 import kotlinx.coroutines.delay
+import com.example.overtime.presentation.components.LoadingOverlay
 
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController, showOnlyLoader: Boolean = false) {
+    if (showOnlyLoader) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_over_time),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(200.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            bottomStart = 10.dp,
+                            bottomEnd = 10.dp
+                        )
+                    )
+            )
+            LoadingOverlay()
+        }
+        return
+    }
 
     val scale = remember {
         Animatable(0f)

@@ -75,18 +75,21 @@ class LoginViewModel @Inject constructor(
             )
             return
         }
+        _loginState.value = _loginState.value.copy(isLoading = true)
         viewModelScope.launch {
             val result = loginUserUseCase(email, password)
             if (result.isSuccess) {
                 _loginState.value = _loginState.value.copy(
                     isSuccess = true,
-                    errorType = null
+                    errorType = null,
+                    isLoading = false
                 )
                 onSuccess()
             } else {
                 _loginState.value = _loginState.value.copy(
                     showAlert = true,
-                    errorType = AlertType.InvalidCredentials
+                    errorType = AlertType.InvalidCredentials,
+                    isLoading = false
                 )
             }
         }
@@ -94,42 +97,49 @@ class LoginViewModel @Inject constructor(
 
     fun resetPassword(email: String, onSuccess: () -> Unit) {
         if (email.isNotEmpty()) {
+            _loginState.value = _loginState.value.copy(isLoading = true)
             viewModelScope.launch {
                 val result = resetPasswordUseCase(email)
                 if (result.isSuccess) {
                     _loginState.value = _loginState.value.copy(
                         showAlert = true,
-                        errorType = AlertType.ResetPasswordSuccess
+                        errorType = AlertType.ResetPasswordSuccess,
+                        isLoading = false
                     )
                     onSuccess()
                 } else {
                     _loginState.value = _loginState.value.copy(
                         showAlert = true,
-                        errorType = AlertType.ResetPasswordInvalidEmail
+                        errorType = AlertType.ResetPasswordInvalidEmail,
+                        isLoading = false
                     )
                 }
             }
         } else {
             _loginState.value = _loginState.value.copy(
                 showAlert = true,
-                errorType = AlertType.ResetPasswordEmptyField
+                errorType = AlertType.ResetPasswordEmptyField,
+                isLoading = false
             )
         }
     }
 
     fun loginWithGoogle(idToken: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        _loginState.value = _loginState.value.copy(isLoading = true)
         viewModelScope.launch {
             val result = loginWithGoogleUseCase(idToken)
             if (result.isSuccess) {
                 _loginState.value = _loginState.value.copy(
                     isSuccess = true,
-                    errorType = null
+                    errorType = null,
+                    isLoading = false
                 )
                 onSuccess()
             } else {
                 _loginState.value = _loginState.value.copy(
                     showAlert = true,
-                    errorType = AlertType.InvalidCredentials
+                    errorType = AlertType.InvalidCredentials,
+                    isLoading = false
                 )
                 onError(result.exceptionOrNull()?.localizedMessage ?: "Error desconocido")
             }

@@ -76,20 +76,23 @@ class RegisterViewModel @Inject constructor(
         validateInput(email, password)?.let { errorType ->
             _registerState.value = _registerState.value.copy(
                 showAlert = true,
-                errorType = errorType
+                errorType = errorType,
+                isLoading = false
             )
             return
         }
+        _registerState.value = _registerState.value.copy(isLoading = true)
         viewModelScope.launch {
             val result = registerUserUseCase(name, email, password)
             if (result.isSuccess) {
-                _registerState.value = RegisterState(isSuccess = true)
+                _registerState.value = RegisterState(isSuccess = true, isLoading = false)
                 onSuccess()
-                cleanFields()
+                // cleanFields() eliminado para que isSuccess no se resetee antes de tiempo
             } else {
                 _registerState.value = _registerState.value.copy(
                     showAlert = true,
-                    errorType = AlertTypeRegister.UnknownError(result.exceptionOrNull()?.message ?: "Error desconocido")
+                    errorType = AlertTypeRegister.UnknownError(result.exceptionOrNull()?.message ?: "Error desconocido"),
+                    isLoading = false
                 )
             }
         }

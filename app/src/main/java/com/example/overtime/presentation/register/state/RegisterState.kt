@@ -15,6 +15,7 @@ data class RegisterState(
 
     val isSuccess: Boolean = false,
     val errorMessage: String? = null,
-    val errorType: AlertTypeRegister? = null
+    val errorType: AlertTypeRegister? = null,
+    val isLoading: Boolean = false
 
 )

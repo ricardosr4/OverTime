@@ -29,6 +29,11 @@ import com.example.overtime.presentation.register.component.RegisterForm
 import com.example.overtime.presentation.register.component.RegisterLinks
 import com.example.overtime.presentation.register.state.AlertTypeRegister
 import com.example.overtime.presentation.register.viewModel.RegisterViewModel
+import androidx.compose.material3.CircularProgressIndicator
+import com.example.overtime.presentation.components.LoadingOverlay
+import androidx.compose.ui.zIndex
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -39,7 +44,9 @@ fun RegisterScreen(navController: NavController) {
     LaunchedEffect(registerState) {
         if (registerState.isSuccess) {
             Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+            delay(500)
             viewModel.clearMessages()
+            navController.navigate("login_screen")
         }
 
         registerState.errorMessage?.let {
@@ -48,65 +55,71 @@ fun RegisterScreen(navController: NavController) {
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 30.dp)
-            .background(Color.White)
-    ) {
-        Column(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(horizontal = 30.dp)
         ) {
-            ZetaImageLogo(
-                image = painterResource(R.drawable.img_over_time),
-                width = 150.dp,
-                height = 150.dp,
+            Column(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 20.dp)
-            )
-            ZetaSpaceHeight(30.dp)
-            ZetaText(
-                text = "Registrarse",
-                fontSize = 30.sp,
-                maxLines = 1,
-                color = Color.Black,
-                modifier = Modifier
-                    .align(Alignment.Start)
-            )
-            ZetaSpaceHeight(20.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+            ) {
+                ZetaImageLogo(
+                    image = painterResource(R.drawable.img_over_time),
+                    width = 150.dp,
+                    height = 150.dp,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 20.dp)
+                )
+                ZetaSpaceHeight(30.dp)
+                ZetaText(
+                    text = "Registrarse",
+                    fontSize = 30.sp,
+                    maxLines = 1,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                )
+                ZetaSpaceHeight(20.dp)
 
-            RegisterForm(registerState, viewModel)
-            RegisterLinks(
-                navController = navController,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        }
-
-        RegisterButton(
-            viewModel = viewModel,
-            navController = navController,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
-
-        if (registerState.showAlert) {
-            val alertMessage = when (registerState.errorType) {
-                is AlertTypeRegister.EmptyField -> "Los campos no pueden estar vacíos."
-                is AlertTypeRegister.InvalidEmail -> "El correo electrónico no es válido."
-                is AlertTypeRegister.InvalidPassword -> "La contraseña debe tener al menos 6 caracteres."
-                is AlertTypeRegister.UnknownError -> registerState.errorMessage
-                    ?: "Ha ocurrido un error inesperado."
-
-                else -> "Ha ocurrido un error inesperado."
+                RegisterForm(registerState, viewModel)
+                RegisterLinks(
+                    navController = navController,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
-            ZetaAlertDialog(
-                title = "Alerta",
-                message = alertMessage,
-                confirmText = "Aceptar",
-                onConfirmClick = { viewModel.closeAlert() }
+
+            RegisterButton(
+                viewModel = viewModel,
+                navController = navController,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                enabled = !registerState.isLoading
             )
+
+            if (registerState.showAlert) {
+                val alertMessage = when (registerState.errorType) {
+                    is AlertTypeRegister.EmptyField -> "Los campos no pueden estar vacíos."
+                    is AlertTypeRegister.InvalidEmail -> "El correo electrónico no es válido."
+                    is AlertTypeRegister.InvalidPassword -> "La contraseña debe tener al menos 6 caracteres."
+                    is AlertTypeRegister.UnknownError -> registerState.errorMessage
+                        ?: "Ha ocurrido un error inesperado."
+
+                    else -> "Ha ocurrido un error inesperado."
+                }
+                ZetaAlertDialog(
+                    title = "Alerta",
+                    message = alertMessage,
+                    confirmText = "Aceptar",
+                    onConfirmClick = { viewModel.closeAlert() }
+                )
+            }
+        }
+        if (registerState.isLoading) {
+            LoadingOverlay(modifier = Modifier.zIndex(1f))
         }
     }
 }

@@ -16,6 +16,8 @@ data class LoginState(
     val isSuccess: Boolean = false,
     val errorMessage: String? = null,
 
+    val isLoading: Boolean = false,
+
 
 
 
