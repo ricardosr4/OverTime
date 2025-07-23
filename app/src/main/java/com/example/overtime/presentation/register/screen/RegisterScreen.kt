@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
@@ -32,7 +32,7 @@ import com.example.overtime.presentation.register.viewModel.RegisterViewModel
 
 @Composable
 fun RegisterScreen(navController: NavController) {
-    val viewModel: RegisterViewModel = viewModel()
+    val viewModel: RegisterViewModel = hiltViewModel()
     val registerState by viewModel.registerState
     val context = LocalContext.current
 

@@ -1,109 +1,111 @@
 package com.example.overtime.presentation.home.viewModel
 
+import android.app.Application
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.overtime.R
 import com.example.overtime.data.model.WorkDay
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.overtime.domain.useCase.workday.DeleteAllWorkDaysUseCase
+import com.example.overtime.domain.useCase.workday.DeleteWorkDayUseCase
+import com.example.overtime.domain.useCase.workday.DownloadWorkDaysPdfUseCase
+import com.example.overtime.domain.useCase.workday.GetWorkDaysUseCase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val getWorkDaysUseCase: GetWorkDaysUseCase,
+    private val deleteWorkDayUseCase: DeleteWorkDayUseCase,
+    private val deleteAllWorkDaysUseCase: DeleteAllWorkDaysUseCase,
+    private val downloadWorkDaysPdfUseCase: DownloadWorkDaysPdfUseCase,
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val appContext: Application
+) : ViewModel() {
 
     private val _workDays = MutableStateFlow<List<WorkDay>>(emptyList())
     val workDays: StateFlow<List<WorkDay>> = _workDays
 
-    private var workDaysListener: ListenerRegistration? = null
+    private var userId: String? = firebaseAuth.currentUser?.uid
+
+    private val _pdfResult = MutableStateFlow<Result<File>?>(null)
+    val pdfResult = _pdfResult.asStateFlow()
 
     init {
-        loadWorkDaysFromFirebase()
+        observeWorkDays()
     }
 
-    private fun loadWorkDaysFromFirebase() {
-        val userId = Firebase.auth.currentUser?.uid
-        if (userId != null) {
-            workDaysListener?.remove()
-            workDaysListener = Firebase.firestore
-                .collection("Users")
-                .document(userId)
-                .collection("workdays")
-                .addSnapshotListener { snapshot, exception ->
-                    if (exception != null) {
-                        return@addSnapshotListener
-                    }
-                    if (snapshot != null) {
-                        val workDaysList = snapshot.documents.mapNotNull { document ->
-                            val workDay = document.toObject(WorkDay::class.java)
-                            workDay?.copy(id = document.id)
-                        }
-                        _workDays.value = workDaysList
-                    }
+    private fun observeWorkDays() {
+        userId?.let { uid ->
+            viewModelScope.launch {
+                getWorkDaysUseCase(uid).collectLatest { workDaysList ->
+                    _workDays.value = workDaysList
                 }
+            }
         }
     }
 
     fun deleteAllWorkDays() {
-        viewModelScope.launch {
-            try {
-                val userId = Firebase.auth.currentUser?.uid
-                if (userId != null) {
-                    // Obtén todos los WorkDays desde Firebase
-                    val workDaysSnapshot = Firebase.firestore
-                        .collection("Users")
-                        .document(userId)
-                        .collection("workdays")
-                        .get()
-                        .await()
-
-                    // Elimina todos los documentos en la colección
-                    for (document in workDaysSnapshot.documents) {
-                        document.reference.delete().await()
-                    }
-
-                    // Actualiza el estado para reflejar que no hay más WorkDays
-                    _workDays.value = emptyList()  // Limpia la lista
+        userId?.let { uid ->
+            viewModelScope.launch {
+                val result = deleteAllWorkDaysUseCase(uid)
+                if (result.isSuccess) {
+                    _workDays.value = emptyList()
                 } else {
-                    Log.e("Firebase", "El usuario no está autenticado.")
+                    Log.e("WorkDay", "Error al eliminar todos los WorkDays: ${result.exceptionOrNull()?.message}")
                 }
-            } catch (e: Exception) {
-                Log.e("Firebase", "Error al eliminar todos los WorkDays", e)
             }
         }
     }
 
     fun deleteWorkDay(workDay: WorkDay) {
-        viewModelScope.launch {
-            try {
-                val userId = Firebase.auth.currentUser?.uid
-                val workDayId = workDay.id
-
-                if (userId != null && !workDayId.isNullOrEmpty()) {
-                    Firebase.firestore
-                        .collection("Users")
-                        .document(userId)
-                        .collection("workdays")
-                        .document(workDayId)
-                        .delete()
-                        .await()
-                } else {
-                    Log.e("Firebase", "El ID del WorkDay es nulo o vacío, no se puede eliminar.")
+        val workDayId = workDay.id
+        userId?.let { uid ->
+            if (!workDayId.isNullOrEmpty()) {
+                viewModelScope.launch {
+                    val result = deleteWorkDayUseCase(uid, workDayId)
+                    if (result.isFailure) {
+                        Log.e("WorkDay", "Error al eliminar el día de trabajo: ${result.exceptionOrNull()?.message}")
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e("Firebase", "Error al eliminar el día de trabajo", e)
+            } else {
+                Log.e("WorkDay", "El ID del WorkDay es nulo o vacío, no se puede eliminar.")
             }
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        workDaysListener?.remove()
+    fun downloadWorkDaysPdf() {
+        val uid = userId ?: return
+        val workDaysList = workDays.value
+        viewModelScope.launch {
+            // Obtener nombre de usuario en tiempo real
+            firestore.collection("Users").document(uid).get()
+                .addOnSuccessListener { document ->
+                    val userName = document.getString("userName") ?: "Usuario"
+                    // Obtener logo como Bitmap
+                    val logo = BitmapFactory.decodeResource(appContext.resources, R.drawable.img_over_time)
+                    // Generar PDF
+                    val result = downloadWorkDaysPdfUseCase(
+                        context = appContext,
+                        logo = logo,
+                        userName = userName,
+                        workDays = workDaysList
+                    )
+                    _pdfResult.value = result
+                }
+                .addOnFailureListener { e ->
+                    _pdfResult.value = Result.failure(e)
+                }
+        }
     }
 }
