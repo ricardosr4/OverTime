@@ -28,6 +28,13 @@ import com.example.overtime.presentation.login.state.AlertType
 import com.example.overtime.ui.theme.PrimaryColor
 import com.example.overtime.presentation.login.viewModel.LoginViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import com.example.overtime.presentation.login.components.getGoogleSignInIntent
+import com.example.overtime.presentation.login.components.getGoogleAccountFromIntent
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -35,6 +42,21 @@ fun LoginScreen(navController: NavController) {
     val viewModel: LoginViewModel = hiltViewModel()
     val loginState by viewModel.loginState
     val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val account = getGoogleAccountFromIntent(result.data)
+        val idToken = account?.idToken
+        if (idToken != null) {
+            isLoading = true
+            viewModel.loginWithGoogle(idToken, onSuccess = {
+                isLoading = false
+                navController.navigate("home_screen")
+            }, onError = {
+                isLoading = false
+                // Manejar error si quieres
+            })
+        }
+    }
 
     LaunchedEffect(loginState) {
         if (loginState.isSuccess) {
@@ -53,8 +75,7 @@ fun LoginScreen(navController: NavController) {
             .fillMaxSize()
             .padding(horizontal = 30.dp)
             .background(Color.White)
-    )
-    {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,21 +135,32 @@ fun LoginScreen(navController: NavController) {
                     .align(Alignment.CenterHorizontally)
             )
         }
-        StandardButton(
-            onClick = {
-                viewModel.login(
-                    email = loginState.email,
-                    password = loginState.password
-                ) {
-                    navController.navigate("home_screen")
-                }
-            },
-            text = "Login",
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(20.dp)
-        )
+                .padding(bottom = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            StandardButton(
+                onClick = {
+                    viewModel.login(
+                        email = loginState.email,
+                        password = loginState.password
+                    ) {
+                        navController.navigate("home_screen")
+                    }
+                },
+                text = "Login",
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            StandardButton(
+                onClick = { launcher.launch(getGoogleSignInIntent(context)) },
+                text = stringResource(id = R.string.login_con_google),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         if (loginState.showAlert) {
             val alertMessage = when (loginState.errorType) {
                 is AlertType.EmptyField -> "Los campos no pueden estar vacíos."

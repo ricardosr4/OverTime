@@ -4,6 +4,7 @@ import com.example.overtime.data.repository.AuthRepositoryImpl
 import com.example.overtime.data.repository.WorkDayRepositoryImpl
 import com.example.overtime.domain.repository.AuthRepository
 import com.example.overtime.domain.repository.WorkDayRepository
+import com.example.overtime.domain.useCase.auth.LoginWithGoogleUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -30,4 +31,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideWorkDayRepository(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore): WorkDayRepository = WorkDayRepositoryImpl(firebaseAuth, firestore)
+
+    @Provides
+    @Singleton
+    fun provideLoginWithGoogleUseCase(repository: AuthRepository): LoginWithGoogleUseCase =
+        LoginWithGoogleUseCase(repository)
 }

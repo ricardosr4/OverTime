@@ -35,20 +35,46 @@ import com.example.overtime.ui.theme.ButtonDisabled
 import com.example.overtime.ui.theme.ButtonPrimaryText
 import com.example.overtime.ui.theme.DividerColor
 import com.example.overtime.ui.theme.TextPrimary
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.overtime.presentation.login.viewModel.LoginViewModel
+import com.example.overtime.presentation.login.components.getGoogleSignInIntent
+import com.example.overtime.presentation.login.components.getGoogleAccountFromIntent
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun PreLoginScreen(navController: NavController) {
+    val context = LocalContext.current
+    val viewModel: LoginViewModel = hiltViewModel()
+    var isLoading by remember { mutableStateOf(false) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val account = getGoogleAccountFromIntent(result.data)
+        val idToken = account?.idToken
+        if (idToken != null) {
+            isLoading = true
+            viewModel.loginWithGoogle(idToken, onSuccess = {
+                isLoading = false
+                navController.navigate("home_screen")
+            }, onError = {
+                isLoading = false
+                // Manejar error si quieres
+            })
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .align(Alignment.Center)
                 .padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
             Image(
@@ -66,34 +92,32 @@ fun PreLoginScreen(navController: NavController) {
                     )
             )
             Spacer(modifier = Modifier.height(100.dp))
-
+            // El resto del contenido principal aquí (si lo hay)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             StandardButton(
                 onClick = { navController.navigate(AppScreen.LoginScreen.route) },
                 text = stringResource(R.string.login),
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
             )
             Spacer(modifier = Modifier.height(10.dp))
-
             StandardButton(
                 onClick = { navController.navigate(AppScreen.RegisterScreen.route) },
                 text = stringResource(R.string.register),
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
             )
             Spacer(modifier = Modifier.height(10.dp))
-
             Button(
-                onClick = { }, //add fun for login to google and firebase
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(45.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ButtonDisabled
-                ),
-                elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 6.dp,
-                    pressedElevation = 8.dp
-                )
+                onClick = { launcher.launch(getGoogleSignInIntent(context)) },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).height(45.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = ButtonDisabled),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp, pressedElevation = 8.dp)
             ) {
                 Text(
                     text = stringResource(R.string.login_con_google),
@@ -101,7 +125,10 @@ fun PreLoginScreen(navController: NavController) {
                     fontWeight = FontWeight.Bold,
                     color = ButtonPrimaryText
                 )
+                Spacer(modifier = Modifier.height(20.dp))
             }
+        }
+        // El resto del contenido (como Box con Divider y mensaje de soporte) permanece igual
 
             Box(
                 modifier = Modifier
@@ -133,4 +160,4 @@ fun PreLoginScreen(navController: NavController) {
         }
 
     }
-}
+
