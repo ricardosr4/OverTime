@@ -43,8 +43,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.overtime.presentation.login.viewModel.LoginViewModel
-import com.example.overtime.presentation.login.components.getGoogleSignInIntent
-import com.example.overtime.presentation.login.components.getGoogleAccountFromIntent
+import com.example.overtime.utils.getGoogleSignInIntent
+import com.example.overtime.utils.getGoogleAccountFromIntent
 import androidx.compose.ui.platform.LocalContext
 
 @Composable

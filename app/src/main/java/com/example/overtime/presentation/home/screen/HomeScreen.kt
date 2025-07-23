@@ -23,14 +23,15 @@ import com.example.overtime.presentation.home.viewModel.HomeViewModel
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+import android.net.Uri
+import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val currentMonth =
-        remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
+    val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
     val workDays by viewModel.workDays.collectAsState()
     val pdfResult by viewModel.pdfResult.collectAsState()
     val context = LocalContext.current
@@ -58,9 +59,19 @@ fun HomeScreen(navController: NavController,
         LaunchedEffect(pdfResult) {
             pdfResult?.let { result ->
                 if (result.isSuccess) {
-                    Toast.makeText(context, "PDF guardado en Descargas: ${result.getOrNull()?.name}", Toast.LENGTH_LONG).show()
+                    val value = result.getOrNull()
+                    when (value) {
+                        is File -> {
+                            Toast.makeText(context, "PDF guardado en Descargas: ${value.name}", Toast.LENGTH_LONG).show()
+                        }
+                        is Uri -> {
+                            Toast.makeText(context, "PDF guardado correctamente", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    viewModel.clearPdfResult()
                 } else if (result.isFailure) {
                     Toast.makeText(context, "Error al generar PDF: ${result.exceptionOrNull()?.localizedMessage}", Toast.LENGTH_LONG).show()
+                    viewModel.clearPdfResult()
                 }
             }
         }

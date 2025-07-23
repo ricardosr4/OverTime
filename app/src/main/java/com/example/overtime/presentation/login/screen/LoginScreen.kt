@@ -33,8 +33,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.overtime.presentation.login.components.getGoogleSignInIntent
-import com.example.overtime.presentation.login.components.getGoogleAccountFromIntent
+import com.example.overtime.utils.getGoogleSignInIntent
+import com.example.overtime.utils.getGoogleAccountFromIntent
 
 @Composable
 fun LoginScreen(navController: NavController) {

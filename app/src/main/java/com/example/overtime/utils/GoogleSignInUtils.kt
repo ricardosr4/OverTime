@@ -1,4 +1,4 @@
-package com.example.overtime.presentation.login.components
+package com.example.overtime.utils
 
 import android.app.Activity
 import android.content.Context
