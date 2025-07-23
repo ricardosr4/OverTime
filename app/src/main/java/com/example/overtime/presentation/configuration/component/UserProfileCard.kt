@@ -18,6 +18,7 @@ import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
 import com.example.overtime.ui.theme.CardColor
 import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.ui.theme.ButtonPrimaryText
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun UserProfileCard(
@@ -27,6 +28,7 @@ fun UserProfileCard(
     viewModel: ConfigViewModel
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -126,7 +128,7 @@ fun UserProfileCard(
                 Button(
                     onClick = {
                         showLogoutDialog = false
-                        viewModel.signOut(navController)
+                        viewModel.signOut(navController, context)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
                 ) {

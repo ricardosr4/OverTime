@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
@@ -16,6 +17,7 @@ fun ConfigTopBar(
     navController: NavController
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     TopAppBar(
         title = { 
@@ -46,7 +48,7 @@ fun ConfigTopBar(
             message = "¿Estás seguro de que deseas cerrar sesión?",
             confirmText = "Cerrar Sesión",
             onConfirmClick = {
-                viewModel.signOut(navController)
+                viewModel.signOut(navController, context)
                 showLogoutDialog = false
             },
             onDismissClick = { showLogoutDialog = false }

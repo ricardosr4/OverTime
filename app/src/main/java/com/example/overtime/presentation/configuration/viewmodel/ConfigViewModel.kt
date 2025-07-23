@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import android.content.Context
 
 class ConfigViewModel : ViewModel() {
 
@@ -79,13 +82,20 @@ class ConfigViewModel : ViewModel() {
 //        // Implementar cambio de idioma
 //    }
 
-    fun signOut(navController: NavController) {
+    fun signOut(navController: NavController, context: Context) {
         val auth = Firebase.auth
         try {
             navController.navigate("splash_screen")
             viewModelScope.launch {
                 _isLoading.value = true
                 auth.signOut()
+                // Cerrar sesión de Google también
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("782417725602-045du8t2rpeh6t9sv6otmpt063rg3va7.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build()
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                googleSignInClient.signOut()
                 delay(1000)
                 _isLoading.value = false
                 navController.navigate("login_screen") {

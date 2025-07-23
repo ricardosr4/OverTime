@@ -166,6 +166,7 @@ fun LoginScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !loginState.isLoading
                 )
+                Spacer(modifier = Modifier.height(20.dp))
             }
             if (loginState.showAlert) {
                 val alertMessage = when (loginState.errorType) {

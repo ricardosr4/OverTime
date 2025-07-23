@@ -49,26 +49,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.CircularProgressIndicator
 import com.example.overtime.presentation.components.LoadingOverlay
 import androidx.compose.ui.zIndex
+import com.example.overtime.ui.theme.ButtonPrimary
 
 @Composable
 fun PreLoginScreen(navController: NavController) {
     val context = LocalContext.current
     val viewModel: LoginViewModel = hiltViewModel()
     var isLoading by remember { mutableStateOf(false) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val account = getGoogleAccountFromIntent(result.data)
-        val idToken = account?.idToken
-        if (idToken != null) {
-            isLoading = true
-            viewModel.loginWithGoogle(idToken, onSuccess = {
-                isLoading = false
-                navController.navigate("home_screen")
-            }, onError = {
-                isLoading = false
-                // Manejar error si quieres
-            })
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val account = getGoogleAccountFromIntent(result.data)
+            val idToken = account?.idToken
+            if (idToken != null) {
+                isLoading = true
+                viewModel.loginWithGoogle(idToken, onSuccess = {
+                    isLoading = false
+                    navController.navigate("home_screen")
+                }, onError = {
+                    isLoading = false
+                    // Manejar error si quieres
+                })
+            }
         }
-    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -108,67 +110,64 @@ fun PreLoginScreen(navController: NavController) {
                 StandardButton(
                     onClick = { navController.navigate(AppScreen.LoginScreen.route) },
                     text = stringResource(R.string.login),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
                     enabled = !isLoading
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 StandardButton(
                     onClick = { navController.navigate(AppScreen.RegisterScreen.route) },
                     text = stringResource(R.string.register),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
                     enabled = !isLoading
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-                Button(
-                    onClick = { launcher.launch(getGoogleSignInIntent(context)) },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).height(45.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = ButtonDisabled),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp, pressedElevation = 8.dp),
-                    enabled = !isLoading
-                ) {
-                    Text(
-                        text = stringResource(R.string.login_con_google),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ButtonPrimaryText
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-            }
-            // El resto del contenido (como Box con Divider y mensaje de soporte) permanece igual
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 10.dp)
-                ) {
-                    Divider(
-                        color = DividerColor,
-                        thickness = 1.dp,
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 40.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Text(
-                        text = stringResource(R.string.message_soporte),
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter),
-                        style = TextStyle(
-                                color = TextPrimary,
-                                fontSize = 14.sp
-                            )
-
-                    )
-
-                }
+                Spacer(modifier = Modifier.height(20.dp))
+//                Button(
+//                    onClick = { launcher.launch(getGoogleSignInIntent(context)) },
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 20.dp)
+//                        .height(45.dp),
+//                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
+//                    elevation = ButtonDefaults.buttonElevation(
+//                        defaultElevation = 6.dp,
+//                        pressedElevation = 8.dp
+//                    ),
+//                    enabled = !isLoading
+//                ) {
+//                    Text(
+//                        text = stringResource(R.string.login_con_google),
+//                        fontSize = 18.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = ButtonPrimaryText
+//                    )
+//
+//                }
+//                Spacer(modifier = Modifier.height(50.dp))
+//                Divider(
+//                    color = Color.Gray,
+//                    thickness = 1.dp,
+//                    modifier = Modifier.padding(horizontal = 20.dp)
+//                )
+//                Spacer(modifier = Modifier.height(10.dp))
+//                Text(
+//                    text = stringResource(R.string.message_soporte),
+//                    modifier = Modifier,
+//                    style = TextStyle(
+//                        color = TextPrimary,
+//                        fontSize = 14.sp
+//                    )
+//                )
 
             }
 
-        }
-        if (isLoading) {
-            LoadingOverlay(modifier = Modifier.zIndex(1f))
         }
     }
+    if (isLoading) {
+        LoadingOverlay(modifier = Modifier.zIndex(1f))
+    }
+}
 
