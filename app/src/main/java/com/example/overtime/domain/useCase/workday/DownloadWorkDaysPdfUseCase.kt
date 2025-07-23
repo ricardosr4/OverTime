@@ -117,7 +117,6 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
                     file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
                 } ?: throw Exception("No se pudo crear el archivo PDF en MediaStore")
             } else {
-                // Método tradicional para Android 9 o menor
                 val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 file = File(downloadsDir, fileName)
                 pdfDocument.writeTo(FileOutputStream(file))
