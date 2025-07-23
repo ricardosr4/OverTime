@@ -1,16 +1,20 @@
 package com.example.overtime.domain.useCase.workday
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import com.example.overtime.data.model.WorkDay
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class DownloadWorkDaysPdfUseCase @Inject constructor() {
@@ -94,13 +98,32 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
 
             pdfDocument.finishPage(page)
 
-            // Guardar en carpeta de descargas
             val fileName = "HorasExtras_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.pdf"
-            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val file = File(downloadsDir, fileName)
-            pdfDocument.writeTo(FileOutputStream(file))
+            var file: File? = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Usar MediaStore para Android 10+
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                    put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
+                    put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+                }
+                val resolver = context.contentResolver
+                val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+                uri?.let {
+                    resolver.openOutputStream(it)?.use { outputStream ->
+                        pdfDocument.writeTo(outputStream)
+                    }
+                    // Obtener la ruta física solo para mostrarla (opcional, puede no ser exacta)
+                    file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
+                } ?: throw Exception("No se pudo crear el archivo PDF en MediaStore")
+            } else {
+                // Método tradicional para Android 9 o menor
+                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                file = File(downloadsDir, fileName)
+                pdfDocument.writeTo(FileOutputStream(file))
+            }
             pdfDocument.close()
-            Result.success(file)
+            Result.success(file!!)
         } catch (e: Exception) {
             Result.failure(e)
         }
