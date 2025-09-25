@@ -12,7 +12,20 @@
           "package_name": "com.example.overtime"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "782417725602-kmjiq808eljjqknbnbn3f83qoi9moci4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.overtime",
+            "certificate_hash": "cbeee6463cd5e9a7e7128c8c5fe474e0593efe0a"
+          }
+        },
+        {
+          "client_id": "782417725602-045du8t2rpeh6t9sv6otmpt063rg3va7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCGype3LKIbeYaEqphu3puwDox3Uvol8W4"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782417725602-045du8t2rpeh6t9sv6otmpt063rg3va7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

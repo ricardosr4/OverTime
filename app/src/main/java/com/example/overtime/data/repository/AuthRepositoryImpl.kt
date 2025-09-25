@@ -38,4 +38,26 @@ class AuthRepositoryImpl(private val firebaseAuth: FirebaseAuth, private val fir
             Result.failure(e)
         }
     }
+
+    override suspend fun loginWithGoogle(idToken: String): Result<Unit> {
+        return try {
+            val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
+            val authResult = firebaseAuth.signInWithCredential(credential).await()
+            val user = authResult.user
+            if (user != null) {
+                val userDoc = firestore.collection("Users").document(user.uid).get().await()
+                if (!userDoc.exists()) {
+                    val newUser = UserModel(
+                        userName = user.displayName ?: "",
+                        email = user.email ?: "",
+                        userId = user.uid
+                    )
+                    firestore.collection("Users").document(user.uid).set(newUser).await()
+                }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 } 

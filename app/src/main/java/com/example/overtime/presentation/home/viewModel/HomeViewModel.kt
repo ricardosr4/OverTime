@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
 
     private var userId: String? = firebaseAuth.currentUser?.uid
 
-    private val _pdfResult = MutableStateFlow<Result<File>?>(null)
+    private val _pdfResult = MutableStateFlow<Result<Any>?>(null)
     val pdfResult = _pdfResult.asStateFlow()
 
     init {
@@ -107,5 +107,9 @@ class HomeViewModel @Inject constructor(
                     _pdfResult.value = Result.failure(e)
                 }
         }
+    }
+
+    fun clearPdfResult() {
+        _pdfResult.value = null
     }
 }

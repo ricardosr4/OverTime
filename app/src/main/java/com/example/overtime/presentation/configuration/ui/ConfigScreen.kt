@@ -1,6 +1,9 @@
 package com.example.overtime.presentation.configuration.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,6 +14,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
 import com.example.overtime.presentation.configuration.component.ConfigContent
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.example.overtime.presentation.components.LoadingOverlay
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,16 +35,21 @@ fun ConfigScreen(
 
     Scaffold(
         content = {
-            ConfigContent(
-                userName = userName,
-                userEmail = userEmail,
-                notificationsEnabled = viewModel.notificationsEnabled,
-                isDarkMode = viewModel.isDarkMode,
-                onNotificationToggle = { viewModel.toggleNotifications() },
-                onThemeToggle = { viewModel.toggleTheme() },
-                navController = navController,
-                viewModel = viewModel
-            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (viewModel.isLoading.collectAsState().value) {
+                    LoadingOverlay()
+                }
+                ConfigContent(
+                    userName = userName,
+                    userEmail = userEmail,
+                    notificationsEnabled = viewModel.notificationsEnabled,
+                    isDarkMode = viewModel.isDarkMode,
+                    onNotificationToggle = { viewModel.toggleNotifications() },
+                    onThemeToggle = { viewModel.toggleTheme() },
+                    navController = navController,
+                    viewModel = viewModel
+                )
+            }
         }
     )
 }

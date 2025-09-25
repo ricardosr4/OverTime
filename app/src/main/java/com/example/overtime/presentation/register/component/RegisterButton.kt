@@ -10,15 +10,15 @@ import com.example.overtime.presentation.register.viewModel.RegisterViewModel
 fun RegisterButton(
     viewModel: RegisterViewModel,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     StandardButton(
         onClick = {
-            viewModel.createUser {
-                navController.navigate("login_screen")
-            }
+            viewModel.createUser {}
         },
         text = "Registrarse",
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     )
 } 

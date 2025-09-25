@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ConfigContent(
@@ -31,6 +32,7 @@ fun ConfigContent(
     viewModel: ConfigViewModel
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Icono de logout arriba a la derecha
@@ -90,7 +92,7 @@ fun ConfigContent(
                     Button(
                         onClick = {
                             showLogoutDialog = false
-                            viewModel.signOut(navController)
+                            viewModel.signOut(navController, context)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                     ) {

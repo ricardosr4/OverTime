@@ -2,6 +2,7 @@ package com.example.overtime.presentation.configuration.viewmodel
 
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -9,6 +10,11 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import android.content.Context
 
 class ConfigViewModel : ViewModel() {
 
@@ -21,6 +27,9 @@ class ConfigViewModel : ViewModel() {
 
     val isDarkMode: Boolean
         get() = _isDarkMode
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     // Estado para la información del usuario
     private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
@@ -73,14 +82,28 @@ class ConfigViewModel : ViewModel() {
 //        // Implementar cambio de idioma
 //    }
 
-    fun signOut(navController: NavController) {
+    fun signOut(navController: NavController, context: Context) {
         val auth = Firebase.auth
         try {
-            auth.signOut()
-            navController.navigate("login_screen") {
-                popUpTo("config_screen") { inclusive = true }
+            navController.navigate("splash_screen")
+            viewModelScope.launch {
+                _isLoading.value = true
+                auth.signOut()
+                // Cerrar sesión de Google también
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("782417725602-045du8t2rpeh6t9sv6otmpt063rg3va7.apps.googleusercontent.com")
+                    .requestEmail()
+                    .build()
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                googleSignInClient.signOut()
+                delay(1000)
+                _isLoading.value = false
+                navController.navigate("login_screen") {
+                    popUpTo("splash_screen") { inclusive = true }
+                }
             }
         } catch (e: Exception) {
+            _isLoading.value = false
             Toast.makeText(
                 navController.context,
                 "Error al cerrar sesión: ${e.localizedMessage}",

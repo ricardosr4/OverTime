@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -23,7 +24,7 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
         logo: Bitmap?,
         userName: String,
         workDays: List<WorkDay>
-    ): Result<File> {
+    ): Result<Any> { // Puede ser File o Uri
         return try {
             val pdfDocument = PdfDocument()
             val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4 size
@@ -100,6 +101,7 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
 
             val fileName = "HorasExtras_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.pdf"
             var file: File? = null
+            var uri: Uri? = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 // Usar MediaStore para Android 10+
                 val contentValues = ContentValues().apply {
@@ -108,13 +110,11 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
                     put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
                 }
                 val resolver = context.contentResolver
-                val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+                uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
                 uri?.let {
                     resolver.openOutputStream(it)?.use { outputStream ->
                         pdfDocument.writeTo(outputStream)
                     }
-                    // Obtener la ruta física solo para mostrarla (opcional, puede no ser exacta)
-                    file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
                 } ?: throw Exception("No se pudo crear el archivo PDF en MediaStore")
             } else {
                 val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -122,7 +122,7 @@ class DownloadWorkDaysPdfUseCase @Inject constructor() {
                 pdfDocument.writeTo(FileOutputStream(file))
             }
             pdfDocument.close()
-            Result.success(file!!)
+            Result.success(uri ?: file!!)
         } catch (e: Exception) {
             Result.failure(e)
         }

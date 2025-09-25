@@ -80,12 +80,15 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    //Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     //Extension de Iconos
     implementation("androidx.compose.material:material-icons-extended")
     //hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
+    //Preferences
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

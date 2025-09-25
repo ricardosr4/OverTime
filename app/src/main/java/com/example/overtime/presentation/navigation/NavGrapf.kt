@@ -38,7 +38,8 @@ fun NavGraph(
         }
 
         composable(AppScreen.SplashScreen.route) {
-            SplashScreen(navController = navController)
+            val showOnlyLoader = it.arguments?.getBoolean("showOnlyLoader") ?: false
+            SplashScreen(navController = navController, showOnlyLoader = showOnlyLoader)
         }
         composable(AppScreen.PreLoginScreen.route) {
             PreLoginScreen(navController = navController)

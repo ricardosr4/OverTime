@@ -15,7 +15,8 @@ fun StandardButton(
     onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
-    icon: @Composable (() -> Unit)? = null
+    icon: @Composable (() -> Unit)? = null,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
@@ -23,6 +24,7 @@ fun StandardButton(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .height(45.dp),
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = ButtonPrimary
         ),
