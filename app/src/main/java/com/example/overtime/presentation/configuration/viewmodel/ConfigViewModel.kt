@@ -1,41 +1,67 @@
 package com.example.overtime.presentation.configuration.viewmodel
 
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import com.example.overtime.core.prefs.PreferencesManager
+import com.example.overtime.core.prefs.ThemeMode
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import android.content.Context
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ConfigViewModel : ViewModel() {
+@HiltViewModel
+class ConfigViewModel @Inject constructor(
+    private val preferencesManager: PreferencesManager
+) : ViewModel() {
 
-    // Estado de configuración (en una app real esto se guardaría en SharedPreferences)
-    private var _notificationsEnabled = true
-    private var _isDarkMode = false
+    // Theme configuration
+    val themeModeFlow: StateFlow<ThemeMode> = preferencesManager.themeModeFlow
 
-    val notificationsEnabled: Boolean
-        get() = _notificationsEnabled
+    // Notifications configuration (pending implementation)
+    private val _notificationsEnabled = MutableStateFlow(true)
+    val notificationsEnabled: StateFlow<Boolean> = _notificationsEnabled.asStateFlow()
 
-    val isDarkMode: Boolean
-        get() = _isDarkMode
-
+    // Loading state
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    // Estado para la información del usuario
+    // User information
     private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
     val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
 
-    // Obtener información del usuario actual desde Firestore
+    // Theme management
+    fun setThemeMode(mode: ThemeMode) {
+        preferencesManager.setThemeMode(mode)
+    }
+
+    fun toggleTheme() {
+        val currentMode = preferencesManager.getThemeMode()
+        val nextMode = when (currentMode) {
+            ThemeMode.DARK -> ThemeMode.LIGHT
+            ThemeMode.LIGHT -> ThemeMode.DARK
+            ThemeMode.SYSTEM -> ThemeMode.DARK
+        }
+        preferencesManager.setThemeMode(nextMode)
+    }
+
+    // Notifications management (pending implementation)
+    fun toggleNotifications() {
+        _notificationsEnabled.value = !_notificationsEnabled.value
+        // TODO: Implement persistence
+    }
+
+    // User information management
     fun getCurrentUser(): Pair<String, String> {
         val auth = Firebase.auth
         val user = auth.currentUser
@@ -65,23 +91,16 @@ class ConfigViewModel : ViewModel() {
         }
     }
 
-    // Toggle notificaciones
-    fun toggleNotifications() {
-        _notificationsEnabled = !_notificationsEnabled
-        // Aquí se guardaría en SharedPreferences
+    fun updateUserInfo(name: String, email: String) {
+        _userInfo.value = Pair(name, email)
     }
 
-    // Toggle tema
-    fun toggleTheme() {
-        _isDarkMode = !_isDarkMode
-        // Aquí se guardaría en SharedPreferences y se aplicaría el tema
+    // Loading state management
+    fun setLoading(loading: Boolean) {
+        _isLoading.value = loading
     }
 
-    // Cambiar idioma (para futuras implementaciones)
-//    fun changeLanguage(language: String) {
-//        // Implementar cambio de idioma
-//    }
-
+    // Sign out functionality (RESTAURADA)
     fun signOut(navController: NavController, context: Context) {
         val auth = Firebase.auth
         try {

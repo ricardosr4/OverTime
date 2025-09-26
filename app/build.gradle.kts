@@ -88,7 +88,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
-    //Preferences
+    //SharedPreferences
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
