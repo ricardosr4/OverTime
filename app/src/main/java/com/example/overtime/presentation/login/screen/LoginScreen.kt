@@ -8,7 +8,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,7 +24,6 @@ import com.example.overtime.presentation.login.components.ZetaSpaceHeight
 import com.example.overtime.presentation.login.components.ZetaText
 import com.example.overtime.presentation.login.components.ZetaTextLink
 import com.example.overtime.presentation.login.state.AlertType
-import com.example.overtime.ui.theme.PrimaryColor
 import com.example.overtime.presentation.login.viewModel.LoginViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -38,6 +36,7 @@ import com.example.overtime.utils.getGoogleAccountFromIntent
 import androidx.compose.material3.CircularProgressIndicator
 import com.example.overtime.presentation.components.LoadingOverlay
 import androidx.compose.ui.zIndex
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -77,7 +76,7 @@ fun LoginScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 30.dp)
         ) {
             Column(
@@ -98,7 +97,7 @@ fun LoginScreen(navController: NavController) {
                     text = "Login",
                     fontSize = 30.sp,
                     maxLines = 1,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -110,7 +109,7 @@ fun LoginScreen(navController: NavController) {
                     keyboardType = KeyboardType.Email,
                     leadingIcon = painterResource(id = R.drawable.icon_email),
 
-                )
+                    )
                 ZetaSpaceHeight()
                 ZetaOutlinedTextField(
                     value = loginState.password,
@@ -124,7 +123,7 @@ fun LoginScreen(navController: NavController) {
                 )
                 ZetaSpaceHeight(40.dp)
                 ZetaTextLink(
-                    text = "¿No tienes cuenta?", linkColor = PrimaryColor,
+                    text = "¿No tienes cuenta?", linkColor = MaterialTheme.colorScheme.primary,
                     textLink = "Registrate aqui!!",
                     onClick = { navController.navigate("register_screen") },
                     modifier = Modifier
@@ -132,7 +131,7 @@ fun LoginScreen(navController: NavController) {
                 )
                 ZetaSpaceHeight(20.dp)
                 ZetaTextLink(
-                    text = stringResource(R.string.recuperar_contraseña), linkColor = PrimaryColor,
+                    text = stringResource(R.string.recuperar_contraseña), linkColor = MaterialTheme.colorScheme.primary,
                     textLink = stringResource(R.string.aqui),
                     onClick = { viewModel.resetPassword(loginState.email) {} },
                     modifier = Modifier

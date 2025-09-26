@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.*
 
 @Composable
 fun DateSelectionCard(
@@ -23,7 +22,7 @@ fun DateSelectionCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Surface
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -39,32 +38,32 @@ fun DateSelectionCard(
                     imageVector = Icons.Default.CalendarToday,
                     contentDescription = "Calendario",
                     modifier = Modifier.size(24.dp),
-                    tint = PrimaryColor
+                    tint = MaterialTheme.colorScheme.primary
                 )
-                
+
                 Spacer(modifier = Modifier.width(12.dp))
-                
+
                 Text(
                     text = "Fecha de Trabajo",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = OnSurface
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             OutlinedButton(
                 onClick = onDateButtonClick,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = CardColor.copy(alpha = 0.3f)
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                 ),
                 border = ButtonDefaults.outlinedButtonBorder.copy(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            PrimaryColor,
-                            BlueDark
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
                         )
                     )
                 )
@@ -72,10 +71,10 @@ fun DateSelectionCard(
                 Text(
                     text = selectedDate,
                     fontSize = 16.sp,
-                    color = PrimaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium
                 )
             }
         }
     }
-} 
+}

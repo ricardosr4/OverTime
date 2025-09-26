@@ -9,43 +9,51 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = PrimaryColorDark,
+    secondary = SecondaryColorDark,
+    tertiary = Pink80,
+    background = BackgroundDark,
+    surface = SurfaceDark,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onTertiary = Color.White,
+    onBackground = TextPrimaryDark,
+    onSurface = TextPrimaryDark,
+    surfaceVariant = CardColorDark,
+    onSurfaceVariant = TextSecondaryDark,
+    outline = Color(0xFF424242),
+    error = Color(0xFFD32F2F)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = PrimaryColorLight,
+    secondary = SecondaryColorLight,
+    tertiary = Pink40,
+    background = BackgroundLight,
+    surface = SurfaceLight,
     onPrimary = Color.White,
-    onSecondary = Color.White,
+    onSecondary = Color.Black,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    onBackground = TextPrimaryLight,
+    onSurface = TextPrimaryLight,
+    surfaceVariant = CardColorLight,
+    onSurfaceVariant = TextSecondaryLight,
+    outline = Color(0xFF757575),
+    error = Color(0xFFD32F2F)
 )
 
 @Composable
 fun OverTimeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // CAMBIO: false para usar tus colores
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
+        // ELIMINADO: dynamicColor ya no se usa
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

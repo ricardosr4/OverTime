@@ -2,17 +2,15 @@ package com.example.overtime.presentation.components
 
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.overtime.presentation.navigation.currentRoute
-import com.example.overtime.ui.theme.ButtonPrimary
-import com.example.overtime.ui.theme.SecondaryColor
 
 @Composable
 fun BottomNavigationBar(
@@ -22,12 +20,10 @@ fun BottomNavigationBar(
         ItemsBottomNav.HomeScreen,
         ItemsBottomNav.ConfigScreen,
         ItemsBottomNav.AddHrsExtras,
-
     )
     BottomAppBar {
         NavigationBar(
-            containerColor = Color.White,
-
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             menuItems.forEach { item ->
                 val selected = currentRoute(navController) == item.route
@@ -46,10 +42,10 @@ fun BottomNavigationBar(
                     label = { Text(text = item.title) },
                     alwaysShowLabel = false,
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = SecondaryColor,
-                        unselectedIconColor = Color.Gray,
-                        selectedTextColor = Color.Black,
-                        indicatorColor = ButtonPrimary
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                        indicatorColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 )
             }

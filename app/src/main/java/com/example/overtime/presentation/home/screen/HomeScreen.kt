@@ -24,6 +24,7 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 import android.net.Uri
+import androidx.compose.material3.MaterialTheme
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -39,7 +40,7 @@ fun HomeScreen(navController: NavController,
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         HomeSummaryCard(
             workDays = workDays,

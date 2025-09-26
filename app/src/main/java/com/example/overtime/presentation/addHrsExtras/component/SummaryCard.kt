@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.*
 
 @Composable
 fun SummaryCard(
@@ -24,14 +23,14 @@ fun SummaryCard(
     val validHours = selectedHours >= 1 && selectedHours <= 12
     val validPercentages = listOf(50, 75, 100, 130)
     val validPercentage = validPercentages.contains(selectedPercentage)
-    
+
     if (validDate && validHours && validPercentage) {
         Card(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             colors = CardDefaults.cardColors(
-                containerColor = SecondaryColor
+                containerColor = MaterialTheme.colorScheme.secondary
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
@@ -47,21 +46,21 @@ fun SummaryCard(
                         imageVector = Icons.Default.Info,
                         contentDescription = "Resumen",
                         modifier = Modifier.size(24.dp),
-                        tint = OnSecondary
+                        tint = MaterialTheme.colorScheme.onSecondary
                     )
-                    
+
                     Spacer(modifier = Modifier.width(12.dp))
-                    
+
                     Text(
                         text = "Resumen",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = OnSecondary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -69,18 +68,18 @@ fun SummaryCard(
                     Text(
                         text = "Fecha:",
                         fontSize = 14.sp,
-                        color = OnSecondary.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
                     Text(
                         text = selectedDate,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = OnSecondary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -88,18 +87,18 @@ fun SummaryCard(
                     Text(
                         text = "Horas:",
                         fontSize = 14.sp,
-                        color = OnSecondary.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
                     Text(
                         text = "$selectedHours horas",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = OnSecondary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
-                
+
                 Spacer(modifier = Modifier.height(8.dp))
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -107,16 +106,16 @@ fun SummaryCard(
                     Text(
                         text = "Porcentaje:",
                         fontSize = 14.sp,
-                        color = OnSecondary.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
                     Text(
                         text = "$selectedPercentage%",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = OnSecondary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
             }
         }
     }
-} 
+}

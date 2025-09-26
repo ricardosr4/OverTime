@@ -9,10 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.CardColor
 
 @Composable
 fun NotificationSettingsCard(
@@ -24,8 +22,8 @@ fun NotificationSettingsCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color.Black),
-        colors = CardDefaults.cardColors(CardColor),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -38,37 +36,37 @@ fun NotificationSettingsCard(
                 imageVector = Icons.Default.Notifications,
                 contentDescription = "Notificaciones",
                 modifier = Modifier.size(32.dp),
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.primary
             )
-            
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = "Notificaciones",
                     fontSize = 16.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
                     text = "Recibir notificaciones de recordatorio",
                     fontSize = 12.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             Switch(
                 checked = notificationsEnabled,
                 onCheckedChange = onNotificationToggle,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = Color.Black,
-                    uncheckedThumbColor = Color.Gray,
-                    uncheckedTrackColor = Color.LightGray
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                 )
             )
         }
     }
-} 
+}

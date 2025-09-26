@@ -11,19 +11,17 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.overtime.ui.theme.PrimaryColor
-import com.example.overtime.ui.theme.TextHint
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +39,7 @@ fun ZetaOutlinedTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = label, color = TextHint) },
+        label = { Text(text = label, color = MaterialTheme.colorScheme.onSurfaceVariant) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         modifier = modifier.fillMaxWidth(),
@@ -69,8 +67,8 @@ fun ZetaOutlinedTextField(
             }
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = PrimaryColor,
-            unfocusedBorderColor = Color.Gray,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
         )
     )
 }

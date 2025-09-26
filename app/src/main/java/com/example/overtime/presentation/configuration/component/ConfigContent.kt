@@ -54,7 +54,7 @@ fun ConfigContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(top = 10.dp, bottom = 10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
