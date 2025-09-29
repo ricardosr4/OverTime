@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -52,7 +53,9 @@ fun ZetaOutlinedTextField(
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .size(20.dp)
+                        .size(20.dp),
+                    tint = Color.Black
+
                 )
             }
         },
@@ -61,7 +64,8 @@ fun ZetaOutlinedTextField(
                 IconButton(onClick = onVisibilityToggle) {
                     Icon(
                         imageVector = if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                        contentDescription = if (isPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                        contentDescription = if (isPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                        tint = Color.Black
                     )
                 }
             }
@@ -69,6 +73,7 @@ fun ZetaOutlinedTextField(
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedTextColor = Color.Black
         )
     )
 }

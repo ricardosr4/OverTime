@@ -1,4 +1,4 @@
-package com.example.overtime.presentation.configuration.ui
+package com.example.overtime.presentation.configuration.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -17,6 +17,7 @@ import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
 import com.example.overtime.presentation.configuration.component.ConfigContent
 import com.example.overtime.core.prefs.ThemeMode
 import com.example.overtime.presentation.components.LoadingOverlay
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,19 +45,22 @@ fun ConfigScreen(
     Scaffold(
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
-                if (viewModel.isLoading.collectAsState().value) {
-                    LoadingOverlay()
-                }
+
+
                 ConfigContent(
                     userName = userName,
                     userEmail = userEmail,
-                    notificationsEnabled = viewModel.notificationsEnabled.collectAsState().value,
+                    notificationsEnabled = viewModel.notificationsEnabledFlow.collectAsState().value,
                     isDarkMode = isDarkMode,
-                    onNotificationToggle = { viewModel.toggleNotifications() },
+                    onNotificationToggle = { enabled -> viewModel.setNotificationsEnabled(enabled) },
                     onThemeToggle = { viewModel.toggleTheme() },
                     navController = navController,
                     viewModel = viewModel
                 )
+                if (viewModel.isLoading.collectAsState().value) {
+                    LoadingOverlay()
+                }
+
             }
         }
     )

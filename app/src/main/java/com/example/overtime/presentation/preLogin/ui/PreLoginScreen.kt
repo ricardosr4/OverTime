@@ -63,7 +63,7 @@ fun PreLoginScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color.White)
         ) {
             Column(
                 modifier = Modifier
@@ -112,45 +112,7 @@ fun PreLoginScreen(navController: NavController) {
                     enabled = !isLoading
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-//                Button(
-//                    onClick = { launcher.launch(getGoogleSignInIntent(context)) },
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 20.dp)
-//                        .height(45.dp),
-//                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
-//                    elevation = ButtonDefaults.buttonElevation(
-//                        defaultElevation = 6.dp,
-//                        pressedElevation = 8.dp
-//                    ),
-//                    enabled = !isLoading
-//                ) {
-//                    Text(
-//                        text = stringResource(R.string.login_con_google),
-//                        fontSize = 18.sp,
-//                        fontWeight = FontWeight.Bold,
-//                        color = ButtonPrimaryText
-//                    )
-//
-//                }
-//                Spacer(modifier = Modifier.height(50.dp))
-//                Divider(
-//                    color = Color.Gray,
-//                    thickness = 1.dp,
-//                    modifier = Modifier.padding(horizontal = 20.dp)
-//                )
-//                Spacer(modifier = Modifier.height(10.dp))
-//                Text(
-//                    text = stringResource(R.string.message_soporte),
-//                    modifier = Modifier,
-//                    style = TextStyle(
-//                        color = TextPrimary,
-//                        fontSize = 14.sp
-//                    )
-//                )
-
             }
-
         }
     }
     if (isLoading) {

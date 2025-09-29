@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.overtime"
-        minSdk = 24
+        minSdk = 30
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -90,6 +90,10 @@ dependencies {
     kapt(libs.hilt.compiler)
     //SharedPreferences
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

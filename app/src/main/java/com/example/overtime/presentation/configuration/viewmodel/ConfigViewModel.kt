@@ -5,11 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
+import com.example.overtime.core.notifications.WeeklyOvertimeScheduler
 import com.example.overtime.core.prefs.PreferencesManager
 import com.example.overtime.core.prefs.ThemeMode
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,50 +14,68 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
-    // Theme configuration
+    // Tema
     val themeModeFlow: StateFlow<ThemeMode> = preferencesManager.themeModeFlow
 
-    // Notifications configuration (pending implementation)
-    private val _notificationsEnabled = MutableStateFlow(true)
-    val notificationsEnabled: StateFlow<Boolean> = _notificationsEnabled.asStateFlow()
+    // Notificaciones (se expone StateFlow y getter para compatibilidad)
+    val notificationsEnabledFlow: StateFlow<Boolean> = preferencesManager.notificationsEnabledFlow
+    val notificationsEnabled: Boolean get() = preferencesManager.getNotificationsEnabled()
 
-    // Loading state
+    // Loading global
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    // User information
+    // Información de usuario
     private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
     val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
 
-    // Theme management
+    // -------- Gestión de Tema --------
     fun setThemeMode(mode: ThemeMode) {
         preferencesManager.setThemeMode(mode)
     }
 
     fun toggleTheme() {
-        val currentMode = preferencesManager.getThemeMode()
-        val nextMode = when (currentMode) {
+        val current = preferencesManager.getThemeMode()
+        val next = when (current) {
             ThemeMode.DARK -> ThemeMode.LIGHT
             ThemeMode.LIGHT -> ThemeMode.DARK
             ThemeMode.SYSTEM -> ThemeMode.DARK
         }
-        preferencesManager.setThemeMode(nextMode)
+        preferencesManager.setThemeMode(next)
     }
 
-    // Notifications management (pending implementation)
+    // -------- Gestión de Notificaciones (lunes 12:00) --------
+    // Mantiene compatibilidad con tu UI: no requiere pasar Context desde la pantalla
+    fun setNotificationsEnabled(enabled: Boolean) {
+        preferencesManager.setNotificationsEnabled(enabled)
+        if (enabled) {
+            WeeklyOvertimeScheduler.scheduleNextMondayNoon(appContext)
+        } else {
+            WeeklyOvertimeScheduler.cancel(appContext)
+        }
+    }
+
+    // Firma original conservada; ahora sí persiste y agenda/cancela
     fun toggleNotifications() {
-        _notificationsEnabled.value = !_notificationsEnabled.value
-        // TODO: Implement persistence
+        val newValue = !preferencesManager.getNotificationsEnabled()
+        setNotificationsEnabled(newValue)
     }
 
-    // User information management
+    // -------- Usuario (Firestore / Auth) --------
     fun getCurrentUser(): Pair<String, String> {
         val auth = Firebase.auth
         val user = auth.currentUser
@@ -70,7 +84,6 @@ class ConfigViewModel @Inject constructor(
             val userId = user.uid
             val email = user.email ?: "No disponible"
 
-            // Obtener el nombre desde Firestore
             Firebase.firestore.collection("Users").document(userId)
                 .get()
                 .addOnSuccessListener { document ->
@@ -91,16 +104,6 @@ class ConfigViewModel @Inject constructor(
         }
     }
 
-    fun updateUserInfo(name: String, email: String) {
-        _userInfo.value = Pair(name, email)
-    }
-
-    // Loading state management
-    fun setLoading(loading: Boolean) {
-        _isLoading.value = loading
-    }
-
-    // Sign out functionality (RESTAURADA)
     fun signOut(navController: NavController, context: Context) {
         val auth = Firebase.auth
         try {

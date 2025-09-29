@@ -8,13 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun LoadingOverlay(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.scrim), // overlay semitransparente adaptativo
+            .background(Color.White), // overlay semitransparente adaptativo
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)

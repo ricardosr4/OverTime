@@ -1,23 +1,39 @@
 package com.example.overtime.presentation.login.screen
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
-import com.example.overtime.presentation.login.components.ZetaAlertDialog
+import com.example.overtime.presentation.components.LoadingOverlay
 import com.example.overtime.presentation.login.components.StandardButton
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 import com.example.overtime.presentation.login.components.ZetaImageLogo
 import com.example.overtime.presentation.login.components.ZetaOutlinedTextField
 import com.example.overtime.presentation.login.components.ZetaSpaceHeight
@@ -25,18 +41,9 @@ import com.example.overtime.presentation.login.components.ZetaText
 import com.example.overtime.presentation.login.components.ZetaTextLink
 import com.example.overtime.presentation.login.state.AlertType
 import com.example.overtime.presentation.login.viewModel.LoginViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.example.overtime.utils.getGoogleSignInIntent
 import com.example.overtime.utils.getGoogleAccountFromIntent
-import androidx.compose.material3.CircularProgressIndicator
-import com.example.overtime.presentation.components.LoadingOverlay
-import androidx.compose.ui.zIndex
-import androidx.compose.material3.MaterialTheme
+import com.example.overtime.utils.getGoogleSignInIntent
+
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -45,20 +52,21 @@ fun LoginScreen(navController: NavController) {
     val loginState by viewModel.loginState
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val account = getGoogleAccountFromIntent(result.data)
-        val idToken = account?.idToken
-        if (idToken != null) {
-            isLoading = true
-            viewModel.loginWithGoogle(idToken, onSuccess = {
-                isLoading = false
-                navController.navigate("home_screen")
-            }, onError = {
-                isLoading = false
-                // Manejar error si quieres
-            })
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val account = getGoogleAccountFromIntent(result.data)
+            val idToken = account?.idToken
+            if (idToken != null) {
+                isLoading = true
+                viewModel.loginWithGoogle(idToken, onSuccess = {
+                    isLoading = false
+                    navController.navigate("home_screen")
+                }, onError = {
+                    isLoading = false
+                    // Manejar error si quieres
+                })
+            }
         }
-    }
 
     LaunchedEffect(loginState) {
         if (loginState.isSuccess) {
@@ -76,7 +84,7 @@ fun LoginScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color.White)
                 .padding(horizontal = 30.dp)
         ) {
             Column(
@@ -97,7 +105,7 @@ fun LoginScreen(navController: NavController) {
                     text = "Login",
                     fontSize = 30.sp,
                     maxLines = 1,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = Color.Black,
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -131,7 +139,8 @@ fun LoginScreen(navController: NavController) {
                 )
                 ZetaSpaceHeight(20.dp)
                 ZetaTextLink(
-                    text = stringResource(R.string.recuperar_contraseña), linkColor = MaterialTheme.colorScheme.primary,
+                    text = stringResource(R.string.recuperar_contraseña),
+                    linkColor = MaterialTheme.colorScheme.primary,
                     textLink = stringResource(R.string.aqui),
                     onClick = { viewModel.resetPassword(loginState.email) {} },
                     modifier = Modifier
