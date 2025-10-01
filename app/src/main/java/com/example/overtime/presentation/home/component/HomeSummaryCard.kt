@@ -41,7 +41,7 @@ fun HomeSummaryCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Horas extras - $currentMonth",
+                text = "Horas Extras - $currentMonth",
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 22.sp,
                 color = Color.Black

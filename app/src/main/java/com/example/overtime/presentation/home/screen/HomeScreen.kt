@@ -31,7 +31,13 @@ import java.io.File
 fun HomeScreen(navController: NavController,
     viewModel: HomeViewModel = viewModel()
 ) {
-    val currentMonth = remember { LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("es", "ES")) }
+    val currentMonth = remember {
+        LocalDate.now().month
+            .getDisplayName(TextStyle.FULL, Locale("es", "ES"))
+            .replaceFirstChar { ch ->
+                if (ch.isLowerCase()) ch.titlecase(Locale("es", "ES")) else ch.toString()
+            }
+    }
     val workDays by viewModel.workDays.collectAsState()
     val pdfResult by viewModel.pdfResult.collectAsState()
     val context = LocalContext.current
