@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
@@ -23,11 +24,11 @@ fun ConfigTopBar(
         title = { 
             Text(
                 text = "Configuración",
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             ) 
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         actions = {
             IconButton(
@@ -36,7 +37,7 @@ fun ConfigTopBar(
                 Icon(
                     imageVector = Icons.Filled.ExitToApp,
                     contentDescription = "Cerrar sesión",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

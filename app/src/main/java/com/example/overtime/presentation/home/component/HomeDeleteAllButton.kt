@@ -6,9 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.overtime.ui.theme.ButtonPrimary
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
 
 @Composable
@@ -27,20 +25,20 @@ fun HomeActionsRow(
             onClick = { showDialog = true },
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Black),
-            colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Eliminar Hrs")
+            Text("Eliminar Hrs", color = MaterialTheme.colorScheme.onPrimary)
         }
         Spacer(modifier = Modifier.width(8.dp))
         Button(
             onClick = onDownloadPdf,
             modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Black),
-            colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Descargar PDF")
+            Text("Descargar PDF", color = MaterialTheme.colorScheme.onPrimary)
         }
     }
     if (showDialog) {
@@ -55,4 +53,4 @@ fun HomeActionsRow(
             onDismissClick = { showDialog = false }
         )
     }
-} 
+}

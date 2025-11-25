@@ -43,7 +43,7 @@ fun AddHrsExtrasScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background)
+            .background(MaterialTheme.colorScheme.background)
     ) { innerPadding ->
         AddHrsExtrasContent(
             modifier = Modifier.padding(innerPadding),

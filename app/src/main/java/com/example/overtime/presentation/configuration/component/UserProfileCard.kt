@@ -10,14 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
-import com.example.overtime.ui.theme.CardColor
-import com.example.overtime.ui.theme.ButtonPrimary
-import com.example.overtime.ui.theme.ButtonPrimaryText
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
@@ -35,8 +31,8 @@ fun UserProfileCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color.Black),
-        colors = CardDefaults.cardColors(CardColor),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
@@ -54,13 +50,13 @@ fun UserProfileCard(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Usuario",
                         modifier = Modifier.size(48.dp),
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = "Perfil de Usuario",
                         fontSize = 18.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
@@ -68,7 +64,7 @@ fun UserProfileCard(
                     Icon(
                         imageVector = Icons.Default.ExitToApp,
                         contentDescription = "Cerrar sesión",
-                        tint = Color.Black,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(35.dp)
                     )
                 }
@@ -83,13 +79,13 @@ fun UserProfileCard(
                 Text(
                     text = "Nombre:",
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
                     text = userName,
                     fontSize = 14.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -103,13 +99,13 @@ fun UserProfileCard(
                 Text(
                     text = "Email:",
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
                     text = userEmail,
                     fontSize = 14.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -119,9 +115,9 @@ fun UserProfileCard(
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            containerColor = ButtonPrimary,
-            titleContentColor = ButtonPrimaryText,
-            textContentColor = ButtonPrimaryText,
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            textContentColor = MaterialTheme.colorScheme.onPrimary,
             title = { Text("Cerrar sesión") },
             text = { Text("¿Estás seguro que deseas cerrar sesión?") },
             confirmButton = {
@@ -130,19 +126,19 @@ fun UserProfileCard(
                         showLogoutDialog = false
                         viewModel.signOut(navController, context)
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Cerrar sesión", color = ButtonPrimaryText)
+                    Text("Cerrar sesión", color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
             dismissButton = {
                 Button(
                     onClick = { showLogoutDialog = false },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
-                    Text("Cancelar", color = ButtonPrimary)
+                    Text("Cancelar", color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )
     }
-} 
+}

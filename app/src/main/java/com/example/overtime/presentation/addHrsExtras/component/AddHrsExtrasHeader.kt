@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.*
 
 @Composable
 fun AddHrsExtrasHeader() {
@@ -20,7 +19,7 @@ fun AddHrsExtrasHeader() {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = CardColor
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -34,24 +33,24 @@ fun AddHrsExtrasHeader() {
                 imageVector = Icons.Default.Schedule,
                 contentDescription = "Horas Extras",
                 modifier = Modifier.size(32.dp),
-                tint = PrimaryColor
+                tint = MaterialTheme.colorScheme.primary
             )
-            
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             Column {
                 Text(
                     text = "Agregar Horas Extras",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = "Registra tus horas adicionales de trabajo",
                     fontSize = 14.sp,
-                    color = TextHint
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
-} 
+}
