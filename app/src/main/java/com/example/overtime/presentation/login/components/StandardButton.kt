@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.*
 
 @Composable
 fun StandardButton(
@@ -26,7 +25,7 @@ fun StandardButton(
             .height(45.dp),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = ButtonPrimary
+            containerColor = MaterialTheme.colorScheme.primary
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 6.dp,
@@ -38,17 +37,17 @@ fun StandardButton(
             horizontalArrangement = Arrangement.Center
         ) {
             icon?.invoke()
-            
+
             if (icon != null) {
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            
+
             Text(
                 text = text,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = ButtonPrimaryText
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
-} 
+}

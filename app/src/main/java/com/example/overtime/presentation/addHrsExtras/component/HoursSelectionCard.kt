@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +25,7 @@ fun HoursSelectionCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Surface
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -42,21 +41,21 @@ fun HoursSelectionCard(
                     imageVector = Icons.Default.AccessTime,
                     contentDescription = "Horas",
                     modifier = Modifier.size(24.dp),
-                    tint = PrimaryColor
+                    tint = MaterialTheme.colorScheme.primary
                 )
-                
+
                 Spacer(modifier = Modifier.width(12.dp))
-                
+
                 Text(
                     text = "Horas Extras Trabajadas",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = OnSurface
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded }
@@ -70,26 +69,26 @@ fun HoursSelectionCard(
                         .fillMaxWidth()
                         .menuAnchor(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = PrimaryColor,
-                        unfocusedBorderColor = DividerColor,
-                        focusedLabelColor = PrimaryColor
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary
                     ),
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     }
                 )
-                
+
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
                     hoursOptions.forEach { hour ->
                         DropdownMenuItem(
-                            text = { 
+                            text = {
                                 Text(
                                     "$hour horas",
                                     fontWeight = if (hour == selectedHours) FontWeight.Bold else FontWeight.Normal
-                                ) 
+                                )
                             },
                             onClick = {
                                 onHoursSelected(hour)
@@ -101,4 +100,4 @@ fun HoursSelectionCard(
             }
         }
     }
-} 
+}

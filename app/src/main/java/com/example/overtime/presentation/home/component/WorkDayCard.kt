@@ -9,12 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.overtime.data.model.WorkDay
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
-import com.example.overtime.ui.theme.CardColor
 
 @Composable
 fun WorkDayCard(
@@ -41,8 +39,8 @@ fun WorkDayCard(
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(1.dp, Color.Black),
-        colors = CardDefaults.cardColors(CardColor),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -52,17 +50,17 @@ fun WorkDayCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = workDay.weekDay, fontSize = 16.sp, color = Color.Black)
-                Text(text = "Horas extras: ${workDay.quantityOverHours}", fontSize = 14.sp, color = Color.Black)
-                Text(text = "Porcentaje: ${workDay.percentageOverHours}%", fontSize = 14.sp, color = Color.Black)
+                Text(text = workDay.weekDay, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = "Horas extras: ${workDay.quantityOverHours}", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text(text = "Porcentaje: ${workDay.percentageOverHours}%", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             }
             IconButton(onClick = { showDialog = true }) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Eliminar",
-                    tint = Color.Gray
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
-} 
+}

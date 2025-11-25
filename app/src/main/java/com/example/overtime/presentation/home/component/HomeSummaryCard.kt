@@ -7,11 +7,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.overtime.data.model.WorkDay
-import com.example.overtime.ui.theme.CardColor
 
 @Composable
 fun HomeSummaryCard(
@@ -29,8 +27,8 @@ fun HomeSummaryCard(
             .fillMaxHeight(0.3f)
             .padding(16.dp),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color.Black),
-        colors = CardDefaults.cardColors(CardColor),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
     ) {
         Column(
@@ -44,15 +42,15 @@ fun HomeSummaryCard(
                 text = "Horas Extras - $currentMonth",
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 22.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = Color.Black)
-            Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = Color.Black)
-            Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = Color.Black)
-            Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = Color.Black)
+            Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
-} 
+}

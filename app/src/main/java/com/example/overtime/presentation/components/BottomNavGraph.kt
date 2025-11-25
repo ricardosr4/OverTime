@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.overtime.presentation.addHrsExtras.screen.AddHrsExtrasScreen
-import com.example.overtime.presentation.configuration.ui.ConfigScreen
+import com.example.overtime.presentation.configuration.screen.ConfigScreen
 import com.example.overtime.presentation.home.screen.HomeScreen
 import com.example.overtime.presentation.navigation.AppScreen
 

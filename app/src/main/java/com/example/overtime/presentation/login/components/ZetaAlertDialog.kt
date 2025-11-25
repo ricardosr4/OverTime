@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.overtime.ui.theme.*
 
 @Composable
 fun ZetaAlertDialog(
@@ -22,15 +22,15 @@ fun ZetaAlertDialog(
     message: String,
     confirmText: String,
     onConfirmClick: () -> Unit,
-    onDismissClick: (() -> Unit)? = null // ahora es opcional
+    onDismissClick: (() -> Unit)? = null
 ) {
     val scroll = rememberScrollState(0)
 
     AlertDialog(
         onDismissRequest = { onDismissClick?.invoke() },
-        containerColor = ButtonPrimary,
-        titleContentColor = ButtonPrimaryText,
-        textContentColor = ButtonPrimaryText,
+        containerColor = MaterialTheme.colorScheme.primary,
+        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        textContentColor = MaterialTheme.colorScheme.onPrimary,
         title = { Text(text = title) },
         text = {
             Text(
@@ -46,7 +46,7 @@ fun ZetaAlertDialog(
                     .fillMaxWidth()
                     .height(45.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ButtonPrimary
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 4.dp,
@@ -57,7 +57,7 @@ fun ZetaAlertDialog(
                     text = confirmText,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = ButtonPrimaryText
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         },
@@ -69,7 +69,7 @@ fun ZetaAlertDialog(
                         .fillMaxWidth()
                         .height(45.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = ButtonPrimary
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 4.dp,
@@ -80,7 +80,7 @@ fun ZetaAlertDialog(
                         text = "Cancelar",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = ButtonPrimaryText
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

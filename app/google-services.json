@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "782417725602-ikklmur76lkajrk78gdcn33dlh63ku9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.overtime",
+            "certificate_hash": "4011e302321a42357ce3d88e469e5dd4f371d765"
+          }
+        },
+        {
           "client_id": "782417725602-kmjiq808eljjqknbnbn3f83qoi9moci4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

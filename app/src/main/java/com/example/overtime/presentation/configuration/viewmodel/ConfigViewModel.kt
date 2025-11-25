@@ -1,41 +1,81 @@
 package com.example.overtime.presentation.configuration.viewmodel
 
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.overtime.core.notifications.WeeklyOvertimeScheduler
+import com.example.overtime.core.prefs.PreferencesManager
+import com.example.overtime.core.prefs.ThemeMode
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import android.content.Context
+import javax.inject.Inject
 
-class ConfigViewModel : ViewModel() {
+@HiltViewModel
+class ConfigViewModel @Inject constructor(
+    private val preferencesManager: PreferencesManager,
+    @ApplicationContext private val appContext: Context
+) : ViewModel() {
 
-    // Estado de configuración (en una app real esto se guardaría en SharedPreferences)
-    private var _notificationsEnabled = true
-    private var _isDarkMode = false
+    // Tema
+    val themeModeFlow: StateFlow<ThemeMode> = preferencesManager.themeModeFlow
 
-    val notificationsEnabled: Boolean
-        get() = _notificationsEnabled
+    // Notificaciones (se expone StateFlow y getter para compatibilidad)
+    val notificationsEnabledFlow: StateFlow<Boolean> = preferencesManager.notificationsEnabledFlow
+    val notificationsEnabled: Boolean get() = preferencesManager.getNotificationsEnabled()
 
-    val isDarkMode: Boolean
-        get() = _isDarkMode
-
+    // Loading global
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    // Estado para la información del usuario
+    // Información de usuario
     private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
     val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
 
-    // Obtener información del usuario actual desde Firestore
+    // -------- Gestión de Tema --------
+    fun setThemeMode(mode: ThemeMode) {
+        preferencesManager.setThemeMode(mode)
+    }
+
+    fun toggleTheme() {
+        val current = preferencesManager.getThemeMode()
+        val next = when (current) {
+            ThemeMode.DARK -> ThemeMode.LIGHT
+            ThemeMode.LIGHT -> ThemeMode.DARK
+            ThemeMode.SYSTEM -> ThemeMode.DARK
+        }
+        preferencesManager.setThemeMode(next)
+    }
+
+    // -------- Gestión de Notificaciones (lunes 12:00) --------
+    // Mantiene compatibilidad con tu UI: no requiere pasar Context desde la pantalla
+    fun setNotificationsEnabled(enabled: Boolean) {
+        preferencesManager.setNotificationsEnabled(enabled)
+        if (enabled) {
+            WeeklyOvertimeScheduler.scheduleNextMondayNoon(appContext)
+        } else {
+            WeeklyOvertimeScheduler.cancel(appContext)
+        }
+    }
+
+    // Firma original conservada; ahora sí persiste y agenda/cancela
+    fun toggleNotifications() {
+        val newValue = !preferencesManager.getNotificationsEnabled()
+        setNotificationsEnabled(newValue)
+    }
+
+    // -------- Usuario (Firestore / Auth) --------
     fun getCurrentUser(): Pair<String, String> {
         val auth = Firebase.auth
         val user = auth.currentUser
@@ -44,7 +84,6 @@ class ConfigViewModel : ViewModel() {
             val userId = user.uid
             val email = user.email ?: "No disponible"
 
-            // Obtener el nombre desde Firestore
             Firebase.firestore.collection("Users").document(userId)
                 .get()
                 .addOnSuccessListener { document ->
@@ -64,23 +103,6 @@ class ConfigViewModel : ViewModel() {
             return Pair("Usuario", "No disponible")
         }
     }
-
-    // Toggle notificaciones
-    fun toggleNotifications() {
-        _notificationsEnabled = !_notificationsEnabled
-        // Aquí se guardaría en SharedPreferences
-    }
-
-    // Toggle tema
-    fun toggleTheme() {
-        _isDarkMode = !_isDarkMode
-        // Aquí se guardaría en SharedPreferences y se aplicaría el tema
-    }
-
-    // Cambiar idioma (para futuras implementaciones)
-//    fun changeLanguage(language: String) {
-//        // Implementar cambio de idioma
-//    }
 
     fun signOut(navController: NavController, context: Context) {
         val auth = Firebase.auth

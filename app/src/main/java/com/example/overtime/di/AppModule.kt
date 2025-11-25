@@ -1,5 +1,7 @@
 package com.example.overtime.di
 
+import android.content.Context
+import com.example.overtime.core.prefs.PreferencesManager
 import com.example.overtime.data.repository.AuthRepositoryImpl
 import com.example.overtime.data.repository.WorkDayRepositoryImpl
 import com.example.overtime.domain.repository.AuthRepository
@@ -10,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -36,4 +39,9 @@ object AppModule {
     @Singleton
     fun provideLoginWithGoogleUseCase(repository: AuthRepository): LoginWithGoogleUseCase =
         LoginWithGoogleUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager =
+        PreferencesManager(context)
 }
