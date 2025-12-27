@@ -1,30 +1,34 @@
 package com.example.overtime.presentation.addHrsExtras.screen
 
-import android.R.attr.padding
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
-import com.example.overtime.presentation.navigation.AppScreen
-import com.example.overtime.presentation.addHrsExtras.component.AddHrsExtrasContent
 import com.example.overtime.presentation.addHrsExtras.component.ErrorDialog
+import com.example.overtime.presentation.addHrsExtras.content.AddHrsExtrasContent
 import com.example.overtime.presentation.addHrsExtras.viewModel.AddHrsExtrasViewModel
-import com.example.overtime.ui.theme.*
+import com.example.overtime.presentation.navigation.AppScreen
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,13 +44,13 @@ fun AddHrsExtrasScreen(
         viewModel.resetState()
     }
 
-    Scaffold(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-    ) { innerPadding ->
+    ) {
         AddHrsExtrasContent(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.fillMaxSize(),
             selectedDate = state.selectedDate,
             selectedPercentage = state.selectedPercentage,
             selectedHours = state.selectedHours,

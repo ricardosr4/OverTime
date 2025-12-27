@@ -1,23 +1,18 @@
 package com.example.overtime.presentation.register.viewModel
 
-import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import com.example.overtime.presentation.register.state.RegisterState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.overtime.data.model.UserModel
-import com.example.overtime.presentation.register.state.AlertTypeRegister
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.firestore.ktx.firestore
-import kotlinx.coroutines.launch
 import com.example.overtime.domain.useCase.auth.RegisterUserUseCase
+import com.example.overtime.presentation.register.state.AlertTypeRegister
+import com.example.overtime.presentation.register.state.RegisterState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -96,9 +91,5 @@ class RegisterViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun cleanFields() {
-        _registerState.value = RegisterState()
     }
 }

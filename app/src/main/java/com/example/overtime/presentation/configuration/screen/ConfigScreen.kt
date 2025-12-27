@@ -18,7 +18,6 @@ import com.example.overtime.presentation.configuration.component.ConfigContent
 import com.example.overtime.core.prefs.ThemeMode
 import com.example.overtime.presentation.components.LoadingOverlay
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +27,6 @@ fun ConfigScreen(
 ) {
     val userInfo by viewModel.userInfo.collectAsState()
     val (userName, userEmail) = userInfo
-
     // Calcular isDarkMode en el composable
     val themeMode by viewModel.themeModeFlow.collectAsState()
     val isDarkMode = when (themeMode) {
@@ -45,14 +43,10 @@ fun ConfigScreen(
     Scaffold(
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
-
-
                 ConfigContent(
                     userName = userName,
                     userEmail = userEmail,
-                    notificationsEnabled = viewModel.notificationsEnabledFlow.collectAsState().value,
                     isDarkMode = isDarkMode,
-                    onNotificationToggle = { enabled -> viewModel.setNotificationsEnabled(enabled) },
                     onThemeToggle = { viewModel.toggleTheme() },
                     navController = navController,
                     viewModel = viewModel
@@ -60,7 +54,6 @@ fun ConfigScreen(
                 if (viewModel.isLoading.collectAsState().value) {
                     LoadingOverlay()
                 }
-
             }
         }
     )

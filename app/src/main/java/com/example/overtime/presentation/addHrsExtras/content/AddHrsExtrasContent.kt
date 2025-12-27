@@ -1,10 +1,16 @@
-package com.example.overtime.presentation.addHrsExtras.component
+package com.example.overtime.presentation.addHrsExtras.content
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.overtime.presentation.addHrsExtras.component.AddHrsExtrasButton
+import com.example.overtime.presentation.addHrsExtras.component.AddHrsExtrasHeader
+import com.example.overtime.presentation.addHrsExtras.component.DateSelectionCard
+import com.example.overtime.presentation.addHrsExtras.component.HoursSelectionCard
+import com.example.overtime.presentation.addHrsExtras.component.PercentageSelectionCard
+import com.example.overtime.presentation.addHrsExtras.component.SummaryCard
 
 @Composable
 fun AddHrsExtrasContent(
@@ -19,7 +25,7 @@ fun AddHrsExtrasContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 16.dp),
+//        contentPadding = PaddingValues(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         item {

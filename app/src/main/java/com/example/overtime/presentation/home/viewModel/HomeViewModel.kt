@@ -2,7 +2,6 @@ package com.example.overtime.presentation.home.viewModel
 
 import android.app.Application
 import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.overtime.R
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -61,8 +59,6 @@ class HomeViewModel @Inject constructor(
                 val result = deleteAllWorkDaysUseCase(uid)
                 if (result.isSuccess) {
                     _workDays.value = emptyList()
-                } else {
-                    Log.e("WorkDay", "Error al eliminar todos los WorkDays: ${result.exceptionOrNull()?.message}")
                 }
             }
         }
@@ -75,11 +71,8 @@ class HomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     val result = deleteWorkDayUseCase(uid, workDayId)
                     if (result.isFailure) {
-                        Log.e("WorkDay", "Error al eliminar el día de trabajo: ${result.exceptionOrNull()?.message}")
                     }
                 }
-            } else {
-                Log.e("WorkDay", "El ID del WorkDay es nulo o vacío, no se puede eliminar.")
             }
         }
     }
@@ -93,7 +86,8 @@ class HomeViewModel @Inject constructor(
                 .addOnSuccessListener { document ->
                     val userName = document.getString("userName") ?: "Usuario"
                     // Obtener logo como Bitmap
-                    val logo = BitmapFactory.decodeResource(appContext.resources, R.drawable.img_over_time)
+                    val logo =
+                        BitmapFactory.decodeResource(appContext.resources, R.drawable.img_over_time)
                     // Generar PDF
                     val result = downloadWorkDaysPdfUseCase(
                         context = appContext,

@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.overtime.core.notifications.WeeklyOvertimeScheduler
 import com.example.overtime.core.prefs.PreferencesManager
 import com.example.overtime.core.prefs.ThemeMode
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,16 +23,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
-    private val preferencesManager: PreferencesManager,
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val appContext: Context,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
     // Tema
     val themeModeFlow: StateFlow<ThemeMode> = preferencesManager.themeModeFlow
-
-    // Notificaciones (se expone StateFlow y getter para compatibilidad)
-    val notificationsEnabledFlow: StateFlow<Boolean> = preferencesManager.notificationsEnabledFlow
-    val notificationsEnabled: Boolean get() = preferencesManager.getNotificationsEnabled()
 
     // Loading global
     private val _isLoading = MutableStateFlow(false)
@@ -43,11 +38,6 @@ class ConfigViewModel @Inject constructor(
     private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
     val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
 
-    // -------- Gestión de Tema --------
-    fun setThemeMode(mode: ThemeMode) {
-        preferencesManager.setThemeMode(mode)
-    }
-
     fun toggleTheme() {
         val current = preferencesManager.getThemeMode()
         val next = when (current) {
@@ -56,23 +46,6 @@ class ConfigViewModel @Inject constructor(
             ThemeMode.SYSTEM -> ThemeMode.DARK
         }
         preferencesManager.setThemeMode(next)
-    }
-
-    // -------- Gestión de Notificaciones (lunes 12:00) --------
-    // Mantiene compatibilidad con tu UI: no requiere pasar Context desde la pantalla
-    fun setNotificationsEnabled(enabled: Boolean) {
-        preferencesManager.setNotificationsEnabled(enabled)
-        if (enabled) {
-            WeeklyOvertimeScheduler.scheduleNextMondayNoon(appContext)
-        } else {
-            WeeklyOvertimeScheduler.cancel(appContext)
-        }
-    }
-
-    // Firma original conservada; ahora sí persiste y agenda/cancela
-    fun toggleNotifications() {
-        val newValue = !preferencesManager.getNotificationsEnabled()
-        setNotificationsEnabled(newValue)
     }
 
     // -------- Usuario (Firestore / Auth) --------
@@ -107,7 +80,6 @@ class ConfigViewModel @Inject constructor(
     fun signOut(navController: NavController, context: Context) {
         val auth = Firebase.auth
         try {
-            navController.navigate("splash_screen")
             viewModelScope.launch {
                 _isLoading.value = true
                 auth.signOut()
@@ -120,9 +92,7 @@ class ConfigViewModel @Inject constructor(
                 googleSignInClient.signOut()
                 delay(1000)
                 _isLoading.value = false
-                navController.navigate("login_screen") {
-                    popUpTo("splash_screen") { inclusive = true }
-                }
+                navController.navigate("login_screen")
             }
         } catch (e: Exception) {
             _isLoading.value = false

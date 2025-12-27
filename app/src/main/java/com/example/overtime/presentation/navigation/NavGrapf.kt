@@ -24,11 +24,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun NavGraph(
     navController: NavHostController
 ) {
-
-
-//    val viewModel: HomeViewModel = viewModel()
-//    val addHrsExtrasViewModel: AddHrsExtrasViewModel = viewModel()
-
     NavHost(
         navController = navController,
         startDestination = AppScreen.BlankScreen.route
@@ -39,27 +34,35 @@ fun NavGraph(
 
         composable(AppScreen.SplashScreen.route) {
             val showOnlyLoader = it.arguments?.getBoolean("showOnlyLoader") ?: false
-            SplashScreen(navController = navController, showOnlyLoader = showOnlyLoader)
+            SplashScreen(
+                navController = navController,
+                showOnlyLoader = showOnlyLoader)
         }
         composable(AppScreen.PreLoginScreen.route) {
-            PreLoginScreen(navController = navController)
+            PreLoginScreen(
+                navController = navController)
         }
         composable(AppScreen.LoginScreen.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(
+                navController = navController)
         }
         composable(AppScreen.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
+            RegisterScreen(
+                navController = navController)
         }
         composable(AppScreen.HomeScreen.route) {
             val homeViewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(navController = navController, viewModel = homeViewModel)
+            HomeScreen(
+                viewModel = homeViewModel)
         }
         composable(AppScreen.ConfigScreen.route) {
             ConfigScreen(navController = navController)
         }
         composable(AppScreen.AddHrsExtrasScreen.route) {
             val addHrsExtrasViewModel: AddHrsExtrasViewModel = hiltViewModel()
-            AddHrsExtrasScreen(navController = navController, viewModel = addHrsExtrasViewModel)
+            AddHrsExtrasScreen(
+                navController = navController,
+                viewModel = addHrsExtrasViewModel)
         }
     }
 }

@@ -8,8 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+
 
 @Composable
 fun SummaryCard(
@@ -24,6 +27,7 @@ fun SummaryCard(
     val validPercentages = listOf(50, 75, 100, 130)
     val validPercentage = validPercentages.contains(selectedPercentage)
 
+    //esta card solo se muestra cuando todos los campos estan completados y muestra un resumen del total
     if (validDate && validHours && validPercentage) {
         Card(
             modifier = modifier

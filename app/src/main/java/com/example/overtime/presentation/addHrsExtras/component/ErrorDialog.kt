@@ -19,4 +19,4 @@ fun ErrorDialog(
             onConfirmClick = onDismiss
         )
     }
-} 
+}
