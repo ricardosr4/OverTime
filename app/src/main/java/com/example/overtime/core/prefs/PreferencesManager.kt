@@ -11,9 +11,13 @@ class PreferencesManager(context: Context) {
     private val _themeMode = MutableStateFlow(readThemeMode())
     val themeModeFlow: StateFlow<ThemeMode> = _themeMode
 
+    private val _monthClosingDay = MutableStateFlow(prefs.getInt(PrefsKeys.KEY_MONTH_CLOSING_DAY, 0))
+    val monthClosingDayFlow: StateFlow<Int> = _monthClosingDay
+
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         when (key) {
             PrefsKeys.KEY_THEME_MODE -> _themeMode.value = readThemeMode()
+            PrefsKeys.KEY_MONTH_CLOSING_DAY -> _monthClosingDay.value = prefs.getInt(PrefsKeys.KEY_MONTH_CLOSING_DAY, 0)
         }
     }
 
@@ -23,6 +27,11 @@ class PreferencesManager(context: Context) {
         prefs.edit().putString(PrefsKeys.KEY_THEME_MODE, mode.name).apply()
     }
     fun getThemeMode(): ThemeMode = _themeMode.value
+
+    fun setMonthClosingDay(day: Int) {
+        prefs.edit().putInt(PrefsKeys.KEY_MONTH_CLOSING_DAY, day).apply()
+    }
+    fun getMonthClosingDay(): Int = _monthClosingDay.value
 
     private fun readThemeMode(): ThemeMode = when (prefs.getString(PrefsKeys.KEY_THEME_MODE, ThemeMode.SYSTEM.name)) {
         ThemeMode.LIGHT.name -> ThemeMode.LIGHT

@@ -36,6 +36,8 @@ fun ConfigContent(
     userEmail: String,
     isDarkMode: Boolean,
     onThemeToggle: (Boolean) -> Unit,
+    monthClosingDay: Int,
+    onMonthClosingDaySelected: (Int) -> Unit,
     navController: NavController,
     viewModel: ConfigViewModel
 ) {
@@ -78,6 +80,12 @@ fun ConfigContent(
                 ThemeSettingsCard(
                     isDarkMode = isDarkMode,
                     onThemeToggle = onThemeToggle
+                )
+            }
+            item {
+                MonthClosingDayCard(
+                    selectedDay = monthClosingDay,
+                    onDaySelected = onMonthClosingDaySelected
                 )
             }
             item {

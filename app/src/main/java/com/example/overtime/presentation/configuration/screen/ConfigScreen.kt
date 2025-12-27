@@ -34,6 +34,8 @@ fun ConfigScreen(
         ThemeMode.LIGHT -> false
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
     }
+    // Día de cierre de mes
+    val monthClosingDay by viewModel.monthClosingDayFlow.collectAsState()
 
     // RESTAURADO: getCurrentUser
     LaunchedEffect(Unit) {
@@ -48,6 +50,8 @@ fun ConfigScreen(
                     userEmail = userEmail,
                     isDarkMode = isDarkMode,
                     onThemeToggle = { viewModel.toggleTheme() },
+                    monthClosingDay = monthClosingDay,
+                    onMonthClosingDaySelected = { day -> viewModel.setMonthClosingDay(day) },
                     navController = navController,
                     viewModel = viewModel
                 )

@@ -30,6 +30,9 @@ class ConfigViewModel @Inject constructor(
     // Tema
     val themeModeFlow: StateFlow<ThemeMode> = preferencesManager.themeModeFlow
 
+    // Día de cierre de mes
+    val monthClosingDayFlow: StateFlow<Int> = preferencesManager.monthClosingDayFlow
+
     // Loading global
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -46,6 +49,10 @@ class ConfigViewModel @Inject constructor(
             ThemeMode.SYSTEM -> ThemeMode.DARK
         }
         preferencesManager.setThemeMode(next)
+    }
+
+    fun setMonthClosingDay(day: Int) {
+        preferencesManager.setMonthClosingDay(day)
     }
 
     // -------- Usuario (Firestore / Auth) --------
