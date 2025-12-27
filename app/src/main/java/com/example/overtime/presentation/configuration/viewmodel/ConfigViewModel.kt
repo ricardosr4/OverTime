@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.overtime.core.prefs.PreferencesManager
 import com.example.overtime.core.prefs.ThemeMode
+import com.example.overtime.core.pdf.MonthlyPdfScheduler
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.ktx.auth
@@ -53,6 +54,30 @@ class ConfigViewModel @Inject constructor(
 
     fun setMonthClosingDay(day: Int) {
         preferencesManager.setMonthClosingDay(day)
+        // Reprogramar la descarga automática con el nuevo día
+        if (day > 0) {
+            MonthlyPdfScheduler.scheduleMonthlyPdfDownload(appContext, day)
+        } else {
+            MonthlyPdfScheduler.cancelMonthlyPdfDownload(appContext)
+        }
+    }
+
+    /**
+     * Función de PRUEBA: Inicia la descarga automática cada 1 minuto
+     * Esta función será eliminada después de las pruebas
+     */
+    fun startTestPdfDownload() {
+        android.util.Log.d("ConfigViewModel", "Iniciando prueba de PDF")
+        MonthlyPdfScheduler.scheduleTestPdfDownload(appContext)
+        Toast.makeText(appContext, "Prueba iniciada: PDF se descargará en 1 minuto", Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Cancela la función de prueba
+     */
+    fun stopTestPdfDownload() {
+        MonthlyPdfScheduler.cancelTestPdfDownload(appContext)
+        Toast.makeText(appContext, "Prueba cancelada", Toast.LENGTH_SHORT).show()
     }
 
     // -------- Usuario (Firestore / Auth) --------
