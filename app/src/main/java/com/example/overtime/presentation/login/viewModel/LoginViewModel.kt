@@ -1,23 +1,20 @@
 package com.example.overtime.presentation.login.viewModel
 
-import android.util.Log
 import android.util.Patterns
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
+import com.example.overtime.domain.useCase.auth.LoginUserUseCase
+import com.example.overtime.domain.useCase.auth.LoginWithGoogleUseCase
+import com.example.overtime.domain.useCase.auth.ResetPasswordUseCase
 import com.example.overtime.presentation.login.state.AlertType
 import com.example.overtime.presentation.login.state.LoginState
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.launch
-import com.example.overtime.domain.useCase.auth.LoginUserUseCase
-import com.example.overtime.domain.useCase.auth.ResetPasswordUseCase
-import com.example.overtime.domain.useCase.auth.LoginWithGoogleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

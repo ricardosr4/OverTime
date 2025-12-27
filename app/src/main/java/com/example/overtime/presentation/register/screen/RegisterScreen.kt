@@ -17,9 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
+import com.example.overtime.presentation.components.LoadingOverlay
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
 import com.example.overtime.presentation.login.components.ZetaImageLogo
 import com.example.overtime.presentation.login.components.ZetaSpaceHeight
@@ -29,10 +31,6 @@ import com.example.overtime.presentation.register.component.RegisterForm
 import com.example.overtime.presentation.register.component.RegisterLinks
 import com.example.overtime.presentation.register.state.AlertTypeRegister
 import com.example.overtime.presentation.register.viewModel.RegisterViewModel
-import androidx.compose.material3.CircularProgressIndicator
-import com.example.overtime.presentation.components.LoadingOverlay
-import androidx.compose.ui.zIndex
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 
 @Composable

@@ -1,35 +1,33 @@
 package com.example.overtime.presentation.home.screen
 
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.overtime.presentation.home.component.HomeActionsRow
 import com.example.overtime.presentation.home.component.HomeContent
 import com.example.overtime.presentation.home.component.HomeSummaryCard
 import com.example.overtime.presentation.home.viewModel.HomeViewModel
+import java.io.File
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
-import android.net.Uri
-import androidx.compose.material3.MaterialTheme
-import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(navController: NavController,
+fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
     val currentMonth = remember {
@@ -66,8 +64,7 @@ fun HomeScreen(navController: NavController,
         LaunchedEffect(pdfResult) {
             pdfResult?.let { result ->
                 if (result.isSuccess) {
-                    val value = result.getOrNull()
-                    when (value) {
+                    when (val value = result.getOrNull()) {
                         is File -> {
                             Toast.makeText(context, "PDF guardado en Descargas: ${value.name}", Toast.LENGTH_LONG).show()
                         }
@@ -84,5 +81,3 @@ fun HomeScreen(navController: NavController,
         }
     }
 }
-
-

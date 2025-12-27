@@ -1,6 +1,5 @@
 package com.example.overtime.utils
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -29,4 +28,4 @@ fun getGoogleAccountFromIntent(data: Intent?): GoogleSignInAccount? {
     } catch (e: Exception) {
         null
     }
-} 
+}
