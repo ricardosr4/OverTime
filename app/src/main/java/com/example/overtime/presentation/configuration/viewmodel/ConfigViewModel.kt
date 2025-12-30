@@ -62,24 +62,6 @@ class ConfigViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Función de PRUEBA: Inicia la descarga automática cada 1 minuto
-     * Esta función será eliminada después de las pruebas
-     */
-    fun startTestPdfDownload() {
-        android.util.Log.d("ConfigViewModel", "Iniciando prueba de PDF")
-        MonthlyPdfScheduler.scheduleTestPdfDownload(appContext)
-        Toast.makeText(appContext, "Prueba iniciada: PDF se descargará en 1 minuto", Toast.LENGTH_SHORT).show()
-    }
-
-    /**
-     * Cancela la función de prueba
-     */
-    fun stopTestPdfDownload() {
-        MonthlyPdfScheduler.cancelTestPdfDownload(appContext)
-        Toast.makeText(appContext, "Prueba cancelada", Toast.LENGTH_SHORT).show()
-    }
-
     // -------- Usuario (Firestore / Auth) --------
     fun getCurrentUser(): Pair<String, String> {
         val auth = Firebase.auth

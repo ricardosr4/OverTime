@@ -42,7 +42,6 @@ fun ConfigContent(
     viewModel: ConfigViewModel
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
-    var isTestRunning by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -88,34 +87,6 @@ fun ConfigContent(
                     selectedDay = monthClosingDay,
                     onDaySelected = onMonthClosingDaySelected
                 )
-            }
-            // Botón de PRUEBA - Se eliminará después de las pruebas
-            item {
-                Button(
-                    onClick = {
-                        if (isTestRunning) {
-                            viewModel.stopTestPdfDownload()
-                            isTestRunning = false
-                        } else {
-                            viewModel.startTestPdfDownload()
-                            isTestRunning = true
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isTestRunning) 
-                            MaterialTheme.colorScheme.error 
-                        else 
-                            MaterialTheme.colorScheme.primary
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    Text(
-                        text = if (isTestRunning) "Detener Prueba (PDF cada 1 min)" else "Iniciar Prueba (PDF cada 1 min)",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
             }
             item {
                 AppInfoCard()

@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import com.example.overtime.core.notification.NotificationHelper
 import com.example.overtime.core.prefs.PreferencesManager
 import com.example.overtime.core.pdf.MonthlyPdfScheduler
 import dagger.hilt.android.HiltAndroidApp
@@ -35,6 +36,9 @@ class OverTimeApplication: Application(), Configuration.Provider {
     
     override fun onCreate() {
         super.onCreate()
+        
+        // Crear canal de notificaciones
+        NotificationHelper.createNotificationChannel(this)
         
         // Programar descarga automática si hay un día de cierre configurado
         // Usar EntryPoint para acceder a PreferencesManager
