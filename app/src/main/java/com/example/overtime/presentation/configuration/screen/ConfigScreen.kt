@@ -36,8 +36,9 @@ fun ConfigScreen(
     }
     // Día de cierre de mes
     val monthClosingDay by viewModel.monthClosingDayFlow.collectAsState()
+    // Notificaciones
+    val notificationsEnabled by viewModel.notificationsEnabledFlow.collectAsState()
 
-    // RESTAURADO: getCurrentUser
     LaunchedEffect(Unit) {
         viewModel.getCurrentUser()
     }
@@ -52,6 +53,8 @@ fun ConfigScreen(
                     onThemeToggle = { viewModel.toggleTheme() },
                     monthClosingDay = monthClosingDay,
                     onMonthClosingDaySelected = { day -> viewModel.setMonthClosingDay(day) },
+                    notificationsEnabled = notificationsEnabled,
+                    onNotificationToggle = { enabled -> viewModel.setNotificationsEnabled(enabled) },
                     navController = navController,
                     viewModel = viewModel
                 )

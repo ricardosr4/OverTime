@@ -79,13 +79,21 @@ class AddHrsExtrasViewModel @Inject constructor(
     }
 
     fun addWorkDay(workDay: WorkDay) {
+        _state.value = _state.value.copy(isSaving = true, saveError = null)
         viewModelScope.launch {
             val userId = firebaseAuth.currentUser?.uid
             if (userId != null) {
                 val result = addWorkDayUseCase(userId, workDay)
                 if (result.isSuccess) {
-                    resetState()
+                    _state.value = _state.value.copy(isSaving = false, saveSuccess = true)
+                } else {
+                    _state.value = _state.value.copy(
+                        isSaving = false,
+                        saveError = result.exceptionOrNull()?.localizedMessage ?: "Error al guardar"
+                    )
                 }
+            } else {
+                _state.value = _state.value.copy(isSaving = false, saveError = "Usuario no autenticado")
             }
         }
     }

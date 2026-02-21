@@ -42,6 +42,7 @@ import com.example.overtime.presentation.login.components.ZetaTextLink
 import com.example.overtime.presentation.login.state.AlertType
 import com.example.overtime.presentation.login.viewModel.LoginViewModel
 import com.example.overtime.utils.getGoogleAccountFromIntent
+import com.example.overtime.utils.getGoogleSignInErrorCode
 import com.example.overtime.utils.getGoogleSignInIntent
 
 
@@ -61,10 +62,20 @@ fun LoginScreen(navController: NavController) {
                 viewModel.loginWithGoogle(idToken, onSuccess = {
                     isLoading = false
                     navController.navigate("home_screen")
-                }, onError = {
+                }, onError = { errorMsg ->
                     isLoading = false
-                    // Manejar error si quieres
+                    Toast.makeText(context, "Error: $errorMsg", Toast.LENGTH_LONG).show()
                 })
+            } else {
+                val errorCode = getGoogleSignInErrorCode(result.data)
+                val errorMsg = when (errorCode) {
+                    10 -> "Error de configuración (DEVELOPER_ERROR). Verifica SHA-1 en Firebase."
+                    12500 -> "Google Sign-In falló. Intenta de nuevo."
+                    12501 -> "Inicio de sesión cancelado."
+                    7 -> "Error de red. Verifica tu conexión."
+                    else -> "Error de Google Sign-In (código: $errorCode)"
+                }
+                Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
             }
         }
 

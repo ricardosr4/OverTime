@@ -28,17 +28,15 @@ class ConfigViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
-    // Tema
     val themeModeFlow: StateFlow<ThemeMode> = preferencesManager.themeModeFlow
 
-    // Día de cierre de mes
     val monthClosingDayFlow: StateFlow<Int> = preferencesManager.monthClosingDayFlow
 
-    // Loading global
+    val notificationsEnabledFlow: StateFlow<Boolean> = preferencesManager.notificationsEnabledFlow
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    // Información de usuario
     private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
     val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
 
@@ -52,17 +50,24 @@ class ConfigViewModel @Inject constructor(
         preferencesManager.setThemeMode(next)
     }
 
-    fun setMonthClosingDay(day: Int) {
+    /**
+     * @return true si es la primera vez que se configura, false si se cambió un valor existente.
+     */
+    fun setMonthClosingDay(day: Int): Boolean {
+        val previous = preferencesManager.getMonthClosingDay()
         preferencesManager.setMonthClosingDay(day)
-        // Reprogramar la descarga automática con el nuevo día
         if (day > 0) {
             MonthlyPdfScheduler.scheduleMonthlyPdfDownload(appContext, day)
         } else {
             MonthlyPdfScheduler.cancelMonthlyPdfDownload(appContext)
         }
+        return previous == 0
     }
 
-    // -------- Usuario (Firestore / Auth) --------
+    fun setNotificationsEnabled(enabled: Boolean) {
+        preferencesManager.setNotificationsEnabled(enabled)
+    }
+
     fun getCurrentUser(): Pair<String, String> {
         val auth = Firebase.auth
         val user = auth.currentUser
@@ -97,7 +102,6 @@ class ConfigViewModel @Inject constructor(
             viewModelScope.launch {
                 _isLoading.value = true
                 auth.signOut()
-                // Cerrar sesión de Google también
                 val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken("782417725602-045du8t2rpeh6t9sv6otmpt063rg3va7.apps.googleusercontent.com")
                     .requestEmail()
