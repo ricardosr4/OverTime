@@ -1,6 +1,7 @@
 package com.example.overtime.presentation.addHrsExtras.screen
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,15 +16,14 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.overtime.data.model.WorkDay
 import com.example.overtime.presentation.addHrsExtras.component.ErrorDialog
 import com.example.overtime.presentation.addHrsExtras.content.AddHrsExtrasContent
 import com.example.overtime.presentation.addHrsExtras.viewModel.AddHrsExtrasViewModel
 import com.example.overtime.presentation.navigation.AppScreen
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -35,13 +35,28 @@ import java.util.Locale
 @Composable
 fun AddHrsExtrasScreen(
     navController: NavController,
-    viewModel: AddHrsExtrasViewModel = viewModel()
+    viewModel: AddHrsExtrasViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+    val context = LocalContext.current
 
-    // Resetear el estado cuando se entra a la pantalla
     LaunchedEffect(Unit) {
         viewModel.resetState()
+    }
+
+    LaunchedEffect(state.saveSuccess) {
+        if (state.saveSuccess) {
+            Toast.makeText(context, "Horas extras agregadas correctamente", Toast.LENGTH_SHORT).show()
+            navController.navigate(AppScreen.HomeScreen.route) {
+                popUpTo(AppScreen.AddHrsExtrasScreen.route) { inclusive = true }
+            }
+        }
+    }
+
+    LaunchedEffect(state.saveError) {
+        state.saveError?.let { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        }
     }
 
     Box(
@@ -58,31 +73,25 @@ fun AddHrsExtrasScreen(
             onPercentageSelected = { viewModel.onPercentageSelected(it) },
             onHoursSelected = { viewModel.onHoursSelected(it) },
             onAddClick = {
-                if (viewModel.validateFields()) {
-                    val userId = Firebase.auth.currentUser?.uid ?: ""
+                if (!state.isSaving && viewModel.validateFields()) {
                     val newWorkDay = WorkDay(
                         weekDay = state.selectedDate,
                         quantityOverHours = state.selectedHours,
                         percentageOverHours = state.selectedPercentage
                     )
                     viewModel.addWorkDay(newWorkDay)
-                    navController.navigate(AppScreen.HomeScreen.route) {
-                        popUpTo(AppScreen.AddHrsExtrasScreen.route) { inclusive = true }
-                    }
-                } else {
+                } else if (!state.isSaving) {
                     viewModel.onShowErrorDialog(true)
                 }
             }
         )
     }
-    
-    // Diálogo de error
+
     ErrorDialog(
         showDialog = state.showErrorDialog,
         onDismiss = { viewModel.onShowErrorDialog(false) }
     )
-    
-    // DatePicker
+
     if (state.showDatePicker) {
         DatePickerDialog(
             onDismissRequest = { viewModel.onShowDatePicker(false) },
@@ -96,14 +105,13 @@ fun AddHrsExtrasScreen(
             val datePickerState = rememberDatePickerState(
                 initialSelectedDateMillis = today.toEpochDay() * 24 * 60 * 60 * 1000
             )
-            
+
             DatePicker(
                 state = datePickerState,
                 dateValidator = { timestamp ->
                     val selectedDate = Instant.ofEpochMilli(timestamp)
                         .atZone(ZoneId.of("UTC"))
                         .toLocalDate()
-                    // Solo permitir fechas hasta hoy (inclusive)
                     !selectedDate.isAfter(today)
                 }
             )

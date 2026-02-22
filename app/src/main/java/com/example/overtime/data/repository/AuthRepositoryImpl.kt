@@ -6,7 +6,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.example.overtime.data.model.UserModel
 import kotlinx.coroutines.tasks.await
 
-class AuthRepositoryImpl(private val firebaseAuth: FirebaseAuth, private val firestore: FirebaseFirestore) : AuthRepository {
+class AuthRepositoryImpl(
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
+) : AuthRepository {
+
     override suspend fun login(email: String, password: String): Result<Unit> {
         return try {
             firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -31,7 +35,6 @@ class AuthRepositoryImpl(private val firebaseAuth: FirebaseAuth, private val fir
             val userId = authResult.user?.uid ?: throw Exception("No se pudo obtener el UID del usuario")
             val user = UserModel(userId = userId, email = email, userName = name)
             firestore.collection("Users").document(userId).set(user.toMap()).await()
-            // Inicializar la lista de workdays vacía
             firestore.collection("Users").document(userId).update("workdays", emptyList<Map<String, Any>>()).await()
             Result.success(Unit)
         } catch (e: Exception) {
@@ -44,7 +47,10 @@ class AuthRepositoryImpl(private val firebaseAuth: FirebaseAuth, private val fir
             val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
             val authResult = firebaseAuth.signInWithCredential(credential).await()
             val user = authResult.user
-            if (user != null) {
+                ?: return Result.failure(Exception("No se pudo obtener el usuario de Firebase"))
+
+            // Crear perfil en Firestore si no existe (no bloquea el login si falla)
+            try {
                 val userDoc = firestore.collection("Users").document(user.uid).get().await()
                 if (!userDoc.exists()) {
                     val newUser = UserModel(
@@ -54,10 +60,13 @@ class AuthRepositoryImpl(private val firebaseAuth: FirebaseAuth, private val fir
                     )
                     firestore.collection("Users").document(user.uid).set(newUser).await()
                 }
+            } catch (_: Exception) {
+                // Firestore puede fallar por reglas/red, pero la autenticación ya fue exitosa
             }
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-} 
+}

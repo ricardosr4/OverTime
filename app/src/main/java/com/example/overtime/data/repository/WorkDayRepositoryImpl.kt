@@ -8,7 +8,11 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class WorkDayRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
@@ -74,6 +78,62 @@ class WorkDayRepositoryImpl(
             }
             Result.success(Unit)
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteWorkDaysByDateRange(
+        userId: String,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): Result<Unit> {
+        return try {
+            android.util.Log.d("WorkDayRepositoryImpl", "Eliminando WorkDays del período $startDate a $endDate")
+            
+            // Obtener todos los WorkDays del usuario
+            val workDaysSnapshot = firestore
+                .collection("Users")
+                .document(userId)
+                .collection("workdays")
+                .get()
+                .await()
+
+            val formatter = DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", Locale("es", "ES"))
+            val simpleFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault())
+
+            var deletedCount = 0
+            var totalChecked = 0
+            
+            // Filtrar y eliminar WorkDays dentro del rango de fechas
+            for (document in workDaysSnapshot.documents) {
+                val workDay = document.toObject(WorkDay::class.java)
+                if (workDay != null) {
+                    totalChecked++
+                    try {
+                        val workDayDate = try {
+                            LocalDate.parse(workDay.weekDay, formatter)
+                        } catch (e: Exception) {
+                            // Fallback: parsear solo la parte de fecha
+                            val datePart = workDay.weekDay.substringAfter(" ").trim()
+                            LocalDate.parse(datePart, simpleFormatter)
+                        }
+                        
+                        // Verificar si la fecha está dentro del rango (inclusive)
+                        if (!workDayDate.isBefore(startDate) && !workDayDate.isAfter(endDate)) {
+                            document.reference.delete().await()
+                            deletedCount++
+                            android.util.Log.d("WorkDayRepositoryImpl", "Eliminado WorkDay: ${workDay.weekDay} (fecha: $workDayDate)")
+                        }
+                    } catch (e: Exception) {
+                        android.util.Log.e("WorkDayRepositoryImpl", "Error al parsear fecha '${workDay.weekDay}': ${e.message}")
+                        continue
+                    }
+                }
+            }
+            android.util.Log.d("WorkDayRepositoryImpl", "Eliminados $deletedCount de $totalChecked WorkDays del período")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            android.util.Log.e("WorkDayRepositoryImpl", "Error al eliminar WorkDays: ${e.message}", e)
             Result.failure(e)
         }
     }

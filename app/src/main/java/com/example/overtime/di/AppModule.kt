@@ -6,7 +6,6 @@ import com.example.overtime.data.repository.AuthRepositoryImpl
 import com.example.overtime.data.repository.WorkDayRepositoryImpl
 import com.example.overtime.domain.repository.AuthRepository
 import com.example.overtime.domain.repository.WorkDayRepository
-import com.example.overtime.domain.useCase.auth.LoginWithGoogleUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -19,6 +18,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
@@ -29,19 +29,21 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore): AuthRepository = AuthRepositoryImpl(firebaseAuth, firestore)
+    fun provideAuthRepository(
+        firebaseAuth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): AuthRepository = AuthRepositoryImpl(firebaseAuth, firestore)
 
     @Provides
     @Singleton
-    fun provideWorkDayRepository(firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore): WorkDayRepository = WorkDayRepositoryImpl(firebaseAuth, firestore)
+    fun provideWorkDayRepository(
+        firebaseAuth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): WorkDayRepository = WorkDayRepositoryImpl(firebaseAuth, firestore)
 
     @Provides
     @Singleton
-    fun provideLoginWithGoogleUseCase(repository: AuthRepository): LoginWithGoogleUseCase =
-        LoginWithGoogleUseCase(repository)
-
-    @Provides
-    @Singleton
-    fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager =
-        PreferencesManager(context)
+    fun providePreferencesManager(
+        @ApplicationContext context: Context
+    ): PreferencesManager = PreferencesManager(context)
 }

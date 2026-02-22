@@ -1,5 +1,6 @@
 package com.example.overtime.presentation.configuration.component
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +37,10 @@ fun ConfigContent(
     userEmail: String,
     isDarkMode: Boolean,
     onThemeToggle: (Boolean) -> Unit,
+    monthClosingDay: Int,
+    onMonthClosingDaySelected: (Int) -> Unit,
+    notificationsEnabled: Boolean,
+    onNotificationToggle: (Boolean) -> Unit,
     navController: NavController,
     viewModel: ConfigViewModel
 ) {
@@ -43,7 +48,6 @@ fun ConfigContent(
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Icono de logout arriba a la derecha
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,6 +82,25 @@ fun ConfigContent(
                 ThemeSettingsCard(
                     isDarkMode = isDarkMode,
                     onThemeToggle = onThemeToggle
+                )
+            }
+            item {
+                MonthClosingDayCard(
+                    selectedDay = monthClosingDay,
+                    onDaySelected = { day ->
+                        onMonthClosingDaySelected(day)
+                        Toast.makeText(
+                            context,
+                            "Cierre de mes programado para el día $day de cada mes a las 00:00 hrs",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
+            }
+            item {
+                NotificationSettingsCard(
+                    notificationsEnabled = notificationsEnabled,
+                    onNotificationToggle = onNotificationToggle
                 )
             }
             item {
