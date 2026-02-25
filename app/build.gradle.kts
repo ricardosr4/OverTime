@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.foundation)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -90,7 +91,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     //SharedPreferences
     implementation(libs.androidx.datastore.preferences)
-
+    //work
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation("androidx.hilt:hilt-work:1.2.0")
     kapt(libs.androidx.hilt.compiler)

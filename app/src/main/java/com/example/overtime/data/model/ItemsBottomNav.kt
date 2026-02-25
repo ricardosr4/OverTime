@@ -14,7 +14,7 @@ sealed class ItemsBottomNav(
         "home_screen")
     data object ConfigScreen : ItemsBottomNav(
         Icons.Default.Settings,
-        "Configuracion",
+        "Ajustes",
         "config_screen")
     data object AddHrsExtras : ItemsBottomNav(
         Icons.Default.Add,

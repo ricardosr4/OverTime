@@ -95,7 +95,8 @@ fun shouldShowBottomBar(navController: NavController): Boolean {
         "splash_screen",
         "pre_login_screen",
         "login_screen",
-        "register_screen")
+        "register_screen",
+        "onboarding_screen")
 
     return currentDestination !in noBottomBarRoutes
 }

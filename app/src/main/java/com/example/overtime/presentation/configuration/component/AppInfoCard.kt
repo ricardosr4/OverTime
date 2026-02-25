@@ -88,7 +88,7 @@ fun AppInfoCard() {
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "Prueba",
+                    text = "1.0.0",
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.7f)
@@ -108,7 +108,7 @@ fun AppInfoCard() {
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "OverTime Team",
+                    text = "Ricardo Soto",
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.7f)

@@ -69,7 +69,7 @@ object MonthlyPdfScheduler {
 
         val currentMonthClosing = now.withDayOfMonth(
             minOf(closingDay, now.toLocalDate().lengthOfMonth())
-        ).withHour(12).withMinute(33).withSecond(0).withNano(0)
+        ).withHour(0).withMinute(0).withSecond(0).withNano(0)
 
         val nextClosing = if (currentMonthClosing.isAfter(now)) {
             currentMonthClosing

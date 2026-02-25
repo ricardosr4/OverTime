@@ -15,6 +15,8 @@ import com.example.overtime.presentation.login.screen.BlankScreen
 import com.example.overtime.presentation.login.screen.LoginScreen
 import com.example.overtime.presentation.preLogin.ui.PreLoginScreen
 import com.example.overtime.presentation.register.screen.RegisterScreen
+import com.example.overtime.presentation.onboarding.screen.OnboardingScreen
+import com.example.overtime.presentation.onboarding.viewmodel.OnboardingViewModel
 import com.example.overtime.presentation.splasScreen.SplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -34,9 +36,22 @@ fun NavGraph(
 
         composable(AppScreen.SplashScreen.route) {
             val showOnlyLoader = it.arguments?.getBoolean("showOnlyLoader") ?: false
+            val onboardingVm: OnboardingViewModel = hiltViewModel()
             SplashScreen(
                 navController = navController,
-                showOnlyLoader = showOnlyLoader)
+                showOnlyLoader = showOnlyLoader,
+                isOnboardingCompleted = onboardingVm.isOnboardingCompleted)
+        }
+        composable(AppScreen.OnboardingScreen.route) {
+            val onboardingVm: OnboardingViewModel = hiltViewModel()
+            OnboardingScreen(
+                onFinish = {
+                    onboardingVm.completeOnboarding()
+                    navController.navigate(AppScreen.PreLoginScreen.route) {
+                        popUpTo(AppScreen.OnboardingScreen.route) { inclusive = true }
+                    }
+                }
+            )
         }
         composable(AppScreen.PreLoginScreen.route) {
             PreLoginScreen(

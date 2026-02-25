@@ -42,6 +42,13 @@ class PreferencesManager(context: Context) {
     }
     fun areNotificationsEnabled(): Boolean = _notificationsEnabled.value
 
+    fun isOnboardingCompleted(): Boolean =
+        prefs.getBoolean(PrefsKeys.KEY_ONBOARDING_COMPLETED, false)
+
+    fun setOnboardingCompleted(completed: Boolean) {
+        prefs.edit().putBoolean(PrefsKeys.KEY_ONBOARDING_COMPLETED, completed).apply()
+    }
+
     private fun readThemeMode(): ThemeMode = when (prefs.getString(PrefsKeys.KEY_THEME_MODE, ThemeMode.SYSTEM.name)) {
         ThemeMode.LIGHT.name -> ThemeMode.LIGHT
         ThemeMode.DARK.name -> ThemeMode.DARK

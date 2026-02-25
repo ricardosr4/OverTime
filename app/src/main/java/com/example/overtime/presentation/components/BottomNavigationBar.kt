@@ -18,8 +18,8 @@ fun BottomNavigationBar(
 ) {
     val menuItems = listOf(
         ItemsBottomNav.HomeScreen,
-        ItemsBottomNav.ConfigScreen,
         ItemsBottomNav.AddHrsExtras,
+        ItemsBottomNav.ConfigScreen,
     )
     BottomAppBar {
         NavigationBar(
