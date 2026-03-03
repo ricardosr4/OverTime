@@ -169,6 +169,8 @@
     <string name="config_logout_icon_description">Cerrar sesión</string>
     <string name="config_notifications_title">Notificaciones</string>
     <string name="config_notifications_subtitle">Recibir notificaciones de recordatorio</string>
+    <string name="config_notifications_enabled">Estas seguro/@ que deseas activar las Notificaciones.</string>
+    <string name="config_notifications_disabled">Estas seguro/@ que deseas desactivar las Notificaciones.</string>
     <string name="config_theme_icon_description">Tema</string>
     <string name="config_theme_title">Modo oscuro</string>
     <string name="config_theme_status_dark">Tema oscuro activado</string>

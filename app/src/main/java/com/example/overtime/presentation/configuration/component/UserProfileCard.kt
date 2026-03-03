@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 
 @Composable
 fun UserProfileCard(
@@ -135,32 +135,15 @@ fun UserProfileCard(
     }
 
     if (showLogoutDialog) {
-        AlertDialog(
-            onDismissRequest = { showLogoutDialog = false },
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            textContentColor = MaterialTheme.colorScheme.onPrimary,
-            title = { Text(stringResource(R.string.config_logout)) },
-            text = { Text(stringResource(R.string.config_logout_description)) },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showLogoutDialog = false
-                        viewModel.signOut(navController, context)
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                ) {
-                    Text(stringResource(R.string.config_logout), color = MaterialTheme.colorScheme.onPrimary)
-                }
+        ZetaAlertDialog(
+            title = stringResource(R.string.config_logout),
+            message = stringResource(R.string.config_logout_description),
+            confirmText = stringResource(R.string.config_logout),
+            onConfirmClick = {
+                showLogoutDialog = false
+                viewModel.signOut(navController, context)
             },
-            dismissButton = {
-                Button(
-                    onClick = { showLogoutDialog = false },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
-                ) {
-                    Text(stringResource(R.string.common_cancel), color = MaterialTheme.colorScheme.onSurface)
-                }
-            }
+            onDismissClick = { showLogoutDialog = false }
         )
     }
 }

@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.overtime.R
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 
 
 @Composable
@@ -47,6 +45,10 @@ fun ConfigContent(
     viewModel: ConfigViewModel
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
+    var showMonthConfirmDialog by remember { mutableStateOf(false) }
+    var pendingMonthClosingDay by remember { mutableStateOf<Int?>(null) }
+    var showNotificationsConfirmDialog by remember { mutableStateOf(false) }
+    var pendingNotificationsEnabled by remember { mutableStateOf<Boolean?>(null) }
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -90,19 +92,18 @@ fun ConfigContent(
                 MonthClosingDayCard(
                     selectedDay = monthClosingDay,
                     onDaySelected = { day ->
-                        onMonthClosingDaySelected(day)
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.config_month_closing_scheduled, day),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        pendingMonthClosingDay = day
+                        showMonthConfirmDialog = true
                     }
                 )
             }
             item {
                 NotificationSettingsCard(
                     notificationsEnabled = notificationsEnabled,
-                    onNotificationToggle = onNotificationToggle
+                    onNotificationToggle = { enabled ->
+                        pendingNotificationsEnabled = enabled
+                        showNotificationsConfirmDialog = true
+                    }
                 )
             }
             item {
@@ -111,28 +112,60 @@ fun ConfigContent(
         }
 
         if (showLogoutDialog) {
-            AlertDialog(
-                onDismissRequest = { showLogoutDialog = false },
-                title = { Text(stringResource(R.string.config_logout)) },
-                text = { Text(stringResource(R.string.config_logout_description)) },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            showLogoutDialog = false
-                            viewModel.signOut(navController, context)
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                    ) {
-                        Text(stringResource(R.string.config_logout), color = MaterialTheme.colorScheme.onPrimary)
-                    }
+            ZetaAlertDialog(
+                title = stringResource(R.string.config_logout),
+                message = stringResource(R.string.config_logout_description),
+                confirmText = stringResource(R.string.config_logout),
+                onConfirmClick = {
+                    showLogoutDialog = false
+                    viewModel.signOut(navController, context)
                 },
-                dismissButton = {
-                    Button(
-                        onClick = { showLogoutDialog = false },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                    ) {
-                        Text(stringResource(R.string.common_cancel))
-                    }
+                onDismissClick = { showLogoutDialog = false }
+            )
+        }
+
+        if (showMonthConfirmDialog && pendingMonthClosingDay != null) {
+            val day = pendingMonthClosingDay!!
+            ZetaAlertDialog(
+                title = stringResource(R.string.config_month_closing_title),
+                message = stringResource(R.string.config_month_closing_scheduled, day),
+                confirmText = stringResource(R.string.common_ok),
+                onConfirmClick = {
+                    showMonthConfirmDialog = false
+                    onMonthClosingDaySelected(day)
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.config_month_closing_scheduled, day),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    pendingMonthClosingDay = null
+                },
+                onDismissClick = {
+                    showMonthConfirmDialog = false
+                    pendingMonthClosingDay = null
+                }
+            )
+        }
+
+        if (showNotificationsConfirmDialog && pendingNotificationsEnabled != null) {
+            val enabled = pendingNotificationsEnabled!!
+            val messageRes = if (enabled) {
+                R.string.config_notifications_enabled
+            } else {
+                R.string.config_notifications_disabled
+            }
+            ZetaAlertDialog(
+                title = stringResource(R.string.config_notifications_title),
+                message = stringResource(messageRes),
+                confirmText = stringResource(R.string.common_ok),
+                onConfirmClick = {
+                    showNotificationsConfirmDialog = false
+                    onNotificationToggle(enabled)
+                    pendingNotificationsEnabled = null
+                },
+                onDismissClick = {
+                    showNotificationsConfirmDialog = false
+                    pendingNotificationsEnabled = null
                 }
             )
         }

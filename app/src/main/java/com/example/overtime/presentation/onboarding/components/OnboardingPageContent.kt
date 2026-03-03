@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.overtime.presentation.onboarding.state.OnboardingPage
+import com.example.overtime.ui.theme.TextPrimary
+import com.example.overtime.ui.theme.TextSecondary
 
 @Composable
 fun OnboardingPageContent(
@@ -48,7 +49,7 @@ fun OnboardingPageContent(
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onBackground
+            color = TextPrimary //MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -57,7 +58,7 @@ fun OnboardingPageContent(
             text = stringResource(id = page.descriptionResId),
             fontSize = 15.sp,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = TextSecondary,
             lineHeight = 22.sp
         )
     }

@@ -169,6 +169,8 @@
     <string name="config_logout_icon_description">Log out</string>
     <string name="config_notifications_title">Notifications</string>
     <string name="config_notifications_subtitle">Receive reminder notifications</string>
+    <string name="config_notifications_enabled">Reminder notifications enabled.</string>
+    <string name="config_notifications_disabled">Reminder notifications disabled.</string>
     <string name="config_theme_icon_description">Theme</string>
     <string name="config_theme_title">Dark mode</string>
     <string name="config_theme_status_dark">Dark theme enabled</string>
