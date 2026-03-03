@@ -27,9 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import com.example.overtime.R
 import com.example.overtime.presentation.onboarding.components.OnboardingPageContent
 import com.example.overtime.presentation.onboarding.state.onboardingPages
 import kotlinx.coroutines.launch
@@ -48,19 +51,18 @@ fun OnboardingScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        if (!isLastPage) {
-            TextButton(
-                onClick = onFinish,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 16.dp, end = 8.dp)
-            ) {
-                Text(
-                    text = "Saltar",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 16.sp,
-                )
-            }
+        TextButton(
+            onClick = onFinish,
+            modifier = Modifier
+                .zIndex(1f)
+                .align(Alignment.TopEnd)
+                .padding(top = 16.dp, end = 8.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.onboarding_skip),
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 16.sp,
+            )
         }
 
         HorizontalPager(
@@ -101,8 +103,13 @@ fun OnboardingScreen(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
+                val buttonText = if (isLastPage) {
+                    stringResource(R.string.onboarding_start)
+                } else {
+                    stringResource(R.string.onboarding_next)
+                }
                 Text(
-                    text = if (isLastPage) "Empezar" else "Siguiente \u2192",
+                    text = buttonText,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary

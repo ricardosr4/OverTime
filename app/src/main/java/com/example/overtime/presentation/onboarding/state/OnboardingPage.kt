@@ -1,33 +1,34 @@
 package com.example.overtime.presentation.onboarding.state
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.example.overtime.R
 
 data class OnboardingPage(
     @DrawableRes val imageResId: Int,
-    val title: String,
-    val description: String,
+    @StringRes val titleResId: Int,
+    @StringRes val descriptionResId: Int,
 )
 
 val onboardingPages = listOf(
     OnboardingPage(
         imageResId = R.drawable.img_onboarding_page1,
-        title = "Bienvenido a\nOver Time",
-        description = "La forma más sencilla de gestionar y calcular tus horas extras con precisión."
+        titleResId = R.string.onboarding_page1_title,
+        descriptionResId = R.string.onboarding_page1_description
     ),
     OnboardingPage(
         imageResId = R.drawable.img_onboarding_page2,
-        title = "Registra tus Horas",
-        description = "Añade fácilmente tus jornadas adicionales indicando la fecha, porcentaje y cantidad de horas correspondientes."
+        titleResId = R.string.onboarding_page2_title,
+        descriptionResId = R.string.onboarding_page2_description
     ),
     OnboardingPage(
         imageResId = R.drawable.img_onboarding_page3,
-        title = "Reportes Detallados",
-        description = "Genera informes en PDF de tus horas extras trabajadas cada mes de forma automática."
+        titleResId = R.string.onboarding_page3_title,
+        descriptionResId = R.string.onboarding_page3_description
     ),
     OnboardingPage(
         imageResId = R.drawable.img_onboarding_page4,
-        title = "¡Todo Listo!",
-        description = "Empieza a tomar el control de tu tiempo y tus ingresos ahora mismo."
+        titleResId = R.string.onboarding_page4_title,
+        descriptionResId = R.string.onboarding_page4_description
     ),
 )

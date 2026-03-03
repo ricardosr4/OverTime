@@ -26,8 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.overtime.R
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
 
 
@@ -91,7 +93,7 @@ fun ConfigContent(
                         onMonthClosingDaySelected(day)
                         Toast.makeText(
                             context,
-                            "Cierre de mes programado para el día $day de cada mes a las 00:00 hrs",
+                            context.getString(R.string.config_month_closing_scheduled, day),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -111,8 +113,8 @@ fun ConfigContent(
         if (showLogoutDialog) {
             AlertDialog(
                 onDismissRequest = { showLogoutDialog = false },
-                title = { Text("Cerrar sesión") },
-                text = { Text("¿Estás seguro que deseas cerrar sesión?") },
+                title = { Text(stringResource(R.string.config_logout)) },
+                text = { Text(stringResource(R.string.config_logout_description)) },
                 confirmButton = {
                     Button(
                         onClick = {
@@ -121,7 +123,7 @@ fun ConfigContent(
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                     ) {
-                        Text("Cerrar sesión", color = MaterialTheme.colorScheme.onPrimary)
+                        Text(stringResource(R.string.config_logout), color = MaterialTheme.colorScheme.onPrimary)
                     }
                 },
                 dismissButton = {
@@ -129,7 +131,7 @@ fun ConfigContent(
                         onClick = { showLogoutDialog = false },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) {
-                        Text("Cancelar")
+                        Text(stringResource(R.string.common_cancel))
                     }
                 }
             )

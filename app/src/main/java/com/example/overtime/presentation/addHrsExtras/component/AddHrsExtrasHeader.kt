@@ -16,9 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @Composable
 fun AddHrsExtrasHeader() {
@@ -39,7 +41,7 @@ fun AddHrsExtrasHeader() {
         ) {
             Icon(
                 imageVector = Icons.Default.Schedule,
-                contentDescription = "Horas Extras",
+                contentDescription = stringResource(R.string.add_hrs_header_title),
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -47,7 +49,7 @@ fun AddHrsExtrasHeader() {
             Spacer(modifier = Modifier.width(16.dp))
 
             Text(
-                text = "Agregar Horas Extras",
+                text = stringResource(R.string.add_hrs_header_title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface

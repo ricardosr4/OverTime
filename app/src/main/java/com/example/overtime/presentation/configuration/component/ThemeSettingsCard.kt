@@ -21,8 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @Composable
 fun ThemeSettingsCard(
@@ -46,7 +48,7 @@ fun ThemeSettingsCard(
         ) {
             Icon(
                 imageVector = Icons.Default.DarkMode,
-                contentDescription = "Tema",
+                contentDescription = stringResource(R.string.config_theme_icon_description),
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -57,13 +59,16 @@ fun ThemeSettingsCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Modo Oscuro",
+                    text = stringResource(R.string.config_theme_title),
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = if (isDarkMode) "Tema oscuro activado" else "Tema claro activado",
+                    text = if (isDarkMode)
+                        stringResource(R.string.config_theme_status_dark)
+                    else
+                        stringResource(R.string.config_theme_status_light),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

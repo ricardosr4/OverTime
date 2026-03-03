@@ -31,9 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.overtime.R
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
 
 @Composable
@@ -68,13 +70,13 @@ fun UserProfileCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Person,
-                        contentDescription = "Usuario",
+                        contentDescription = stringResource(R.string.config_user_profile_title),
                         modifier = Modifier.size(48.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Perfil de Usuario",
+                        text = stringResource(R.string.config_user_profile_title),
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleMedium
@@ -83,7 +85,7 @@ fun UserProfileCard(
                 IconButton(onClick = { showLogoutDialog = true }) {
                     Icon(
                         imageVector = Icons.Default.ExitToApp,
-                        contentDescription = "Cerrar sesión",
+                        contentDescription = stringResource(R.string.config_logout),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(35.dp)
                     )
@@ -97,7 +99,7 @@ fun UserProfileCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Nombre:",
+                    text = stringResource(R.string.config_user_name_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
@@ -117,7 +119,7 @@ fun UserProfileCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Email:",
+                    text = stringResource(R.string.config_user_email_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
@@ -138,8 +140,8 @@ fun UserProfileCard(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.onPrimary,
             textContentColor = MaterialTheme.colorScheme.onPrimary,
-            title = { Text("Cerrar sesión") },
-            text = { Text("¿Estás seguro que deseas cerrar sesión?") },
+            title = { Text(stringResource(R.string.config_logout)) },
+            text = { Text(stringResource(R.string.config_logout_description)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -148,7 +150,7 @@ fun UserProfileCard(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Cerrar sesión", color = MaterialTheme.colorScheme.onPrimary)
+                    Text(stringResource(R.string.config_logout), color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
             dismissButton = {
@@ -156,7 +158,7 @@ fun UserProfileCard(
                     onClick = { showLogoutDialog = false },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
-                    Text("Cancelar", color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(R.string.common_cancel), color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )

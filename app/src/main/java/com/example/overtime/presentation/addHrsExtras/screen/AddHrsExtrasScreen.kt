@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.overtime.R
 import com.example.overtime.data.model.WorkDay
 import com.example.overtime.presentation.addHrsExtras.component.ErrorDialog
 import com.example.overtime.presentation.addHrsExtras.content.AddHrsExtrasContent
@@ -46,7 +48,11 @@ fun AddHrsExtrasScreen(
 
     LaunchedEffect(state.saveSuccess) {
         if (state.saveSuccess) {
-            Toast.makeText(context, "Horas extras agregadas correctamente", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.add_hrs_success),
+                Toast.LENGTH_SHORT
+            ).show()
             navController.navigate(AppScreen.HomeScreen.route) {
                 popUpTo(AppScreen.AddHrsExtrasScreen.route) { inclusive = true }
             }
@@ -55,7 +61,13 @@ fun AddHrsExtrasScreen(
 
     LaunchedEffect(state.saveError) {
         state.saveError?.let { error ->
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            val messageRes = when (error) {
+                "ERROR_USER_NOT_AUTHENTICATED" -> R.string.add_hrs_error_user_not_authenticated
+                "ERROR_SAVE_GENERIC" -> R.string.add_hrs_error_save_generic
+                else -> null
+            }
+            val message = messageRes?.let { context.getString(it) } ?: error
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     }
 

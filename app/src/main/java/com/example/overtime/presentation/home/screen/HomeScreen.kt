@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.overtime.R
 import com.example.overtime.presentation.home.component.HomeActionsRow
 import com.example.overtime.presentation.home.component.HomeContent
 import com.example.overtime.presentation.home.component.HomeSummaryCard
@@ -52,6 +53,7 @@ fun HomeScreen(
         )
 
         HomeActionsRow(
+            hasWorkDays = workDays.isNotEmpty(),
             onDeleteAll = { viewModel.deleteAllWorkDays() },
             onDownloadPdf = { viewModel.downloadWorkDaysPdf() }
         )
@@ -66,15 +68,30 @@ fun HomeScreen(
                 if (result.isSuccess) {
                     when (val value = result.getOrNull()) {
                         is File -> {
-                            Toast.makeText(context, "PDF guardado en Descargas: ${value.name}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.home_pdf_saved_downloads, value.name),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         is Uri -> {
-                            Toast.makeText(context, "PDF guardado correctamente", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.home_pdf_saved),
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
                     viewModel.clearPdfResult()
                 } else if (result.isFailure) {
-                    Toast.makeText(context, "Error al generar PDF: ${result.exceptionOrNull()?.localizedMessage}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(
+                            R.string.home_pdf_error,
+                            result.exceptionOrNull()?.localizedMessage ?: ""
+                        ),
+                        Toast.LENGTH_LONG
+                    ).show()
                     viewModel.clearPdfResult()
                 }
             }

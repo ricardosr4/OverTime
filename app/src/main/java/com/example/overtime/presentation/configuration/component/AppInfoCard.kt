@@ -19,8 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @Composable
 fun AppInfoCard() {
@@ -41,7 +43,7 @@ fun AppInfoCard() {
         ) {
             Icon(
                 imageVector = Icons.Default.Info,
-                contentDescription = "Información",
+                contentDescription = stringResource(R.string.config_app_info_icon_description),
                 modifier = Modifier.size(48.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -49,7 +51,7 @@ fun AppInfoCard() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Información de la App",
+                text = stringResource(R.string.config_app_info_title),
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium
@@ -62,13 +64,13 @@ fun AppInfoCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Nombre:",
+                        text = stringResource(R.string.config_app_info_name_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "OverTime",
+                        text = stringResource(R.string.app_name),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.7f)
@@ -82,13 +84,13 @@ fun AppInfoCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Versión:",
+                        text = stringResource(R.string.config_app_info_version_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "1.0.0",
+                        text = stringResource(R.string.config_app_info_version_value),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.7f)
@@ -102,13 +104,13 @@ fun AppInfoCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Desarrollador:",
+                        text = stringResource(R.string.config_app_info_developer_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "Ricardo Soto",
+                        text = stringResource(R.string.config_app_info_developer_value),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.7f)
@@ -122,13 +124,13 @@ fun AppInfoCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Descripción:",
+                        text = stringResource(R.string.config_app_info_description_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
                 )
                 Text(
-                    text = "Gestión de horas extras",
+                        text = stringResource(R.string.config_app_info_description_value),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(0.7f)

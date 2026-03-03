@@ -62,7 +62,7 @@ class AddHrsExtrasViewModel @Inject constructor(
 
     fun validateFields(): Boolean {
         val currentState = _state.value
-        if (currentState.selectedDate == "Selecciona una fecha") {
+        if (currentState.selectedDate.isBlank()) {
             return false
         }
         if (isFutureDate(currentState.selectedDate)) {
@@ -89,11 +89,11 @@ class AddHrsExtrasViewModel @Inject constructor(
                 } else {
                     _state.value = _state.value.copy(
                         isSaving = false,
-                        saveError = result.exceptionOrNull()?.localizedMessage ?: "Error al guardar"
+                        saveError = result.exceptionOrNull()?.localizedMessage ?: "ERROR_SAVE_GENERIC"
                     )
                 }
             } else {
-                _state.value = _state.value.copy(isSaving = false, saveError = "Usuario no autenticado")
+                _state.value = _state.value.copy(isSaving = false, saveError = "ERROR_USER_NOT_AUTHENTICATED")
             }
         }
     }

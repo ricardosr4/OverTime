@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 import com.example.overtime.data.model.WorkDay
 
 @Composable
@@ -49,7 +51,7 @@ fun HomeSummaryCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Horas Extras - $currentMonth",
+                text = stringResource(R.string.home_summary_title, currentMonth),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 22.sp,
                 color = MaterialTheme.colorScheme.onSurface
@@ -57,10 +59,26 @@ fun HomeSummaryCard(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(text = "$total130 hrs al 130%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = "$total100 hrs al 100%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = "$total75 hrs al 75%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
-            Text(text = "$total50 hrs al 50%", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                text = stringResource(R.string.home_summary_hours_percent, total130, 130),
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = stringResource(R.string.home_summary_hours_percent, total100, 100),
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = stringResource(R.string.home_summary_hours_percent, total75, 75),
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = stringResource(R.string.home_summary_hours_percent, total50, 50),
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

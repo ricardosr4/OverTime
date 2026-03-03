@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import com.example.overtime.core.prefs.PreferencesManager
 import com.example.overtime.core.prefs.ThemeMode
 import com.example.overtime.core.pdf.MonthlyPdfScheduler
+import com.example.overtime.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.ktx.auth
@@ -37,7 +38,12 @@ class ConfigViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _userInfo = MutableStateFlow(Pair("Usuario", "No disponible"))
+    private val _userInfo = MutableStateFlow(
+        Pair(
+            appContext.getString(R.string.config_user_default_name),
+            appContext.getString(R.string.config_user_email_unavailable)
+        )
+    )
     val userInfo: StateFlow<Pair<String, String>> = _userInfo.asStateFlow()
 
     fun toggleTheme() {
@@ -74,25 +80,35 @@ class ConfigViewModel @Inject constructor(
 
         if (user != null) {
             val userId = user.uid
-            val email = user.email ?: "No disponible"
+            val email = user.email ?: appContext.getString(R.string.config_user_email_unavailable)
 
             Firebase.firestore.collection("Users").document(userId)
                 .get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
-                        val userName = document.getString("userName") ?: "Usuario"
+                        val userName = document.getString("userName")
+                            ?: appContext.getString(R.string.config_user_default_name)
                         _userInfo.value = Pair(userName, email)
                     } else {
-                        _userInfo.value = Pair("Usuario", email)
+                        _userInfo.value = Pair(
+                            appContext.getString(R.string.config_user_default_name),
+                            email
+                        )
                     }
                 }
                 .addOnFailureListener {
-                    _userInfo.value = Pair("Usuario", email)
+                    _userInfo.value = Pair(
+                        appContext.getString(R.string.config_user_default_name),
+                        email
+                    )
                 }
 
             return _userInfo.value
         } else {
-            return Pair("Usuario", "No disponible")
+            return Pair(
+                appContext.getString(R.string.config_user_default_name),
+                appContext.getString(R.string.config_user_email_unavailable)
+            )
         }
     }
 
@@ -116,7 +132,10 @@ class ConfigViewModel @Inject constructor(
             _isLoading.value = false
             Toast.makeText(
                 navController.context,
-                "Error al cerrar sesión: ${e.localizedMessage}",
+                navController.context.getString(
+                    R.string.config_logout_snackbar_error,
+                    e.localizedMessage ?: ""
+                ),
                 Toast.LENGTH_SHORT
             ).show()
         }

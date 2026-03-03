@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -75,7 +76,7 @@ fun RegisterScreen(navController: NavController) {
                 )
                 ZetaSpaceHeight(30.dp)
                 ZetaText(
-                    text = "Registrarse",
+                    text = stringResource(R.string.register),
                     fontSize = 30.sp,
                     maxLines = 1,
                     color = Color.Black,
@@ -100,18 +101,21 @@ fun RegisterScreen(navController: NavController) {
 
             if (registerState.showAlert) {
                 val alertMessage = when (registerState.errorType) {
-                    is AlertTypeRegister.EmptyField -> "Los campos no pueden estar vacíos."
-                    is AlertTypeRegister.InvalidEmail -> "El correo electrónico no es válido."
-                    is AlertTypeRegister.InvalidPassword -> "La contraseña debe tener al menos 6 caracteres."
-                    is AlertTypeRegister.UnknownError -> registerState.errorMessage
-                        ?: "Ha ocurrido un error inesperado."
-
-                    else -> "Ha ocurrido un error inesperado."
+                    is AlertTypeRegister.EmptyField ->
+                        stringResource(R.string.register_error_fields_empty)
+                    is AlertTypeRegister.InvalidEmail ->
+                        stringResource(R.string.register_error_invalid_email)
+                    is AlertTypeRegister.InvalidPassword ->
+                        stringResource(R.string.register_error_invalid_password)
+                    is AlertTypeRegister.UnknownError ->
+                        registerState.errorMessage ?: stringResource(R.string.common_error_unexpected)
+                    else ->
+                        stringResource(R.string.common_error_unexpected)
                 }
                 ZetaAlertDialog(
-                    title = "Alerta",
+                    title = stringResource(R.string.common_alert_title),
                     message = alertMessage,
-                    confirmText = "Aceptar",
+                    confirmText = stringResource(R.string.common_ok),
                     onConfirmClick = { viewModel.closeAlert() }
                 )
             }

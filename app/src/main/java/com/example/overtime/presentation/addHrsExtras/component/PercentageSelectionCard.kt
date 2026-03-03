@@ -28,9 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +62,7 @@ fun PercentageSelectionCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.Percent,
-                    contentDescription = "Porcentaje",
+                    contentDescription = stringResource(R.string.add_hrs_percentage_title),
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -68,7 +70,7 @@ fun PercentageSelectionCard(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = "Porcentaje de Horas Extras",
+                    text = stringResource(R.string.add_hrs_percentage_title),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -83,9 +85,12 @@ fun PercentageSelectionCard(
             ) {
                 OutlinedTextField(
                     readOnly = true,
-                    value = if (selectedPercentage == 0) "Selecciona el porcentaje" else "$selectedPercentage%",
+                    value = if (selectedPercentage == 0)
+                        stringResource(R.string.add_hrs_percentage_placeholder)
+                    else
+                        stringResource(R.string.add_hrs_percentage_value, selectedPercentage),
                     onValueChange = {},
-                    label = { Text("Selecciona el porcentaje") },
+                    label = { Text(stringResource(R.string.add_hrs_percentage_placeholder)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
@@ -107,7 +112,7 @@ fun PercentageSelectionCard(
                         DropdownMenuItem(
                             text = {
                                 Text(
-                                    "$percentage%",
+                                    stringResource(R.string.add_hrs_percentage_value, percentage),
                                     fontWeight = if (percentage == selectedPercentage) FontWeight.Bold else FontWeight.Normal
                                 )
                             },

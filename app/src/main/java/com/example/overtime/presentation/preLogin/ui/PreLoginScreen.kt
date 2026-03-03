@@ -1,5 +1,8 @@
 package com.example.overtime.presentation.preLogin.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.overtime.R
@@ -42,21 +47,41 @@ fun PreLoginScreen(navController: NavController) {
     val context = LocalContext.current
     val viewModel: LoginViewModel = hiltViewModel()
     var isLoading by remember { mutableStateOf(false) }
-    val launcher =
+
+    val googleSignInLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val account = getGoogleAccountFromIntent(result.data)
             val idToken = account?.idToken
             if (idToken != null) {
                 isLoading = true
-                viewModel.loginWithGoogle(idToken, onSuccess = {
-                    isLoading = false
-                    navController.navigate("home_screen")
-                }, onError = {
-                    isLoading = false
-                    // Manejar error si quieres
-                })
+                viewModel.loginWithGoogle(
+                    idToken,
+                    onSuccess = {
+                        isLoading = false
+                        navController.navigate("home_screen")
+                    },
+                    onError = {
+                        isLoading = false
+                        // Manejar error si quieres
+                    }
+                )
             }
         }
+
+    val notificationPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { /* no-op */ }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermission = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (!hasPermission) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -95,7 +120,7 @@ fun PreLoginScreen(navController: NavController) {
             ) {
                 StandardButton(
                     onClick = { navController.navigate(AppScreen.LoginScreen.route) },
-                    text = stringResource(R.string.login),
+                    text = stringResource(R.string.prelogin_login),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
@@ -104,7 +129,7 @@ fun PreLoginScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
                 StandardButton(
                     onClick = { navController.navigate(AppScreen.RegisterScreen.route) },
-                    text = stringResource(R.string.register),
+                    text = stringResource(R.string.prelogin_register),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
