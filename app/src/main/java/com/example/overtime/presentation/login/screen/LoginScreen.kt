@@ -59,21 +59,29 @@ fun LoginScreen(navController: NavController) {
             val idToken = account?.idToken
             if (idToken != null) {
                 isLoading = true
-                viewModel.loginWithGoogle(idToken, onSuccess = {
-                    isLoading = false
-                    navController.navigate("home_screen")
-                }, onError = { errorMsg ->
-                    isLoading = false
-                    Toast.makeText(context, "Error: $errorMsg", Toast.LENGTH_LONG).show()
-                })
+                viewModel.loginWithGoogle(
+                    idToken,
+                    onSuccess = {
+                        isLoading = false
+                        navController.navigate("home_screen")
+                    },
+                    onError = { errorMsg ->
+                        isLoading = false
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.login_error_generic, errorMsg),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
             } else {
                 val errorCode = getGoogleSignInErrorCode(result.data)
                 val errorMsg = when (errorCode) {
-                    10 -> "Error de configuración (DEVELOPER_ERROR). Verifica SHA-1 en Firebase."
-                    12500 -> "Google Sign-In falló. Intenta de nuevo."
-                    12501 -> "Inicio de sesión cancelado."
-                    7 -> "Error de red. Verifica tu conexión."
-                    else -> "Error de Google Sign-In (código: $errorCode)"
+                    10 -> context.getString(R.string.login_error_google_config)
+                    12500 -> context.getString(R.string.login_error_google_failed)
+                    12501 -> context.getString(R.string.login_error_google_canceled)
+                    7 -> context.getString(R.string.login_error_network)
+                    else -> context.getString(R.string.login_error_google_code, errorCode)
                 }
                 Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
             }
@@ -81,7 +89,11 @@ fun LoginScreen(navController: NavController) {
 
     LaunchedEffect(loginState) {
         if (loginState.isSuccess) {
-            Toast.makeText(context, "¡Ingreso exitoso!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.login_success),
+                Toast.LENGTH_SHORT
+            ).show()
             viewModel.clearMessages()
         }
 
@@ -113,7 +125,7 @@ fun LoginScreen(navController: NavController) {
                 )
                 ZetaSpaceHeight(30.dp)
                 ZetaText(
-                    text = "Login",
+                    text = stringResource(R.string.login),
                     fontSize = 30.sp,
                     maxLines = 1,
                     color = Color.Black,
@@ -124,7 +136,7 @@ fun LoginScreen(navController: NavController) {
                 ZetaOutlinedTextField(
                     value = loginState.email,
                     onValueChange = { viewModel.onEmailChanged(it) },
-                    label = "Email",
+                    label = stringResource(R.string.login_email_label),
                     keyboardType = KeyboardType.Email,
                     leadingIcon = painterResource(id = R.drawable.icon_email),
 
@@ -133,7 +145,7 @@ fun LoginScreen(navController: NavController) {
                 ZetaOutlinedTextField(
                     value = loginState.password,
                     onValueChange = { viewModel.onPasswordChanged(it) },
-                    label = "Paswword",
+                    label = stringResource(R.string.login_password_label),
                     keyboardType = KeyboardType.Password,
                     leadingIcon = painterResource(id = R.drawable.icon_password),
                     isPassword = true,
@@ -142,17 +154,18 @@ fun LoginScreen(navController: NavController) {
                 )
                 ZetaSpaceHeight(40.dp)
                 ZetaTextLink(
-                    text = "¿No tienes cuenta?", linkColor = MaterialTheme.colorScheme.primary,
-                    textLink = "Registrate aqui!!",
+                    text = stringResource(R.string.login_no_account),
+                    linkColor = MaterialTheme.colorScheme.primary,
+                    textLink = stringResource(R.string.login_register_here),
                     onClick = { navController.navigate("register_screen") },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                 )
                 ZetaSpaceHeight(20.dp)
                 ZetaTextLink(
-                    text = stringResource(R.string.recuperar_contraseña),
+                    text = stringResource(R.string.login_recover_password),
                     linkColor = MaterialTheme.colorScheme.primary,
-                    textLink = stringResource(R.string.aqui),
+                    textLink = stringResource(R.string.login_here),
                     onClick = { viewModel.resetPassword(loginState.email) {} },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -174,14 +187,14 @@ fun LoginScreen(navController: NavController) {
                             navController.navigate("home_screen")
                         }
                     },
-                    text = "Login",
+                    text = stringResource(R.string.login),
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !loginState.isLoading
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 StandardButton(
                     onClick = { launcher.launch(getGoogleSignInIntent(context)) },
-                    text = stringResource(id = R.string.login_con_google),
+                    text = stringResource(id = R.string.login_with_google),
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !loginState.isLoading
                 )
@@ -189,17 +202,23 @@ fun LoginScreen(navController: NavController) {
             }
             if (loginState.showAlert) {
                 val alertMessage = when (loginState.errorType) {
-                    is AlertType.EmptyField -> "Los campos no pueden estar vacíos."
-                    is AlertType.InvalidCredentials -> "Usuario y/o contraseña incorrectos."
-                    is AlertType.ResetPasswordSuccess -> "Se ha enviado un correo para restablecer la contraseña."
-                    is AlertType.ResetPasswordEmptyField -> "El campo de correo no puede estar vacío."
-                    is AlertType.ResetPasswordInvalidEmail -> "El correo electrónico no es válido."
-                    else -> "Ha ocurrido un error inesperado."
+                    is AlertType.EmptyField ->
+                        context.getString(R.string.login_error_fields_empty)
+                    is AlertType.InvalidCredentials ->
+                        context.getString(R.string.login_error_invalid_credentials)
+                    is AlertType.ResetPasswordSuccess ->
+                        context.getString(R.string.login_error_reset_success)
+                    is AlertType.ResetPasswordEmptyField ->
+                        context.getString(R.string.login_error_reset_email_empty)
+                    is AlertType.ResetPasswordInvalidEmail ->
+                        context.getString(R.string.login_error_reset_email_invalid)
+                    else ->
+                        context.getString(R.string.common_error_unexpected)
                 }
                 ZetaAlertDialog(
-                    title = "Alerta",
+                    title = stringResource(R.string.common_alert_title),
                     message = alertMessage,
-                    confirmText = "Aceptar",
+                    confirmText = stringResource(R.string.common_ok),
                     onConfirmClick = { viewModel.closeAlert() }
                 )
             }

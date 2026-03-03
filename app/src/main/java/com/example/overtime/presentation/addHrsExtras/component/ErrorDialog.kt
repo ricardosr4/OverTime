@@ -1,6 +1,8 @@
 package com.example.overtime.presentation.addHrsExtras.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.overtime.R
 import com.example.overtime.presentation.login.components.ZetaAlertDialog
 
 @Composable
@@ -10,12 +12,9 @@ fun ErrorDialog(
 ) {
     if (showDialog) {
         ZetaAlertDialog(
-            title = "Campos Requeridos",
-            message = "Por favor, asegúrate de completar todos los campos correctamente:\n\n" +
-                    "• Seleccionar una fecha\n" +
-                    "• Seleccionar horas extras\n" +
-                    "• Seleccionar porcentaje",
-            confirmText = "Entendido",
+            title = stringResource(R.string.add_hrs_error_required_title),
+            message = stringResource(R.string.add_hrs_error_required_message),
+            confirmText = stringResource(R.string.add_hrs_error_required_confirm),
             onConfirmClick = onDismiss
         )
     }

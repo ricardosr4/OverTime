@@ -29,9 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +64,7 @@ fun MonthClosingDayCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.CalendarMonth,
-                    contentDescription = "Día de cierre",
+                    contentDescription = stringResource(R.string.config_month_closing_title),
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -70,7 +72,7 @@ fun MonthClosingDayCard(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = "Día de Cierre de Mes",
+                    text = stringResource(R.string.config_month_closing_title),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -85,9 +87,12 @@ fun MonthClosingDayCard(
             ) {
                 OutlinedTextField(
                     readOnly = true,
-                    value = if (selectedDay == 0) "Selecciona el día" else "Día $selectedDay",
+                    value = if (selectedDay == 0)
+                        stringResource(R.string.config_month_closing_value_placeholder)
+                    else
+                        stringResource(R.string.config_month_closing_value, selectedDay),
                     onValueChange = {},
-                    label = { Text("Selecciona el día de cierre") },
+                    label = { Text(stringResource(R.string.config_month_closing_label)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
@@ -109,7 +114,7 @@ fun MonthClosingDayCard(
                         DropdownMenuItem(
                             text = {
                                 Text(
-                                    "Día $day",
+                                    stringResource(R.string.config_month_closing_value, day),
                                     fontWeight = if (day == selectedDay) FontWeight.Bold else FontWeight.Normal
                                 )
                             },

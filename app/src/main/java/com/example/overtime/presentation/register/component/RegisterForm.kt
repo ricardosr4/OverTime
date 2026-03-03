@@ -2,6 +2,7 @@ package com.example.overtime.presentation.register.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.overtime.R
@@ -18,25 +19,25 @@ fun RegisterForm(
     ZetaOutlinedTextField(
         value = registerState.name,
         onValueChange = { viewModel.onNameChanged(it) },
-        label = "Nombre",
+        label = stringResource(R.string.config_user_name_label),
         keyboardType = KeyboardType.Text,
         leadingIcon = painterResource(id = R.drawable.icon_person)
     )
     ZetaSpaceHeight()
-    
+
     ZetaOutlinedTextField(
         value = registerState.email,
         onValueChange = { viewModel.onEmailChanged(it) },
-        label = "Email",
+        label = stringResource(R.string.email),
         keyboardType = KeyboardType.Email,
         leadingIcon = painterResource(id = R.drawable.icon_email)
     )
     ZetaSpaceHeight()
-    
+
     ZetaOutlinedTextField(
         value = registerState.password,
         onValueChange = { viewModel.onPasswordChanged(it) },
-        label = "Paswword",
+        label = stringResource(R.string.password),
         keyboardType = KeyboardType.Password,
         leadingIcon = painterResource(id = R.drawable.icon_password),
         isPassword = true,
@@ -44,4 +45,4 @@ fun RegisterForm(
         onVisibilityToggle = { viewModel.onPasswordVisibilityChanged() }
     )
     ZetaSpaceHeight(40.dp)
-} 
+}

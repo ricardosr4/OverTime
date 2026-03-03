@@ -21,8 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @Composable
 fun NotificationSettingsCard(
@@ -46,7 +48,7 @@ fun NotificationSettingsCard(
         ) {
             Icon(
                 imageVector = Icons.Default.Notifications,
-                contentDescription = "Notificaciones",
+                contentDescription = stringResource(R.string.config_notifications_title),
                 modifier = Modifier.size(32.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -57,13 +59,13 @@ fun NotificationSettingsCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Notificaciones",
+                        text = stringResource(R.string.config_notifications_title),
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "Recibir notificaciones de recordatorio",
+                        text = stringResource(R.string.config_notifications_subtitle),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

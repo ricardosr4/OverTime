@@ -1,0 +1,212 @@
+<resources>
+
+    <!-- ========================= -->
+    <!-- Global / common strings   -->
+    <!-- ========================= -->
+    <string name="app_name">OverTime</string>
+    <string name="common_ok">Aceptar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_alert_title">Alerta</string>
+    <string name="common_error_unexpected">Ha ocurrido un error inesperado.</string>
+
+    <!-- ========================= -->
+    <!-- Pre-login strings         -->
+    <!-- Pantalla: PreLoginScreen  -->
+    <!-- ========================= -->
+    <string name="prelogin_login">Iniciar sesión</string>
+    <string name="prelogin_register">Registrarse</string>
+
+    <!-- ========================= -->
+    <!-- Login strings             -->
+    <!-- Pantalla: LoginScreen     -->
+    <!-- ========================= -->
+    <string name="login">Iniciar sesión</string>
+    <string name="login_with_google">Iniciar sesión con Google</string>
+    <string name="login_email_label">Correo electrónico</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_no_account">¿No tienes cuenta?</string>
+    <string name="login_register_here">Regístrate aquí</string>
+    <string name="login_success">¡Ingreso exitoso!</string>
+
+    <!-- Mensajes de error de login -->
+    <string name="login_error_generic">Error: %1$s</string>
+    <string name="login_error_google_config">
+        Error de configuración (DEVELOPER_ERROR). Verifica SHA-1 en Firebase.
+    </string>
+    <string name="login_error_google_failed">Google Sign-In falló. Intenta de nuevo.</string>
+    <string name="login_error_google_canceled">Inicio de sesión cancelado.</string>
+    <string name="login_error_network">Error de red. Verifica tu conexión.</string>
+    <string name="login_error_google_code">Error de Google Sign-In (código: %1$d)</string>
+    <string name="login_error_fields_empty">Los campos no pueden estar vacíos.</string>
+    <string name="login_error_invalid_credentials">Usuario y/o contraseña incorrectos.</string>
+    <string name="login_error_reset_success">
+        Se ha enviado un correo para restablecer la contraseña.
+    </string>
+    <string name="login_error_reset_email_empty">El campo de correo no puede estar vacío.</string>
+    <string name="login_error_reset_email_invalid">El correo electrónico no es válido.</string>
+
+    <!-- Recuperar contraseña -->
+    <string name="login_recover_password">Recuperar tu contraseña</string>
+    <string name="login_here">aquí</string>
+
+    <!-- ========================= -->
+    <!-- Register strings          -->
+    <!-- Pantalla: RegisterScreen  -->
+    <!-- ========================= -->
+    <string name="register">Registrarse</string>
+    <string name="register_success">¡Registro exitoso!</string>
+    <string name="register_error_fields_empty">Los campos no pueden estar vacíos.</string>
+    <string name="register_error_invalid_email">El correo electrónico no es válido.</string>
+    <string name="register_error_invalid_password">
+        La contraseña debe tener al menos 6 caracteres.
+    </string>
+    <string name="register_error_unknown">Error desconocido</string>
+    <string name="register_have_account">¿Ya tienes una cuenta?</string>
+    <string name="register_login_here">Inicia sesión</string>
+
+    <!-- ========================= -->
+    <!-- Home strings              -->
+    <!-- Pantalla: HomeScreen      -->
+    <!-- ========================= -->
+    <string name="home_empty_title">Aún no hay registros</string>
+    <string name="home_empty_subtitle">
+        Tus horas extras aparecerán aquí una vez que las agregues.
+    </string>
+    <string name="home_delete_hours">Eliminar horas</string>
+    <string name="home_download_pdf">Descargar PDF</string>
+    <string name="home_delete_all_confirmation">
+        ¿Estás seguro de eliminar todos los registros?
+    </string>
+    <string name="home_pdf_saved_downloads">PDF guardado en Descargas: %1$s</string>
+    <string name="home_pdf_saved">PDF guardado correctamente</string>
+    <string name="home_pdf_error">Error al generar PDF: %1$s</string>
+    <string name="home_delete_item_title">Confirmar eliminación</string>
+    <string name="home_delete_item_message">
+        ¿Estás seguro de que deseas eliminar este ítem?
+    </string>
+    <string name="home_delete_item_confirm">Eliminar</string>
+    <string name="home_summary_title">Horas Extras - %1$s</string>
+    <string name="home_summary_hours_percent">%1$d hrs al %2$d%%</string>
+    <string name="home_workday_hours_label">Horas extras: %1$d</string>
+    <string name="home_workday_percentage_label">Porcentaje: %1$d%%</string>
+    <string name="home_workday_delete_content_description">Eliminar</string>
+
+    <!-- ========================= -->
+    <!-- Add Extra Hours strings   -->
+    <!-- Pantalla: AddHrsExtras    -->
+    <!-- ========================= -->
+    <string name="add_hrs_header_title">Agregar horas extras</string>
+    <string name="add_hrs_button">Agregar horas extras</string>
+    <string name="add_hrs_success">Horas extras agregadas correctamente</string>
+    <string name="add_hrs_date_placeholder">Selecciona una fecha</string>
+    <string name="add_hrs_error_save_generic">Error al guardar</string>
+    <string name="add_hrs_error_user_not_authenticated">Usuario no autenticado</string>
+    <string name="add_hrs_error_required_title">Campos requeridos</string>
+    <string name="add_hrs_error_required_message">
+        Por favor, asegúrate de completar todos los campos correctamente:&#10;&#10;- Seleccionar una fecha&#10;- Seleccionar horas extras&#10;- Seleccionar porcentaje
+    </string>
+    <string name="add_hrs_error_required_confirm">Entendido</string>
+    <string name="add_hrs_date_label">Fecha de trabajo</string>
+    <string name="add_hrs_date_icon_description">Calendario</string>
+    <string name="add_hrs_hours_title">Horas extras trabajadas</string>
+    <string name="add_hrs_hours_placeholder">Selecciona las horas</string>
+    <string name="add_hrs_hours_value">%1$d horas</string>
+    <string name="add_hrs_percentage_title">Porcentaje de horas extras</string>
+    <string name="add_hrs_percentage_placeholder">Selecciona el porcentaje</string>
+    <string name="add_hrs_percentage_value">%1$d%%</string>
+    <string name="add_hrs_summary_title">Resumen</string>
+    <string name="add_hrs_summary_date">Fecha:</string>
+    <string name="add_hrs_summary_hours">Horas:</string>
+    <string name="add_hrs_summary_percentage">Porcentaje:</string>
+    <string name="add_hrs_summary_icon_description">Resumen</string>
+
+    <!-- ========================= -->
+    <!-- Onboarding strings        -->
+    <!-- Pantalla: Onboarding      -->
+    <!-- ========================= -->
+    <string name="onboarding_skip">Saltar</string>
+    <string name="onboarding_next">Siguiente</string>
+    <string name="onboarding_start">Empezar</string>
+    <string name="onboarding_page1_title">Bienvenido a\nOverTime</string>
+    <string name="onboarding_page1_description">
+        La forma más sencilla de gestionar y calcular tus horas extras con precisión.
+    </string>
+    <string name="onboarding_page2_title">Registra tus horas</string>
+    <string name="onboarding_page2_description">
+        Añade fácilmente tus jornadas adicionales indicando la fecha, porcentaje y cantidad de horas correspondientes.
+    </string>
+    <string name="onboarding_page3_title">Reportes detallados</string>
+    <string name="onboarding_page3_description">
+        Genera informes en PDF de tus horas extras trabajadas cada mes de forma automática.
+    </string>
+    <string name="onboarding_page4_title">¡Todo listo!</string>
+    <string name="onboarding_page4_description">
+        Empieza a tomar el control de tu tiempo y tus ingresos ahora mismo.
+    </string>
+
+    <!-- ========================= -->
+    <!-- Configuration strings     -->
+    <!-- Pantalla: ConfigScreen    -->
+    <!-- ========================= -->
+    <string name="config_user_default_name">Usuario</string>
+    <string name="config_user_email_unavailable">No disponible</string>
+    <string name="config_logout">Cerrar sesión</string>
+    <string name="config_logout_description">
+        ¿Estás seguro que deseas cerrar sesión?
+    </string>
+    <string name="config_logout_snackbar_error">
+        Error al cerrar sesión: %1$s
+    </string>
+    <string name="config_month_closing_title">Día de cierre de mes</string>
+    <string name="config_month_closing_value_placeholder">Selecciona el día</string>
+    <string name="config_month_closing_value">Día %1$d</string>
+    <string name="config_month_closing_label">
+        Selecciona el día de cierre
+    </string>
+    <string name="config_month_closing_scheduled">
+        Cierre de mes programado para el día %1$d de cada mes a las 00:00 hrs
+    </string>
+    <string name="config_logout_icon_description">Cerrar sesión</string>
+    <string name="config_notifications_title">Notificaciones</string>
+    <string name="config_notifications_subtitle">Recibir notificaciones de recordatorio</string>
+    <string name="config_notifications_enabled">Estas seguro/@ que deseas activar las Notificaciones.</string>
+    <string name="config_notifications_disabled">Estas seguro/@ que deseas desactivar las Notificaciones.</string>
+    <string name="config_theme_icon_description">Tema</string>
+    <string name="config_theme_title">Modo oscuro</string>
+    <string name="config_theme_status_dark">Tema oscuro activado</string>
+    <string name="config_theme_status_light">Tema claro activado</string>
+    <string name="config_user_profile_title">Perfil de usuario</string>
+    <string name="config_user_name_label">Nombre:</string>
+    <string name="config_user_email_label">Email:</string>
+    <string name="config_app_info_icon_description">Información</string>
+    <string name="config_app_info_title">Información de la app</string>
+    <string name="config_app_info_name_label">Nombre:</string>
+    <string name="config_app_info_version_label">Versión:</string>
+    <string name="config_app_info_version_value">1.0.0</string>
+    <string name="config_app_info_developer_label">Desarrollador:</string>
+    <string name="config_app_info_developer_value">Ricardo Soto</string>
+    <string name="config_app_info_description_label">Descripción:</string>
+    <string name="config_app_info_description_value">Gestión de horas extras</string>
+
+    <!-- ========================= -->
+    <!-- Misc / legacy             -->
+    <!-- ========================= -->
+    <string name="message_soporte">
+        En caso de problemas comunícate con Soporte
+    </string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="mostrar_contraseña">Mostrar contraseña</string>
+    <string name="recuperar_contraseña">Recuperar tu contraseña</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="aqui">aquí</string>
+    <!-- Bottom bar -->
+    <string name="bottom_home">Inicio</string>
+    <string name="bottom_movements">Movimientos</string>
+    <string name="bottom_add">Agregar</string>
+    <string name="bottom_reports">Reportes</string>
+    <string name="bottom_settings">Ajustes</string>
+    <string name="password_toggle_show">Mostrar contraseña</string>
+    <string name="password_toggle_hide">Ocultar contraseña</string>
+
+</resources>

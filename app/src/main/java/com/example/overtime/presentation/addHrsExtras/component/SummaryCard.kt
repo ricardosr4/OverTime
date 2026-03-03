@@ -1,16 +1,29 @@
 package com.example.overtime.presentation.addHrsExtras.component
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 
 
@@ -22,7 +35,7 @@ fun SummaryCard(
     modifier: Modifier = Modifier
 ) {
     // Validar que todos los campos básicos sean válidos
-    val validDate = selectedDate != "Selecciona una fecha"
+    val validDate = selectedDate.isNotBlank()
     val validHours = selectedHours >= 1 && selectedHours <= 12
     val validPercentages = listOf(50, 75, 100, 130)
     val validPercentage = validPercentages.contains(selectedPercentage)
@@ -48,7 +61,7 @@ fun SummaryCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "Resumen",
+                        contentDescription = stringResource(R.string.add_hrs_summary_icon_description),
                         modifier = Modifier.size(24.dp),
                         tint = MaterialTheme.colorScheme.onSecondary
                     )
@@ -56,7 +69,7 @@ fun SummaryCard(
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Text(
-                        text = "Resumen",
+                        text = stringResource(R.string.add_hrs_summary_title),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -70,7 +83,7 @@ fun SummaryCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Fecha:",
+                            text = stringResource(R.string.add_hrs_summary_date),
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
@@ -89,12 +102,12 @@ fun SummaryCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Horas:",
+                            text = stringResource(R.string.add_hrs_summary_hours),
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
                     Text(
-                        text = "$selectedHours horas",
+                            text = stringResource(R.string.add_hrs_hours_value, selectedHours),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -108,12 +121,12 @@ fun SummaryCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Porcentaje:",
+                            text = stringResource(R.string.add_hrs_summary_percentage),
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.7f)
                     )
                     Text(
-                        text = "$selectedPercentage%",
+                            text = stringResource(R.string.add_hrs_percentage_value, selectedPercentage),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSecondary

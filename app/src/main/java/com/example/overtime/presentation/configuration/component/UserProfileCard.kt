@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -31,10 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.overtime.R
 import com.example.overtime.presentation.configuration.viewmodel.ConfigViewModel
+import com.example.overtime.presentation.login.components.ZetaAlertDialog
 
 @Composable
 fun UserProfileCard(
@@ -68,13 +70,13 @@ fun UserProfileCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Person,
-                        contentDescription = "Usuario",
+                        contentDescription = stringResource(R.string.config_user_profile_title),
                         modifier = Modifier.size(48.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Perfil de Usuario",
+                        text = stringResource(R.string.config_user_profile_title),
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleMedium
@@ -83,7 +85,7 @@ fun UserProfileCard(
                 IconButton(onClick = { showLogoutDialog = true }) {
                     Icon(
                         imageVector = Icons.Default.ExitToApp,
-                        contentDescription = "Cerrar sesión",
+                        contentDescription = stringResource(R.string.config_logout),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(35.dp)
                     )
@@ -97,7 +99,7 @@ fun UserProfileCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Nombre:",
+                    text = stringResource(R.string.config_user_name_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
@@ -117,7 +119,7 @@ fun UserProfileCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Email:",
+                    text = stringResource(R.string.config_user_email_label),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(0.3f)
@@ -133,32 +135,15 @@ fun UserProfileCard(
     }
 
     if (showLogoutDialog) {
-        AlertDialog(
-            onDismissRequest = { showLogoutDialog = false },
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            textContentColor = MaterialTheme.colorScheme.onPrimary,
-            title = { Text("Cerrar sesión") },
-            text = { Text("¿Estás seguro que deseas cerrar sesión?") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showLogoutDialog = false
-                        viewModel.signOut(navController, context)
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                ) {
-                    Text("Cerrar sesión", color = MaterialTheme.colorScheme.onPrimary)
-                }
+        ZetaAlertDialog(
+            title = stringResource(R.string.config_logout),
+            message = stringResource(R.string.config_logout_description),
+            confirmText = stringResource(R.string.config_logout),
+            onConfirmClick = {
+                showLogoutDialog = false
+                viewModel.signOut(navController, context)
             },
-            dismissButton = {
-                Button(
-                    onClick = { showLogoutDialog = false },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
-                ) {
-                    Text("Cancelar", color = MaterialTheme.colorScheme.onSurface)
-                }
-            }
+            onDismissClick = { showLogoutDialog = false }
         )
     }
 }

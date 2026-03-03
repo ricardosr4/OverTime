@@ -8,8 +8,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+
 import com.example.overtime.presentation.navigation.currentRoute
 
 @Composable
@@ -18,8 +20,8 @@ fun BottomNavigationBar(
 ) {
     val menuItems = listOf(
         ItemsBottomNav.HomeScreen,
-        ItemsBottomNav.ConfigScreen,
         ItemsBottomNav.AddHrsExtras,
+        ItemsBottomNav.ConfigScreen,
     )
     BottomAppBar {
         NavigationBar(
@@ -36,10 +38,10 @@ fun BottomNavigationBar(
                     icon = {
                         Icon(
                             imageVector = item.icon,
-                            contentDescription = item.title
+                            contentDescription = stringResource(id = item.labelResId)
                         )
                     },
-                    label = { Text(text = item.title) },
+                    label = { Text(text = stringResource(id = item.labelResId)) },
                     alwaysShowLabel = false,
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,

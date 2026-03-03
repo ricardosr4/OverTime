@@ -28,9 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.overtime.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +62,7 @@ fun HoursSelectionCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.AccessTime,
-                    contentDescription = "Horas",
+                    contentDescription = stringResource(R.string.add_hrs_hours_title),
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -68,7 +70,7 @@ fun HoursSelectionCard(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = "Horas Extras Trabajadas",
+                    text = stringResource(R.string.add_hrs_hours_title),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -83,9 +85,12 @@ fun HoursSelectionCard(
             ) {
                 OutlinedTextField(
                     readOnly = true,
-                    value = if (selectedHours == 0) "Selecciona las horas" else "$selectedHours horas",
+                    value = if (selectedHours == 0)
+                        stringResource(R.string.add_hrs_hours_placeholder)
+                    else
+                        stringResource(R.string.add_hrs_hours_value, selectedHours),
                     onValueChange = {},
-                    label = { Text("Selecciona las horas") },
+                    label = { Text(stringResource(R.string.add_hrs_hours_placeholder)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
@@ -107,7 +112,7 @@ fun HoursSelectionCard(
                         DropdownMenuItem(
                             text = {
                                 Text(
-                                    "$hour horas",
+                                        stringResource(R.string.add_hrs_hours_value, hour),
                                     fontWeight = if (hour == selectedHours) FontWeight.Bold else FontWeight.Normal
                                 )
                             },

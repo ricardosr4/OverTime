@@ -1,24 +1,30 @@
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.overtime.R
 
 sealed class ItemsBottomNav(
     val icon: ImageVector,
-    val title: String,
+    @StringRes val labelResId: Int,
     val route: String
 ) {
 
     data object HomeScreen : ItemsBottomNav(
-        Icons.Default.Home,
-        "Home",
-        "home_screen")
-    data object ConfigScreen : ItemsBottomNav(
-        Icons.Default.Settings,
-        "Configuracion",
-        "config_screen")
-    data object AddHrsExtras : ItemsBottomNav(
-        Icons.Default.Add,
-        "Agregar hrs",
-        "add_hrs_extras")
+        icon = Icons.Filled.Home,
+        labelResId = R.string.bottom_home,
+        route = "home_screen"
+    )
 
+    data object ConfigScreen : ItemsBottomNav(
+        icon = Icons.Filled.Settings,
+        labelResId = R.string.bottom_settings,
+        route = "config_screen"
+    )
+
+    data object AddHrsExtras : ItemsBottomNav(
+        icon = Icons.Filled.Add,
+        labelResId = R.string.bottom_add,
+        route = "add_hrs_extras"
+    )
 }

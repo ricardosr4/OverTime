@@ -30,7 +30,11 @@ import com.example.overtime.presentation.components.LoadingOverlay
 
 
 @Composable
-fun SplashScreen(navController: NavController, showOnlyLoader: Boolean = false) {
+fun SplashScreen(
+    navController: NavController,
+    showOnlyLoader: Boolean = false,
+    isOnboardingCompleted: Boolean = false
+) {
     if (showOnlyLoader) {
         Box(
             modifier = Modifier
@@ -72,8 +76,13 @@ fun SplashScreen(navController: NavController, showOnlyLoader: Boolean = false) 
         )
 
         delay(2500)
-        navController.navigate(AppScreen.PreLoginScreen.route){
-            popUpTo(AppScreen.SplashScreen.route){
+        val destination = if (isOnboardingCompleted) {
+            AppScreen.PreLoginScreen.route
+        } else {
+            AppScreen.OnboardingScreen.route
+        }
+        navController.navigate(destination) {
+            popUpTo(AppScreen.SplashScreen.route) {
                 inclusive = true
             }
         }
